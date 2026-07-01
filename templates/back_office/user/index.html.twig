@@ -3,7 +3,10 @@
 {% block title %}Utilisateurs | Admin{% endblock %}
 
 {% block body %}
-    <h1 class="h3 mb-4">Utilisateurs</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Utilisateurs</h1>
+        <a class="btn btn-primary" href="{{ path('app_back_user_new') }}">Nouvel utilisateur</a>
+    </div>
     <div class="card shadow-sm">
         <div class="card-body">
             <table class="table align-middle">

@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RegistrationController extends AbstractController
 {
+    #[Route('/register', name: 'app_register', methods: ['GET', 'POST'])]
     #[Route('/register', name: 'app_front_register', methods: ['GET', 'POST'])]
     public function register(
         Request $request,
@@ -25,21 +26,28 @@ class RegistrationController extends AbstractController
         }
 
         $user = new User();
-        $user->setRoles([UserRole::ROLE_PARENT->value]);
+        $user
+            ->setRoles([UserRole::ROLE_PARENT->value])
+            ->setIsActive(true)
+            ->setCreatedAt(new \DateTimeImmutable());
 
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $plainPassword = (string) $form->get('plainPassword')->getData();
+            $plainPassword = (string) $user->getPlainPassword();
             $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
+            $user->setRoles([UserRole::ROLE_PARENT->value]);
+            $user->setIsActive(true);
+            $user->setCreatedAt(new \DateTimeImmutable());
 
             $entityManager->persist($user);
             $entityManager->flush();
+            $user->eraseCredentials();
 
-            $this->addFlash('success', 'Votre compte parent a ete cree. Vous pouvez maintenant vous connecter.');
+            $this->addFlash('success', 'Votre compte parent a ete cree avec succes. Vous pouvez maintenant vous connecter.');
 
-            return $this->redirectToRoute('app_front_login');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('front_office/registration/register.html.twig', [

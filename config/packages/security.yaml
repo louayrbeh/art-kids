@@ -16,12 +16,12 @@ security:
             lazy: true
             provider: app_user_provider
             form_login:
-                login_path: app_front_login
-                check_path: app_front_login
+                login_path: app_login
+                check_path: app_login
                 default_target_path: app_post_login_redirect
                 enable_csrf: true
             logout:
-                path: app_front_logout
+                path: app_logout
                 target: app_front_home
 
     access_control:

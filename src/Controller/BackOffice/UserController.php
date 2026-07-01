@@ -25,6 +25,41 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $passwordHasher,
+    ): Response {
+        $user = new User();
+        $user
+            ->setRoles(['ROLE_PARENT'])
+            ->setIsActive(true)
+            ->setCreatedAt(new \DateTimeImmutable());
+
+        $form = $this->createForm(UserType::class, $user, [
+            'require_password' => true,
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $plainPassword = (string) $form->get('plainPassword')->getData();
+            $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Utilisateur cree avec succes.');
+
+            return $this->redirectToRoute('app_back_user_index');
+        }
+
+        return $this->render('back_office/user/new.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user,
+        ]);
+    }
+
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(User $user): Response
     {

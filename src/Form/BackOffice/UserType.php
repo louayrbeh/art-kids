@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserType extends AbstractType
 {
@@ -43,12 +44,13 @@ class UserType extends AbstractType
                 'expanded' => true,
             ])
             ->add('plainPassword', PasswordType::class, [
-                'label' => 'Nouveau mot de passe',
+                'label' => $options['require_password'] ? 'Mot de passe' : 'Nouveau mot de passe',
                 'mapped' => false,
-                'required' => false,
-                'constraints' => [
+                'required' => $options['require_password'],
+                'constraints' => array_filter([
+                    $options['require_password'] ? new NotBlank(message: 'Le mot de passe est obligatoire.') : null,
                     new Length(min: 6, minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caracteres.'),
-                ],
+                ]),
                 'empty_data' => '',
             ])
             ->add('isActive', ChoiceType::class, [
@@ -68,6 +70,9 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'require_password' => false,
         ]);
+
+        $resolver->setAllowedTypes('require_password', 'bool');
     }
 }

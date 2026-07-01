@@ -21,48 +21,50 @@
         <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
         {% endif %}
     </head>
-    <body class="bg-light">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" href="{{ path('app_front_home') }}">Art Kids</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="mainNav">
-                    <ul class="navbar-nav me-auto">
-                        {% if not app.user %}
-                            <li class="nav-item"><a class="nav-link" href="{{ path('app_front_home') }}">Accueil</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ path('app_front_register') }}">Inscription</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ path('app_front_login') }}">Connexion</a></li>
-                        {% endif %}
+    <body class="{% block body_class %}bg-light{% endblock %}">
+        {% block navbar %}
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container">
+                    <a class="navbar-brand" href="{{ path('app_front_home') }}">Art Kids</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="mainNav">
+                        <ul class="navbar-nav me-auto">
+                            {% if not app.user %}
+                                <li class="nav-item"><a class="nav-link" href="{{ path('app_front_home') }}">Accueil</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ path('app_front_register') }}">Inscription</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ path('app_front_login') }}">Connexion</a></li>
+                            {% endif %}
 
-                        {% if is_granted('ROLE_PARENT') %}
-                            <li class="nav-item"><a class="nav-link" href="{{ path('app_front_parent_index') }}">Espace parent</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ path('app_front_child_index') }}">Mes enfants</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ path('app_front_activity_index') }}">Activites</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ path('app_front_reservation_index') }}">Reservations</a></li>
-                        {% endif %}
+                            {% if is_granted('ROLE_PARENT') %}
+                                <li class="nav-item"><a class="nav-link" href="{{ path('app_front_parent_index') }}">Espace parent</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ path('app_front_child_index') }}">Mes enfants</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ path('app_front_activity_index') }}">Activites</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ path('app_front_reservation_index') }}">Reservations</a></li>
+                            {% endif %}
 
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <li class="nav-item"><a class="nav-link" href="{{ path('app_back_admin_index') }}">Admin</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ path('app_back_category_index') }}">Categories</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ path('app_back_activity_index') }}">Activites</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ path('app_back_user_index') }}">Utilisateurs</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ path('app_back_reservation_index') }}">Reservations</a></li>
-                        {% endif %}
-                    </ul>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li class="nav-item"><a class="nav-link" href="{{ path('app_back_admin_index') }}">Admin</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ path('app_back_category_index') }}">Categories</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ path('app_back_activity_index') }}">Activites</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ path('app_back_user_index') }}">Utilisateurs</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ path('app_back_reservation_index') }}">Reservations</a></li>
+                            {% endif %}
+                        </ul>
 
-                    <div class="d-flex align-items-center gap-3 text-white">
-                        {% if app.user %}
-                            <span>{{ app.user.fullName }}</span>
-                            <a class="btn btn-outline-light btn-sm" href="{{ path('app_front_logout') }}">Deconnexion</a>
-                        {% endif %}
+                        <div class="d-flex align-items-center gap-3 text-white">
+                            {% if app.user %}
+                                <span>{{ app.user.fullName }}</span>
+                                <a class="btn btn-outline-light btn-sm" href="{{ path('app_front_logout') }}">Deconnexion</a>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        {% endblock %}
 
-        <main class="container py-4">
+        <main class="{% block main_class %}container py-4{% endblock %}">
             {% for label, messages in app.flashes %}
                 {% for message in messages %}
                     <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show" role="alert">

@@ -40,7 +40,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank(message: 'Le mot de passe est obligatoire.')]
     private ?string $password = null;
 
     #[ORM\Column(length: 30, nullable: true)]
@@ -50,6 +49,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /** @var list<string> */
     #[ORM\Column(type: Types::JSON)]
     private array $roles = [];
+
+    #[Assert\NotBlank(message: 'Le mot de passe est obligatoire.', groups: ['registration', 'admin_create'])]
+    #[Assert\Length(
+        min: 6,
+        minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caracteres.',
+        groups: ['registration', 'admin_create']
+    )]
+    private ?string $plainPassword = null;
 
     #[ORM\Column(options: ['default' => true])]
     private bool $isActive = true;
@@ -125,6 +132,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
     public function getTelephone(): ?string
     {
         return $this->telephone;
@@ -143,6 +162,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
+        if ([] === $roles) {
+            $roles[] = UserRole::ROLE_PARENT->value;
+        }
 
         return array_values(array_unique($roles));
     }
@@ -255,6 +277,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void
     {
+        $this->plainPassword = null;
     }
 
     #[ORM\PrePersist]
