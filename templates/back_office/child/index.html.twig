@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Enfants | Admin{% endblock %}
+
+{% block body %}
+    <h1 class="h3 mb-4">Enfants</h1>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Parent</th>
+                        <th>Age</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for child in children %}
+                        <tr>
+                            <td>{{ child.fullName }}</td>
+                            <td>{{ child.parent.fullName }}</td>
+                            <td>{{ child.age }} ans</td>
+                            <td class="text-end"><a class="btn btn-sm btn-outline-secondary" href="{{ path('app_back_child_show', {id: child.id}) }}">Voir</a></td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="4" class="text-muted">Aucun enfant.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

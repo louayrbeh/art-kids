@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Activites | Art Kids{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Activites ouvertes</h1>
+        <a class="btn btn-outline-secondary" href="{{ path('app_front_parent_index') }}">Retour a l'espace parent</a>
+    </div>
+
+    <div class="row g-4">
+        {% for activity in activities %}
+            <div class="col-md-6 col-xl-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="small text-muted mb-2">{{ activity.category.nom }}</div>
+                        <h2 class="h5">{{ activity.titre }}</h2>
+                        <p class="text-muted">{{ activity.description|length > 110 ? activity.description|slice(0, 110) ~ '...' : activity.description }}</p>
+                        <ul class="list-unstyled small mb-4">
+                            <li>Date : {{ activity.dateActivite|date('d/m/Y') }}</li>
+                            <li>Age : {{ activity.ageMin }} - {{ activity.ageMax }} ans</li>
+                            <li>Places restantes : {{ activity.placesDisponibles }}</li>
+                        </ul>
+                        <a class="btn btn-primary" href="{{ path('app_front_activity_show', {id: activity.id}) }}">Voir le detail</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info mb-0">Aucune activite disponible pour le moment.</div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Activites | Admin{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Activites</h1>
+        <a class="btn btn-primary" href="{{ path('app_back_activity_new') }}">Nouvelle activite</a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Categorie</th>
+                        <th>Date</th>
+                        <th>Statut</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for activity in activities %}
+                        <tr>
+                            <td>{{ activity.titre }}</td>
+                            <td>{{ activity.category.nom }}</td>
+                            <td>{{ activity.dateActivite|date('d/m/Y') }}</td>
+                            <td>{{ activity.statut.value }}</td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-secondary" href="{{ path('app_back_activity_show', {id: activity.id}) }}">Voir</a>
+                                <a class="btn btn-sm btn-outline-primary" href="{{ path('app_back_activity_edit', {id: activity.id}) }}">Modifier</a>
+                                <form method="post" action="{{ path('app_back_activity_delete', {id: activity.id}) }}" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete_activity_' ~ activity.id) }}">
+                                    <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer cette activite ?');">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="5" class="text-muted">Aucune activite.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

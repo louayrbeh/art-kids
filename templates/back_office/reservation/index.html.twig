@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reservations | Admin{% endblock %}
+
+{% block body %}
+    <h1 class="h3 mb-4">Reservations</h1>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Enfant</th>
+                        <th>Activite</th>
+                        <th>Statut</th>
+                        <th>Date reservation</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reservation in reservations %}
+                        <tr>
+                            <td>{{ reservation.child.fullName }}</td>
+                            <td>{{ reservation.activity.titre }}</td>
+                            <td>{{ reservation.statut.value }}</td>
+                            <td>{{ reservation.dateReservation|date('d/m/Y H:i') }}</td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-secondary" href="{{ path('app_back_reservation_show', {id: reservation.id}) }}">Voir</a>
+                                <form method="post" action="{{ path('app_back_reservation_confirm', {id: reservation.id}) }}" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('confirm_reservation_' ~ reservation.id) }}">
+                                    <button class="btn btn-sm btn-outline-success">Confirmer</button>
+                                </form>
+                                <form method="post" action="{{ path('app_back_reservation_cancel', {id: reservation.id}) }}" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('cancel_admin_reservation_' ~ reservation.id) }}">
+                                    <button class="btn btn-sm btn-outline-danger">Annuler</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="5" class="text-muted">Aucune reservation.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

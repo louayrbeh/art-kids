@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reservation | Admin{% endblock %}
+
+{% block body %}
+    <div class="card shadow-sm"><div class="card-body">
+        <h1 class="h4 mb-4">Reservation #{{ reservation.id }}</h1>
+        <dl class="row mb-0">
+            <dt class="col-sm-4">Enfant</dt><dd class="col-sm-8">{{ reservation.child.fullName }}</dd>
+            <dt class="col-sm-4">Parent</dt><dd class="col-sm-8">{{ reservation.child.parent.fullName }}</dd>
+            <dt class="col-sm-4">Activite</dt><dd class="col-sm-8">{{ reservation.activity.titre }}</dd>
+            <dt class="col-sm-4">Statut</dt><dd class="col-sm-8">{{ reservation.statut.value }}</dd>
+            <dt class="col-sm-4">Date reservation</dt><dd class="col-sm-8">{{ reservation.dateReservation|date('d/m/Y H:i') }}</dd>
+        </dl>
+    </div></div>
+{% endblock %}

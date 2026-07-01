@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateurs | Admin{% endblock %}
+
+{% block body %}
+    <h1 class="h3 mb-4">Utilisateurs</h1>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Roles</th>
+                        <th>Actif</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.fullName }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.roles|join(', ') }}</td>
+                            <td>{{ user.isActive ? 'Oui' : 'Non' }}</td>
+                            <td class="text-end">
+                                <a class="btn btn-sm btn-outline-secondary" href="{{ path('app_back_user_show', {id: user.id}) }}">Voir</a>
+                                <a class="btn btn-sm btn-outline-primary" href="{{ path('app_back_user_edit', {id: user.id}) }}">Modifier</a>
+                                <form method="post" action="{{ path('app_back_user_delete', {id: user.id}) }}" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete_user_' ~ user.id) }}">
+                                    <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer cet utilisateur ?');">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="5" class="text-muted">Aucun utilisateur.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

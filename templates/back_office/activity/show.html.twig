@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Activite | Admin{% endblock %}
+
+{% block body %}
+    <div class="card shadow-sm"><div class="card-body">
+        <h1 class="h4 mb-4">{{ activity.titre }}</h1>
+        <dl class="row">
+            <dt class="col-sm-4">Categorie</dt><dd class="col-sm-8">{{ activity.category.nom }}</dd>
+            <dt class="col-sm-4">Date</dt><dd class="col-sm-8">{{ activity.dateActivite|date('d/m/Y') }}</dd>
+            <dt class="col-sm-4">Horaire</dt><dd class="col-sm-8">{{ activity.heureDebut|date('H:i') }} - {{ activity.heureFin|date('H:i') }}</dd>
+            <dt class="col-sm-4">Places restantes</dt><dd class="col-sm-8">{{ activity.placesDisponibles }}</dd>
+            <dt class="col-sm-4">Statut</dt><dd class="col-sm-8">{{ activity.statut.value }}</dd>
+            <dt class="col-sm-4">Lieu</dt><dd class="col-sm-8">{{ activity.lieu ?: 'A definir' }}</dd>
+        </dl>
+        <p class="mb-0">{{ activity.description }}</p>
+    </div></div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier activite | Admin{% endblock %}
+
+{% block body %}
+    <div class="card shadow-sm"><div class="card-body">
+        <h1 class="h4 mb-4">Modifier {{ activity.titre }}</h1>
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+        {{ form_end(form) }}
+    </div></div>
+{% endblock %}

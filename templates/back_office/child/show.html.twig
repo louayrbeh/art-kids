@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Enfant | Admin{% endblock %}
+
+{% block body %}
+    <div class="card shadow-sm"><div class="card-body">
+        <h1 class="h4 mb-4">{{ child.fullName }}</h1>
+        <dl class="row mb-0">
+            <dt class="col-sm-4">Parent</dt><dd class="col-sm-8">{{ child.parent.fullName }}</dd>
+            <dt class="col-sm-4">Date de naissance</dt><dd class="col-sm-8">{{ child.dateNaissance|date('d/m/Y') }}</dd>
+            <dt class="col-sm-4">Age</dt><dd class="col-sm-8">{{ child.age }} ans</dd>
+            <dt class="col-sm-4">Sexe</dt><dd class="col-sm-8">{{ child.sexe.value }}</dd>
+        </dl>
+    </div></div>
+{% endblock %}

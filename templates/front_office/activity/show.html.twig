@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detail activite | Art Kids{% endblock %}
+
+{% block body %}
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="small text-muted mb-2">{{ activity.category.nom }}</div>
+                    <h1 class="h3">{{ activity.titre }}</h1>
+                    <p>{{ activity.description }}</p>
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Date</dt>
+                        <dd class="col-sm-8">{{ activity.dateActivite|date('d/m/Y') }}</dd>
+                        <dt class="col-sm-4">Horaire</dt>
+                        <dd class="col-sm-8">{{ activity.heureDebut|date('H:i') }} - {{ activity.heureFin|date('H:i') }}</dd>
+                        <dt class="col-sm-4">Lieu</dt>
+                        <dd class="col-sm-8">{{ activity.lieu ?: 'A definir' }}</dd>
+                        <dt class="col-sm-4">Age autorise</dt>
+                        <dd class="col-sm-8">{{ activity.ageMin }} - {{ activity.ageMax }} ans</dd>
+                        <dt class="col-sm-4">Prix</dt>
+                        <dd class="col-sm-8">{{ activity.prix ? activity.prix ~ ' EUR' : 'Gratuit' }}</dd>
+                        <dt class="col-sm-4">Statut</dt>
+                        <dd class="col-sm-8">{{ activity.statut.value }}</dd>
+                        <dt class="col-sm-4">Places restantes</dt>
+                        <dd class="col-sm-8">{{ activity.placesDisponibles }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h5">Reservation</h2>
+                    {% if reservationForm is defined %}
+                        {{ form_start(reservationForm) }}
+                            {{ form_row(reservationForm.child) }}
+                            {{ form_row(reservationForm.save) }}
+                        {{ form_end(reservationForm) }}
+                    {% else %}
+                        <p class="text-muted">Selectionnez l'un de vos enfants pour reserver cette activite.</p>
+                        <a class="btn btn-primary" href="{{ path('app_front_activity_reserve', {id: activity.id}) }}">Reserver cette activite</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="h5">Compatibilite rapide</h2>
+                    {% if children %}
+                        <ul class="list-group list-group-flush">
+                            {% for child in children %}
+                                <li class="list-group-item px-0">
+                                    <div class="fw-semibold">{{ child.fullName }}</div>
+                                    <div class="small text-muted">
+                                        {{ child.age }} ans
+                                        {% if child.age >= activity.ageMin and child.age <= activity.ageMax %}
+                                            | Compatible
+                                        {% else %}
+                                            | Hors tranche d'age
+                                        {% endif %}
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted mb-0">Ajoutez un enfant pour commencer les reservations.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
