@@ -29,11 +29,7 @@
                     {% for category in categories %}
                         <tr>
                             <td>
-                                {% if category.image %}
-                                    <img src="{{ asset('uploads/categories/' ~ category.image) }}" alt="{{ category.nom }}" class="img-thumbnail admin-image-thumb category-image">
-                                {% else %}
-                                    <div class="category-placeholder admin-placeholder-sm"><i class="bi bi-image"></i></div>
-                                {% endif %}
+                                <img src="{{ category_image_url(category.image) }}" alt="{{ category.nom }}" class="img-thumbnail admin-image-thumb category-image">
                             </td>
                             <td class="fw-semibold">{{ category.nom }}</td>
                             <td>{{ category.description ?: '-' }}</td>

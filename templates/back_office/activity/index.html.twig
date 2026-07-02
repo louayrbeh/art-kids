@@ -31,11 +31,7 @@
                     {% for activity in activities %}
                         <tr>
                             <td>
-                                {% if activity.image %}
-                                    <img src="{{ asset('uploads/activities/' ~ activity.image) }}" alt="{{ activity.titre }}" class="img-thumbnail admin-image-thumb activity-image">
-                                {% else %}
-                                    <div class="activity-placeholder admin-placeholder-sm"><i class="bi bi-image"></i></div>
-                                {% endif %}
+                                <img src="{{ activity_image_url(activity.image) }}" alt="{{ activity.titre }}" class="img-thumbnail admin-image-thumb activity-image">
                             </td>
                             <td class="fw-semibold">{{ activity.titre }}</td>
                             <td>{{ activity.category.nom }}</td>

@@ -17,7 +17,7 @@
             {% if category.image %}
                 <div class="mb-4">
                     <p class="fw-semibold mb-2">Image actuelle</p>
-                    <img src="{{ asset('uploads/categories/' ~ category.image) }}" alt="{{ category.nom }}" class="img-fluid rounded-4 admin-image-preview category-image">
+                    <img src="{{ category_image_url(category.image) }}" alt="{{ category.nom }}" class="img-fluid rounded-4 admin-image-preview category-image">
                 </div>
             {% endif %}
             <div class="row g-4">

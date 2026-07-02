@@ -40,11 +40,7 @@
         {% for activity in activities %}
             <div class="col-md-6 col-xl-4">
                 <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
-                    {% if activity.image %}
-                        <img class="parent-card-media activity-image" src="{{ asset('uploads/activities/' ~ activity.image) }}" alt="{{ activity.titre }}">
-                    {% else %}
-                        <div class="activity-placeholder parent-placeholder-card"><i class="bi bi-image"></i></div>
-                    {% endif %}
+                    <img class="parent-card-media activity-image" src="{{ activity_image_url(activity.image) }}" alt="{{ activity.titre }}">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start gap-3 mb-2">
                             <div class="small text-muted">{{ activity.category.nom }}</div>

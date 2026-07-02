@@ -18,11 +18,7 @@
         <div class="col-xl-8">
             <div class="admin-surface p-4">
                 <div class="mb-4">
-                    {% if activity.image %}
-                        <img src="{{ asset('uploads/activities/' ~ activity.image) }}" alt="{{ activity.titre }}" class="img-fluid rounded-4 admin-image-preview activity-image">
-                    {% else %}
-                        <div class="activity-placeholder admin-placeholder-lg"><i class="bi bi-image"></i></div>
-                    {% endif %}
+                    <img src="{{ activity_image_url(activity.image) }}" alt="{{ activity.titre }}" class="img-fluid rounded-4 admin-image-preview activity-image">
                 </div>
                 <dl class="row mb-4">
                     <dt class="col-sm-4">Categorie</dt>

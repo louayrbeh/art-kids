@@ -2,6 +2,11 @@
 
 {% block title %}Modifier activite | Admin{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script defer src="{{ asset('js/activity-ai.js') }}"></script>
+{% endblock %}
+
 {% block admin_body %}
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
@@ -17,13 +22,28 @@
             {% if activity.image %}
                 <div class="mb-4">
                     <p class="fw-semibold mb-2">Image actuelle</p>
-                    <img src="{{ asset('uploads/activities/' ~ activity.image) }}" alt="{{ activity.titre }}" class="img-fluid rounded-4 admin-image-preview activity-image">
+                    <img src="{{ activity_image_url(activity.image) }}" alt="{{ activity.titre }}" class="img-fluid rounded-4 admin-image-preview activity-image">
                 </div>
             {% endif %}
             <div class="row g-4">
                 <div class="col-lg-6">{{ form_row(form.titre) }}</div>
                 <div class="col-lg-6">{{ form_row(form.category) }}</div>
-                <div class="col-12">{{ form_row(form.description) }}</div>
+                <div class="col-12">
+                    {{ form_row(form.description) }}
+                    <p class="form-text mb-3">Vous pouvez remplir la description manuellement ou la generer automatiquement avec l IA a partir du titre, de la categorie et de l age.</p>
+                    <div class="d-flex flex-wrap align-items-center gap-3">
+                        <button
+                            type="button"
+                            class="btn btn-outline-primary rounded-4"
+                            data-activity-ai-generate
+                            data-generate-url="{{ path('app_back_office_activity_generate_description') }}"
+                        >
+                            <i class="bi bi-stars me-2"></i>Generer une description avec IA
+                        </button>
+                        <input type="hidden" value="{{ csrf_token('generate_activity_description') }}" data-activity-ai-csrf>
+                    </div>
+                    <div class="mt-3" data-activity-ai-feedback></div>
+                </div>
                 <div class="col-lg-6">{{ form_row(form.imageFile) }}</div>
                 <div class="col-lg-6">{{ form_row(form.lieu) }}</div>
                 <div class="col-md-4">{{ form_row(form.dateActivite) }}</div>

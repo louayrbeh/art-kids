@@ -7,11 +7,7 @@
         <div class="col-lg-7">
             <div class="parent-surface p-4 h-100">
                 <div class="mb-4">
-                    {% if activity.image %}
-                        <img class="img-fluid rounded-4 activity-image-detail" src="{{ asset('uploads/activities/' ~ activity.image) }}" alt="{{ activity.titre }}">
-                    {% else %}
-                        <div class="activity-placeholder parent-placeholder-detail"><i class="bi bi-image"></i></div>
-                    {% endif %}
+                    <img class="img-fluid rounded-4 activity-image-detail" src="{{ activity_image_url(activity.image) }}" alt="{{ activity.titre }}">
                 </div>
 
                 <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
@@ -98,11 +94,7 @@
                     {% for recommendation in items|slice(0, 2) %}
                         <div class="col-md-6 col-xl-4">
                             <div class="parent-surface p-3 h-100 bg-body-tertiary">
-                                {% if recommendation.image %}
-                                    <img class="parent-card-media activity-image mb-3" src="{{ asset('uploads/activities/' ~ recommendation.image) }}" alt="{{ recommendation.titre }}">
-                                {% else %}
-                                    <div class="activity-placeholder parent-placeholder-card mb-3"><i class="bi bi-image"></i></div>
-                                {% endif %}
+                                <img class="parent-card-media activity-image mb-3" src="{{ activity_image_url(recommendation.image) }}" alt="{{ recommendation.titre }}">
                                 <div class="small text-muted mb-2">{{ recommendation.category.nom }}</div>
                                 <h3 class="h6">{{ recommendation.titre }}</h3>
                                 <p class="small text-muted mb-3">{{ recommendation.dateActivite|date('d/m/Y') }} - {{ recommendation.ageMin }}-{{ recommendation.ageMax }} ans</p>
