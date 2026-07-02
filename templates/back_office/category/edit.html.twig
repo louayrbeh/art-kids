@@ -12,11 +12,17 @@
     </div>
 
     <div class="admin-surface admin-form-card p-4 p-lg-5">
-        {{ form_start(form) }}
+        {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
             {{ form_errors(form) }}
+            {% if category.image %}
+                <div class="mb-4">
+                    <p class="fw-semibold mb-2">Image actuelle</p>
+                    <img src="{{ asset('uploads/categories/' ~ category.image) }}" alt="{{ category.nom }}" class="img-fluid rounded-4 admin-image-preview category-image">
+                </div>
+            {% endif %}
             <div class="row g-4">
                 <div class="col-md-6">{{ form_row(form.nom) }}</div>
-                <div class="col-md-6">{{ form_row(form.image) }}</div>
+                <div class="col-md-6">{{ form_row(form.imageFile) }}</div>
                 <div class="col-12">{{ form_row(form.description) }}</div>
             </div>
             <div class="mt-4 d-flex gap-3">

@@ -182,6 +182,54 @@
     margin-top: 0.35rem;
 }
 
+.admin-image-thumb {
+    width: 88px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 0.9rem;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.admin-image-preview {
+    width: 100%;
+    max-height: 320px;
+    object-fit: cover;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.activity-image {
+    height: 220px;
+    object-fit: cover;
+}
+
+.category-image {
+    height: 160px;
+    object-fit: cover;
+}
+
+.activity-placeholder,
+.category-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    color: #94a3b8;
+    border: 1px dashed rgba(148, 163, 184, 0.35);
+    border-radius: 1rem;
+    font-size: 2.4rem;
+}
+
+.admin-placeholder-sm {
+    width: 88px;
+    height: 64px;
+    font-size: 1.8rem;
+}
+
+.admin-placeholder-lg {
+    width: 100%;
+    min-height: 220px;
+}
+
 @media (max-width: 991.98px) {
     .admin-topbar {
         padding: 1rem;

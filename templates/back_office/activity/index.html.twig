@@ -18,6 +18,7 @@
             <table class="table table-hover align-middle admin-table mb-0">
                 <thead>
                     <tr>
+                        <th>Image</th>
                         <th>Titre</th>
                         <th>Categorie</th>
                         <th>Date</th>
@@ -29,6 +30,13 @@
                 <tbody>
                     {% for activity in activities %}
                         <tr>
+                            <td>
+                                {% if activity.image %}
+                                    <img src="{{ asset('uploads/activities/' ~ activity.image) }}" alt="{{ activity.titre }}" class="img-thumbnail admin-image-thumb activity-image">
+                                {% else %}
+                                    <div class="activity-placeholder admin-placeholder-sm"><i class="bi bi-image"></i></div>
+                                {% endif %}
+                            </td>
                             <td class="fw-semibold">{{ activity.titre }}</td>
                             <td>{{ activity.category.nom }}</td>
                             <td>{{ activity.dateActivite|date('d/m/Y') }}</td>
@@ -45,7 +53,7 @@
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="6" class="text-muted py-4">Aucune activite enregistree.</td>
+                            <td colspan="7" class="text-muted py-4">Aucune activite enregistree.</td>
                         </tr>
                     {% endfor %}
                 </tbody>

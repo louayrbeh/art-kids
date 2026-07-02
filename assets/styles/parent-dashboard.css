@@ -114,6 +114,41 @@
     border-top-right-radius: 1.5rem;
 }
 
+.activity-image {
+    height: 220px;
+    object-fit: cover;
+}
+
+.activity-image-detail {
+    width: 100%;
+    max-height: 360px;
+    object-fit: cover;
+}
+
+.activity-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #eff6ff, #fff7ed);
+    color: #94a3b8;
+    border: 1px dashed rgba(148, 163, 184, 0.35);
+    border-radius: 1.25rem;
+    font-size: 3rem;
+}
+
+.parent-placeholder-card {
+    height: 220px;
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.parent-placeholder-detail {
+    width: 100%;
+    min-height: 320px;
+}
+
 .parent-empty {
     border: 1px dashed rgba(148, 163, 184, 0.4);
     border-radius: 1.25rem;

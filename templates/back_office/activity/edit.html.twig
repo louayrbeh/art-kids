@@ -12,13 +12,19 @@
     </div>
 
     <div class="admin-surface admin-form-card p-4 p-lg-5">
-        {{ form_start(form) }}
+        {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
             {{ form_errors(form) }}
+            {% if activity.image %}
+                <div class="mb-4">
+                    <p class="fw-semibold mb-2">Image actuelle</p>
+                    <img src="{{ asset('uploads/activities/' ~ activity.image) }}" alt="{{ activity.titre }}" class="img-fluid rounded-4 admin-image-preview activity-image">
+                </div>
+            {% endif %}
             <div class="row g-4">
                 <div class="col-lg-6">{{ form_row(form.titre) }}</div>
                 <div class="col-lg-6">{{ form_row(form.category) }}</div>
                 <div class="col-12">{{ form_row(form.description) }}</div>
-                <div class="col-lg-6">{{ form_row(form.image) }}</div>
+                <div class="col-lg-6">{{ form_row(form.imageFile) }}</div>
                 <div class="col-lg-6">{{ form_row(form.lieu) }}</div>
                 <div class="col-md-4">{{ form_row(form.dateActivite) }}</div>
                 <div class="col-md-4">{{ form_row(form.heureDebut) }}</div>

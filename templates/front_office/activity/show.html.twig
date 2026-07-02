@@ -6,6 +6,14 @@
     <div class="row g-4">
         <div class="col-lg-7">
             <div class="parent-surface p-4 h-100">
+                <div class="mb-4">
+                    {% if activity.image %}
+                        <img class="img-fluid rounded-4 activity-image-detail" src="{{ asset('uploads/activities/' ~ activity.image) }}" alt="{{ activity.titre }}">
+                    {% else %}
+                        <div class="activity-placeholder parent-placeholder-detail"><i class="bi bi-image"></i></div>
+                    {% endif %}
+                </div>
+
                 <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
                     <div>
                         <div class="small text-muted mb-2">{{ activity.category.nom }}</div>
@@ -13,18 +21,25 @@
                     </div>
                     <span class="badge text-bg-{{ activity.estDisponible ? 'success' : 'secondary' }}">{{ activity.statut.value }}</span>
                 </div>
+
                 <p>{{ activity.description }}</p>
+
                 <dl class="row mb-0">
                     <dt class="col-sm-4">Date</dt>
                     <dd class="col-sm-8">{{ activity.dateActivite|date('d/m/Y') }}</dd>
+
                     <dt class="col-sm-4">Horaire</dt>
                     <dd class="col-sm-8">{{ activity.heureDebut|date('H:i') }} - {{ activity.heureFin|date('H:i') }}</dd>
+
                     <dt class="col-sm-4">Lieu</dt>
                     <dd class="col-sm-8">{{ activity.lieu ?: 'A definir' }}</dd>
+
                     <dt class="col-sm-4">Prix</dt>
                     <dd class="col-sm-8">{{ activity.prix ? activity.prix ~ ' TND' : 'Gratuit' }}</dd>
+
                     <dt class="col-sm-4">Age autorise</dt>
                     <dd class="col-sm-8">{{ activity.ageMin }} - {{ activity.ageMax }} ans</dd>
+
                     <dt class="col-sm-4">Places disponibles</dt>
                     <dd class="col-sm-8">{{ activity.placesDisponibles }}</dd>
                 </dl>
@@ -60,9 +75,9 @@
                                 <div class="small text-muted">
                                     {{ child.age }} ans
                                     {% if child.age >= activity.ageMin and child.age <= activity.ageMax %}
-                                        • Compatible
+                                        - Compatible
                                     {% else %}
-                                        • Hors tranche d age
+                                        - Hors tranche d age
                                     {% endif %}
                                 </div>
                             </li>
@@ -83,9 +98,14 @@
                     {% for recommendation in items|slice(0, 2) %}
                         <div class="col-md-6 col-xl-4">
                             <div class="parent-surface p-3 h-100 bg-body-tertiary">
+                                {% if recommendation.image %}
+                                    <img class="parent-card-media activity-image mb-3" src="{{ asset('uploads/activities/' ~ recommendation.image) }}" alt="{{ recommendation.titre }}">
+                                {% else %}
+                                    <div class="activity-placeholder parent-placeholder-card mb-3"><i class="bi bi-image"></i></div>
+                                {% endif %}
                                 <div class="small text-muted mb-2">{{ recommendation.category.nom }}</div>
                                 <h3 class="h6">{{ recommendation.titre }}</h3>
-                                <p class="small text-muted mb-3">{{ recommendation.dateActivite|date('d/m/Y') }} • {{ recommendation.ageMin }}-{{ recommendation.ageMax }} ans</p>
+                                <p class="small text-muted mb-3">{{ recommendation.dateActivite|date('d/m/Y') }} - {{ recommendation.ageMin }}-{{ recommendation.ageMax }} ans</p>
                                 <a class="btn btn-sm btn-outline-primary rounded-3" href="{{ path('app_front_activity_show', {id: recommendation.id}) }}">Voir details</a>
                             </div>
                         </div>
