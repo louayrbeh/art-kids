@@ -1,0 +1,251 @@
+{% extends 'front_office/layout.html.twig' %}
+
+{% set reservationBadgeMap = {
+    'EN_ATTENTE': 'warning',
+    'CONFIRMEE': 'success',
+    'ANNULEE': 'danger',
+    'TERMINEE': 'secondary'
+} %}
+
+{% block title %}Dashboard Parent | Art Kids{% endblock %}
+
+{% block parent_body %}
+    <section class="parent-surface p-4 p-lg-5 mb-4">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary px-3 py-2 mb-3">Espace parent securise</span>
+                <h1 class="display-6 fw-bold mb-2">Bienvenue dans votre espace parent</h1>
+                <p class="text-muted mb-4">Gerez les enfants, les activites et les reservations depuis un espace simple et securise.</p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a class="btn btn-primary rounded-4 px-4" href="{{ path('app_front_child_new') }}">
+                        <i class="bi bi-person-plus-fill me-2"></i>Ajouter un enfant
+                    </a>
+                    <a class="btn btn-outline-primary rounded-4 px-4" href="{{ path('app_front_activity_index') }}">
+                        <i class="bi bi-palette-fill me-2"></i>Voir les activites
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="parent-surface p-4 bg-body-tertiary h-100">
+                    <div class="small text-muted mb-2">Parent connecte</div>
+                    <h2 class="h4 mb-1">{{ parent.fullName }}</h2>
+                    <p class="text-muted mb-4">{{ parent.email }}</p>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">Date du jour</span>
+                        <strong>{{ today|date('d/m/Y') }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="row g-4 mb-4">
+        {% set statCards = [
+            { label: 'Mes enfants', value: dashboard.childrenCount, helper: 'Profils rattaches', icon: 'bi-balloon-heart', class: 'bg-primary' },
+            { label: 'Mes reservations', value: dashboard.reservationCount, helper: 'Inscriptions totalisees', icon: 'bi-journal-check', class: 'bg-info' },
+            { label: 'Confirmees', value: dashboard.confirmedReservationsCount, helper: 'Places validees', icon: 'bi-check2-circle', class: 'bg-success' },
+            { label: 'En attente', value: dashboard.pendingReservationsCount, helper: 'A suivre', icon: 'bi-hourglass-split', class: 'bg-warning' },
+            { label: 'Prochaines activites', value: dashboard.upcomingActivitiesCount, helper: 'A venir', icon: 'bi-calendar-event', class: 'bg-danger' }
+        ] %}
+        {% for card in statCards %}
+            <div class="col-sm-6 col-xl">
+                <div class="card parent-stat-card h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between gap-3">
+                            <div>
+                                <div class="small text-muted mb-2">{{ card.label }}</div>
+                                <div class="display-6 fw-bold mb-1">{{ card.value }}</div>
+                                <div class="text-muted">{{ card.helper }}</div>
+                            </div>
+                            <span class="parent-stat-icon {{ card.class }}"><i class="bi {{ card.icon }}"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+
+    <section class="parent-surface p-4 mb-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+            <div>
+                <h2 class="h4 mb-1">Actions rapides</h2>
+                <p class="text-muted mb-0">Accedez directement a vos actions les plus utiles.</p>
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6 col-xl-3"><a class="btn btn-outline-primary w-100 rounded-4 py-3" href="{{ path('app_front_child_new') }}"><i class="bi bi-person-plus-fill me-2"></i>Ajouter un enfant</a></div>
+            <div class="col-md-6 col-xl-3"><a class="btn btn-outline-primary w-100 rounded-4 py-3" href="{{ path('app_front_activity_index') }}"><i class="bi bi-search-heart me-2"></i>Consulter les activites</a></div>
+            <div class="col-md-6 col-xl-3"><a class="btn btn-outline-primary w-100 rounded-4 py-3" href="{{ path('app_front_reservation_index') }}"><i class="bi bi-journal-check me-2"></i>Voir mes reservations</a></div>
+            <div class="col-md-6 col-xl-3"><a class="btn btn-outline-primary w-100 rounded-4 py-3" href="#recommendations"><i class="bi bi-stars me-2"></i>Voir les recommandations</a></div>
+        </div>
+    </section>
+
+    <section class="row g-4 mb-4">
+        <div class="col-12 col-xxl-7">
+            <div class="parent-surface p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center gap-3 mb-4">
+                    <div>
+                        <h2 class="h4 mb-1">Mes enfants</h2>
+                        <p class="text-muted mb-0">Seuls vos enfants sont visibles dans cette section.</p>
+                    </div>
+                    <a class="btn btn-sm btn-primary rounded-4" href="{{ path('app_front_child_index') }}">Tout voir</a>
+                </div>
+
+                {% if children %}
+                    <div class="row g-3">
+                        {% for child in children %}
+                            <div class="col-md-6">
+                                <div class="parent-surface p-4 h-100 bg-body-tertiary">
+                                    <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                                        <div>
+                                            <h3 class="h5 mb-1">{{ child.fullName }}</h3>
+                                            <div class="text-muted">{{ child.age }} ans • {{ child.sexe.value }}</div>
+                                        </div>
+                                        <span class="badge text-bg-primary">{{ child.reservations|length }} reservation(s)</span>
+                                    </div>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_front_child_show', {id: child.id}) }}">Voir</a>
+                                        <a class="btn btn-sm btn-outline-primary rounded-3" href="{{ path('app_front_child_edit', {id: child.id}) }}">Modifier</a>
+                                        <a class="btn btn-sm btn-outline-success rounded-3" href="{{ path('app_front_activity_index', {age: child.age}) }}">Voir recommandations</a>
+                                        <form method="post" action="{{ path('app_front_child_delete', {id: child.id}) }}" class="d-inline">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete_child_' ~ child.id) }}">
+                                            <button class="btn btn-sm btn-outline-danger rounded-3" {% if child.reservations|length > 0 %}title="Suppression impossible avec reservations"{% endif %}>Supprimer</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="parent-empty">
+                        <p class="mb-3">Vous n avez pas encore ajoute d enfant.</p>
+                        <a class="btn btn-primary rounded-4" href="{{ path('app_front_child_new') }}">Ajouter mon premier enfant</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-12 col-xxl-5">
+            <div class="parent-surface p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center gap-3 mb-4">
+                    <div>
+                        <h2 class="h4 mb-1">Prochaines activites reservees</h2>
+                        <p class="text-muted mb-0">Les activites a venir de vos enfants.</p>
+                    </div>
+                </div>
+
+                {% if dashboard.upcomingReservations %}
+                    <div class="table-responsive">
+                        <table class="table align-middle parent-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Enfant</th>
+                                    <th>Activite</th>
+                                    <th>Date</th>
+                                    <th>Statut</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reservation in dashboard.upcomingReservations %}
+                                    <tr>
+                                        <td>{{ reservation.child.fullName }}</td>
+                                        <td>{{ reservation.activity.titre }}</td>
+                                        <td>{{ reservation.activity.dateActivite|date('d/m/Y') }}<br><span class="small text-muted">{{ reservation.activity.heureDebut|date('H:i') }}</span></td>
+                                        <td><span class="badge text-bg-{{ reservationBadgeMap[reservation.statut.value] ?? 'secondary' }}">{{ reservation.statut.value }}</span></td>
+                                        <td class="text-end">
+                                            <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_front_activity_show', {id: reservation.activity.id}) }}">Voir</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="parent-empty">Aucune prochaine activite reservee pour le moment.</div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <section id="recommendations" class="parent-surface p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center gap-3 mb-4">
+            <div>
+                <h2 class="h4 mb-1">Activites recommandees</h2>
+                <p class="text-muted mb-0">Suggestions calculees selon l age de vos enfants et les disponibilites reelles.</p>
+            </div>
+            <a class="btn btn-sm btn-outline-primary rounded-4" href="{{ path('app_front_activity_index') }}">Toutes les activites</a>
+        </div>
+
+        {% if recommendations %}
+            <div class="row g-4">
+                {% for item in recommendations %}
+                    {% set activity = item.activity %}
+                    <div class="col-md-6 col-xl-4">
+                        <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+                            {% if activity.image %}
+                                <img class="parent-card-media" src="{{ activity.image }}" alt="{{ activity.titre }}">
+                            {% endif %}
+                            <div class="card-body">
+                                <div class="small text-muted mb-2">{{ activity.category.nom }}</div>
+                                <h3 class="h5">{{ activity.titre }}</h3>
+                                <p class="text-muted small mb-3">Pour {{ item.childNames|join(', ') }}</p>
+                                <ul class="list-unstyled small mb-4">
+                                    <li>Date : {{ activity.dateActivite|date('d/m/Y') }}</li>
+                                    <li>Age : {{ activity.ageMin }} - {{ activity.ageMax }} ans</li>
+                                    <li>Places disponibles : {{ activity.placesDisponibles }}</li>
+                                </ul>
+                                <a class="btn btn-primary rounded-4" href="{{ path('app_front_activity_show', {id: activity.id}) }}">Voir details</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="parent-empty">Aucune recommandation disponible pour le moment.</div>
+        {% endif %}
+    </section>
+
+    <section class="parent-surface p-4">
+        <div class="d-flex justify-content-between align-items-center gap-3 mb-4">
+            <div>
+                <h2 class="h4 mb-1">Historique recent des reservations</h2>
+                <p class="text-muted mb-0">Vos dernieres inscriptions reelles en base MySQL.</p>
+            </div>
+            <a class="btn btn-sm btn-outline-primary rounded-4" href="{{ path('app_front_reservation_index') }}">Voir tout</a>
+        </div>
+
+        {% if dashboard.latestReservations %}
+            <div class="table-responsive">
+                <table class="table align-middle parent-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Enfant</th>
+                            <th>Activite</th>
+                            <th>Date reservation</th>
+                            <th>Statut</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reservation in dashboard.latestReservations %}
+                            <tr>
+                                <td>#{{ reservation.id }}</td>
+                                <td>{{ reservation.child.fullName }}</td>
+                                <td>{{ reservation.activity.titre }}</td>
+                                <td>{{ reservation.dateReservation|date('d/m/Y H:i') }}</td>
+                                <td><span class="badge text-bg-{{ reservationBadgeMap[reservation.statut.value] ?? 'secondary' }}">{{ reservation.statut.value }}</span></td>
+                                <td class="text-end">
+                                    <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_front_reservation_show', {id: reservation.id}) }}">Voir</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="parent-empty">Aucune reservation recente pour le moment.</div>
+        {% endif %}
+    </section>
+{% endblock %}

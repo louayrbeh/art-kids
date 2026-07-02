@@ -27,16 +27,32 @@ class ParentReservationController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}', name: 'show', methods: ['GET'])]
+    public function show(Reservation $reservation): Response
+    {
+        $this->denyUnlessOwnReservation($reservation);
+
+        return $this->render('front_office/reservation/show.html.twig', [
+            'reservation' => $reservation,
+        ]);
+    }
+
     #[Route('/{id}/cancel', name: 'cancel', methods: ['POST'])]
     public function cancel(Request $request, Reservation $reservation, ReservationService $reservationService): Response
     {
         $this->denyUnlessOwnReservation($reservation);
 
-        if ($this->isCsrfTokenValid('cancel_reservation_'.$reservation->getId(), (string) $request->request->get('_token'))) {
-            $reservationService->cancelReservation($reservation);
-            $this->addFlash('success', 'Reservation annulee.');
-        } else {
+        if (!$this->isCsrfTokenValid('cancel_reservation_'.$reservation->getId(), (string) $request->request->get('_token'))) {
             $this->addFlash('error', 'Jeton CSRF invalide.');
+
+            return $this->redirectToRoute('app_front_reservation_index');
+        }
+
+        try {
+            $reservationService->cancelReservation($reservation);
+            $this->addFlash('success', 'Reservation annulee avec succes.');
+        } catch (\DomainException $exception) {
+            $this->addFlash('error', $exception->getMessage());
         }
 
         return $this->redirectToRoute('app_front_reservation_index');

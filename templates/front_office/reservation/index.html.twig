@@ -1,47 +1,65 @@
-{% extends 'base.html.twig' %}
+{% extends 'front_office/layout.html.twig' %}
+
+{% set reservationBadgeMap = {
+    'EN_ATTENTE': 'warning',
+    'CONFIRMEE': 'success',
+    'ANNULEE': 'danger',
+    'TERMINEE': 'secondary'
+} %}
 
 {% block title %}Mes reservations | Art Kids{% endblock %}
 
-{% block body %}
-    <h1 class="h3 mb-4">Mes reservations</h1>
-
-    <div class="card shadow-sm">
-        <div class="card-body">
-            {% if reservations %}
-                <div class="table-responsive">
-                    <table class="table align-middle">
-                        <thead>
-                            <tr>
-                                <th>Enfant</th>
-                                <th>Activite</th>
-                                <th>Date activite</th>
-                                <th>Statut</th>
-                                <th class="text-end">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for reservation in reservations %}
-                                <tr>
-                                    <td>{{ reservation.child.fullName }}</td>
-                                    <td>{{ reservation.activity.titre }}</td>
-                                    <td>{{ reservation.activity.dateActivite|date('d/m/Y') }}</td>
-                                    <td>{{ reservation.statut.value }}</td>
-                                    <td class="text-end">
-                                        {% if not reservation.estAnnulee %}
-                                            <form method="post" action="{{ path('app_front_reservation_cancel', {id: reservation.id}) }}" class="d-inline">
-                                                <input type="hidden" name="_token" value="{{ csrf_token('cancel_reservation_' ~ reservation.id) }}">
-                                                <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Annuler cette reservation ?');">Annuler</button>
-                                            </form>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% else %}
-                <p class="text-muted mb-0">Aucune reservation pour le moment.</p>
-            {% endif %}
+{% block parent_body %}
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h1 class="h3 mb-1">Mes reservations</h1>
+            <p class="text-muted mb-0">Historique complet des reservations de vos enfants.</p>
         </div>
+        <a class="btn btn-outline-secondary rounded-4" href="{{ path('app_front_parent_index') }}">Retour au dashboard</a>
+    </div>
+
+    <div class="parent-surface p-4">
+        {% if reservations %}
+            <div class="table-responsive">
+                <table class="table align-middle parent-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Enfant</th>
+                            <th>Activite</th>
+                            <th>Categorie</th>
+                            <th>Date activite</th>
+                            <th>Date reservation</th>
+                            <th>Statut</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reservation in reservations %}
+                            <tr>
+                                <td>#{{ reservation.id }}</td>
+                                <td>{{ reservation.child.fullName }}</td>
+                                <td>{{ reservation.activity.titre }}</td>
+                                <td>{{ reservation.activity.category.nom }}</td>
+                                <td>{{ reservation.activity.dateActivite|date('d/m/Y') }}</td>
+                                <td>{{ reservation.dateReservation|date('d/m/Y H:i') }}</td>
+                                <td><span class="badge text-bg-{{ reservationBadgeMap[reservation.statut.value] ?? 'secondary' }}">{{ reservation.statut.value }}</span></td>
+                                <td class="text-end">
+                                    <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_front_reservation_show', {id: reservation.id}) }}">Voir</a>
+                                    {% if reservation.statut.value not in ['ANNULEE', 'TERMINEE'] %}
+                                        <form method="post" action="{{ path('app_front_reservation_cancel', {id: reservation.id}) }}" class="d-inline">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('cancel_reservation_' ~ reservation.id) }}">
+                                            <button class="btn btn-sm btn-outline-danger rounded-3" onclick="return confirm('Annuler cette reservation ?');">Annuler</button>
+                                        </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="parent-empty">Aucune reservation pour le moment.</div>
+        {% endif %}
     </div>
 {% endblock %}

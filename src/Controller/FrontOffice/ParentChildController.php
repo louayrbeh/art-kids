@@ -21,7 +21,7 @@ class ParentChildController extends AbstractController
     public function index(ChildRepository $childRepository): Response
     {
         return $this->render('front_office/child/index.html.twig', [
-            'children' => $childRepository->findByParent($this->getParentUser()),
+            'children' => $childRepository->findByParentWithRelations($this->getParentUser()),
         ]);
     }
 
@@ -91,13 +91,21 @@ class ParentChildController extends AbstractController
     {
         $this->denyUnlessOwnChild($child);
 
-        if ($this->isCsrfTokenValid('delete_child_'.$child->getId(), (string) $request->request->get('_token'))) {
-            $entityManager->remove($child);
-            $entityManager->flush();
-            $this->addFlash('success', 'Enfant supprime avec succes.');
-        } else {
+        if (!$this->isCsrfTokenValid('delete_child_'.$child->getId(), (string) $request->request->get('_token'))) {
             $this->addFlash('error', 'Jeton CSRF invalide.');
+
+            return $this->redirectToRoute('app_front_child_index');
         }
+
+        if ($child->getReservations()->count() > 0) {
+            $this->addFlash('error', 'Impossible de supprimer un enfant ayant deja des reservations.');
+
+            return $this->redirectToRoute('app_front_child_index');
+        }
+
+        $entityManager->remove($child);
+        $entityManager->flush();
+        $this->addFlash('success', 'Enfant supprime avec succes.');
 
         return $this->redirectToRoute('app_front_child_index');
     }

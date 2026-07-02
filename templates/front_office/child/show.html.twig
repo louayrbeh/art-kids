@@ -1,22 +1,53 @@
-{% extends 'base.html.twig' %}
+{% extends 'front_office/layout.html.twig' %}
 
-{% block title %}Fiche enfant | Art Kids{% endblock %}
+{% block title %}Mon enfant | Art Kids{% endblock %}
 
-{% block body %}
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="h4 mb-0">{{ child.fullName }}</h1>
-                <a class="btn btn-outline-primary" href="{{ path('app_front_child_edit', {id: child.id}) }}">Modifier</a>
+{% block parent_body %}
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h1 class="h3 mb-1">{{ child.fullName }}</h1>
+            <p class="text-muted mb-0">Consultez les informations et l historique de reservations de votre enfant.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a class="btn btn-outline-primary rounded-4" href="{{ path('app_front_child_edit', {id: child.id}) }}">Modifier</a>
+            <a class="btn btn-outline-secondary rounded-4" href="{{ path('app_front_child_index') }}">Retour</a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="parent-surface p-4">
+                <dl class="row mb-0">
+                    <dt class="col-sm-5">Date de naissance</dt>
+                    <dd class="col-sm-7">{{ child.dateNaissance|date('d/m/Y') }}</dd>
+                    <dt class="col-sm-5">Age</dt>
+                    <dd class="col-sm-7">{{ child.age }} ans</dd>
+                    <dt class="col-sm-5">Sexe</dt>
+                    <dd class="col-sm-7">{{ child.sexe.value }}</dd>
+                    <dt class="col-sm-5">Reservations</dt>
+                    <dd class="col-sm-7">{{ child.reservations|length }}</dd>
+                </dl>
             </div>
-            <dl class="row mb-0">
-                <dt class="col-sm-4">Date de naissance</dt>
-                <dd class="col-sm-8">{{ child.dateNaissance|date('d/m/Y') }}</dd>
-                <dt class="col-sm-4">Age</dt>
-                <dd class="col-sm-8">{{ child.age }} ans</dd>
-                <dt class="col-sm-4">Sexe</dt>
-                <dd class="col-sm-8">{{ child.sexe.value }}</dd>
-            </dl>
+        </div>
+        <div class="col-lg-7">
+            <div class="parent-surface p-4">
+                <h2 class="h5 mb-3">Historique des reservations</h2>
+                {% if child.reservations|length > 0 %}
+                    <ul class="list-group list-group-flush">
+                        {% for reservation in child.reservations %}
+                            <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="fw-semibold">{{ reservation.activity.titre }}</div>
+                                    <div class="small text-muted">{{ reservation.dateReservation|date('d/m/Y H:i') }} • {{ reservation.statut.value }}</div>
+                                </div>
+                                <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_front_reservation_show', {id: reservation.id}) }}">Voir</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="parent-empty">Aucune reservation pour cet enfant.</div>
+                {% endif %}
+            </div>
         </div>
     </div>
 {% endblock %}

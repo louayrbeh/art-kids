@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% set parentNavigation = [
+    { route: 'app_front_parent_index', label: 'Dashboard', icon: 'bi-grid-1x2-fill', prefix: 'app_front_parent' },
+    { route: 'app_front_child_index', label: 'Mes enfants', icon: 'bi-balloon-heart-fill', prefix: 'app_front_child' },
+    { route: 'app_front_child_new', label: 'Ajouter un enfant', icon: 'bi-person-plus-fill', prefix: 'app_front_child' },
+    { route: 'app_front_activity_index', label: 'Activites disponibles', icon: 'bi-palette-fill', prefix: 'app_front_activity' },
+    { route: 'app_front_reservation_index', label: 'Mes reservations', icon: 'bi-journal-check', prefix: 'app_front_reservation' }
+] %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ asset('styles/parent-dashboard.css') }}">
+{% endblock %}
+
+{% block body_class %}bg-body-tertiary{% endblock %}
+{% block main_class %}container-fluid py-0 px-0{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg navbar-light parent-navbar shadow-sm">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{{ path('app_front_home') }}">
+                <span class="parent-brand-art">Art</span><span class="parent-brand-kids">Kids</span>
+            </a>
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#parentNav" aria-controls="parentNav" aria-expanded="false" aria-label="Menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="parentNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% for item in parentNavigation %}
+                        {% set isActive = item.route == 'app_front_parent_index'
+                            ? currentRoute in ['app_front_parent_index', 'app_front_office_parent_dashboard']
+                            : currentRoute starts with item.prefix %}
+                        <li class="nav-item">
+                            <a class="nav-link {{ isActive ? 'active' : '' }}" href="{{ path(item.route) }}">
+                                <i class="bi {{ item.icon }} me-1"></i>{{ item.label }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-3">
+                    <div class="parent-user-pill">
+                        <div class="small text-muted">Connecte en tant que</div>
+                        <div class="fw-semibold">{{ app.user ? app.user.fullName : 'Parent' }}</div>
+                    </div>
+                    <a class="btn btn-outline-primary rounded-4" href="{{ path('app_front_home') }}">Retour au site</a>
+                    <a class="btn btn-primary rounded-4" href="{{ path('app_logout') }}">Deconnexion</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="parent-shell">
+        <div class="container-fluid px-4 py-4">
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                {% for item in parentNavigation %}
+                    {% set isActive = item.route == 'app_front_parent_index'
+                        ? currentRoute in ['app_front_parent_index', 'app_front_office_parent_dashboard']
+                        : currentRoute starts with item.prefix %}
+                    <a class="parent-shortcut {{ isActive ? 'active' : '' }}" href="{{ path(item.route) }}">
+                        <i class="bi {{ item.icon }}"></i>
+                        <span>{{ item.label }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+
+            {% block parent_body %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

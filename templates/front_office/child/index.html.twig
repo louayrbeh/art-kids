@@ -1,50 +1,57 @@
-{% extends 'base.html.twig' %}
+{% extends 'front_office/layout.html.twig' %}
 
 {% block title %}Mes enfants | Art Kids{% endblock %}
 
-{% block body %}
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0">Mes enfants</h1>
-        <a class="btn btn-primary" href="{{ path('app_front_child_new') }}">Ajouter un enfant</a>
+{% block parent_body %}
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h1 class="h3 mb-1">Mes enfants</h1>
+            <p class="text-muted mb-0">Gestion securisee des enfants rattaches a votre compte.</p>
+        </div>
+        <a class="btn btn-primary rounded-4" href="{{ path('app_front_child_new') }}">Ajouter un enfant</a>
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-body">
-            {% if children %}
-                <div class="table-responsive">
-                    <table class="table align-middle">
-                        <thead>
+    <div class="parent-surface p-4">
+        {% if children %}
+            <div class="table-responsive">
+                <table class="table align-middle parent-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Date de naissance</th>
+                            <th>Age</th>
+                            <th>Sexe</th>
+                            <th>Reservations</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for child in children %}
                             <tr>
-                                <th>Nom</th>
-                                <th>Date de naissance</th>
-                                <th>Age</th>
-                                <th>Sexe</th>
-                                <th class="text-end">Actions</th>
+                                <td class="fw-semibold">{{ child.fullName }}</td>
+                                <td>{{ child.dateNaissance|date('d/m/Y') }}</td>
+                                <td>{{ child.age }} ans</td>
+                                <td>{{ child.sexe.value }}</td>
+                                <td>{{ child.reservations|length }}</td>
+                                <td class="text-end">
+                                    <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_front_child_show', {id: child.id}) }}">Voir</a>
+                                    <a class="btn btn-sm btn-outline-primary rounded-3" href="{{ path('app_front_child_edit', {id: child.id}) }}">Modifier</a>
+                                    <a class="btn btn-sm btn-outline-success rounded-3" href="{{ path('app_front_activity_index', {age: child.age}) }}">Recommandations</a>
+                                    <form method="post" action="{{ path('app_front_child_delete', {id: child.id}) }}" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete_child_' ~ child.id) }}">
+                                        <button class="btn btn-sm btn-outline-danger rounded-3" onclick="return confirm('Supprimer cet enfant ?');">Supprimer</button>
+                                    </form>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {% for child in children %}
-                                <tr>
-                                    <td>{{ child.fullName }}</td>
-                                    <td>{{ child.dateNaissance|date('d/m/Y') }}</td>
-                                    <td>{{ child.age }} ans</td>
-                                    <td>{{ child.sexe.value }}</td>
-                                    <td class="text-end">
-                                        <a class="btn btn-sm btn-outline-secondary" href="{{ path('app_front_child_show', {id: child.id}) }}">Voir</a>
-                                        <a class="btn btn-sm btn-outline-primary" href="{{ path('app_front_child_edit', {id: child.id}) }}">Modifier</a>
-                                        <form method="post" action="{{ path('app_front_child_delete', {id: child.id}) }}" class="d-inline">
-                                            <input type="hidden" name="_token" value="{{ csrf_token('delete_child_' ~ child.id) }}">
-                                            <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer cet enfant ?');">Supprimer</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% else %}
-                <p class="text-muted mb-0">Aucun enfant enregistre pour le moment.</p>
-            {% endif %}
-        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="parent-empty">
+                <p class="mb-3">Vous n avez pas encore ajoute d enfant.</p>
+                <a class="btn btn-primary rounded-4" href="{{ path('app_front_child_new') }}">Ajouter mon premier enfant</a>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

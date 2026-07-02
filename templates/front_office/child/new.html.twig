@@ -1,21 +1,29 @@
-{% extends 'base.html.twig' %}
+{% extends 'front_office/layout.html.twig' %}
 
 {% block title %}Ajouter un enfant | Art Kids{% endblock %}
 
-{% block body %}
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h1 class="h4 mb-4">Ajouter un enfant</h1>
-                    {{ form_start(form) }}
-                        {{ form_errors(form) }}
-                        <div class="row g-3">
-                            <div class="col-md-6">{{ form_row(form.nom) }}</div>
-                    <div class="col-md-6">{{ form_row(form.prenom) }}</div>
-                    <div class="col-md-6">{{ form_row(form.dateNaissance) }}</div>
-                    <div class="col-md-6">{{ form_row(form.sexe) }}</div>
-                </div>
-                <div class="mt-4">{{ form_row(form.save) }}</div>
-                    {{ form_end(form) }}
-                </div>
+{% block parent_body %}
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h1 class="h3 mb-1">Ajouter un enfant</h1>
+            <p class="text-muted mb-0">Ce profil sera automatiquement rattache a votre compte parent.</p>
+        </div>
+        <a class="btn btn-outline-secondary rounded-4" href="{{ path('app_front_child_index') }}">Retour</a>
+    </div>
+
+    <div class="parent-surface parent-form-card p-4 p-lg-5">
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <div class="row g-3">
+                <div class="col-md-6">{{ form_row(form.nom) }}</div>
+                <div class="col-md-6">{{ form_row(form.prenom) }}</div>
+                <div class="col-md-6">{{ form_row(form.dateNaissance) }}</div>
+                <div class="col-md-6">{{ form_row(form.sexe) }}</div>
             </div>
+            <div class="mt-4 d-flex gap-3">
+                {{ form_row(form.save) }}
+                <a class="btn btn-outline-secondary rounded-4" href="{{ path('app_front_child_index') }}">Annuler</a>
+            </div>
+        {{ form_end(form) }}
+    </div>
 {% endblock %}

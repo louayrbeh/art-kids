@@ -36,6 +36,26 @@ class ChildRepository extends ServiceEntityRepository
     /**
      * @return list<Child>
      */
+    public function findByParentWithRelations(User $parent): array
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.parent', 'p')
+            ->addSelect('p')
+            ->leftJoin('c.reservations', 'r')
+            ->addSelect('r')
+            ->leftJoin('r.activity', 'a')
+            ->addSelect('a')
+            ->andWhere('c.parent = :parent')
+            ->setParameter('parent', $parent)
+            ->orderBy('c.nom', 'ASC')
+            ->addOrderBy('c.prenom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return list<Child>
+     */
     public function findAllWithParents(): array
     {
         return $this->createQueryBuilder('c')
@@ -44,5 +64,15 @@ class ChildRepository extends ServiceEntityRepository
             ->orderBy('c.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function countForParent(User $parent): int
+    {
+        return (int) $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->andWhere('c.parent = :parent')
+            ->setParameter('parent', $parent)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

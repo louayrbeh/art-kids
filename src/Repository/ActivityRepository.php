@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Activity;
+use App\Entity\Category;
 use App\Enum\ActivityStatusEnum;
 use App\Enum\ReservationStatusEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -106,5 +107,49 @@ class ActivityRepository extends ServiceEntityRepository
             ->orderBy('a.dateActivite', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @return list<Activity>
+     */
+    public function findAvailableForParent(?string $search = null, ?Category $category = null, ?int $age = null): array
+    {
+        $queryBuilder = $this->createQueryBuilder('a')
+            ->leftJoin('a.category', 'c')
+            ->addSelect('c')
+            ->andWhere('a.statut = :status')
+            ->andWhere('a.dateActivite > :today')
+            ->setParameter('status', ActivityStatusEnum::OUVERTE)
+            ->setParameter('today', new \DateTimeImmutable('today'));
+
+        if (null !== $search && '' !== trim($search)) {
+            $queryBuilder
+                ->andWhere('LOWER(a.titre) LIKE :search')
+                ->setParameter('search', '%'.mb_strtolower(trim($search)).'%');
+        }
+
+        if (null !== $category) {
+            $queryBuilder
+                ->andWhere('a.category = :category')
+                ->setParameter('category', $category);
+        }
+
+        if (null !== $age) {
+            $queryBuilder
+                ->andWhere('a.ageMin <= :age')
+                ->andWhere('a.ageMax >= :age')
+                ->setParameter('age', $age);
+        }
+
+        $activities = $queryBuilder
+            ->orderBy('a.dateActivite', 'ASC')
+            ->addOrderBy('a.heureDebut', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        return array_values(array_filter(
+            $activities,
+            static fn (Activity $activity): bool => $activity->estDisponible()
+        ));
     }
 }

@@ -1,0 +1,129 @@
+.parent-navbar {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+}
+
+.parent-brand-art,
+.parent-brand-kids {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.parent-brand-art {
+    color: #2563eb;
+}
+
+.parent-brand-kids {
+    color: #f97316;
+}
+
+.parent-navbar .nav-link {
+    color: #334155;
+    font-weight: 500;
+}
+
+.parent-navbar .nav-link.active,
+.parent-navbar .nav-link:hover {
+    color: #2563eb;
+}
+
+.parent-user-pill {
+    padding: 0.65rem 1rem;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.parent-shell {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left, rgba(96, 165, 250, 0.16), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(251, 146, 60, 0.15), transparent 24%),
+        #f8fafc;
+}
+
+.parent-shortcut {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem 1rem;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
+    color: #334155;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.parent-shortcut:hover,
+.parent-shortcut.active {
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.parent-surface {
+    background: #fff;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 1.5rem;
+    box-shadow: 0 18px 35px rgba(15, 23, 42, 0.06);
+}
+
+.parent-stat-card {
+    border: 0;
+    border-radius: 1.5rem;
+    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.parent-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 36px rgba(15, 23, 42, 0.12);
+}
+
+.parent-stat-icon {
+    width: 3.2rem;
+    height: 3.2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+    color: #fff;
+    font-size: 1.25rem;
+}
+
+.parent-table thead th {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #64748b;
+}
+
+.parent-form-card .form-control,
+.parent-form-card .form-select {
+    border-radius: 1rem;
+    padding: 0.8rem 1rem;
+}
+
+.parent-card-media {
+    height: 180px;
+    object-fit: cover;
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+}
+
+.parent-empty {
+    border: 1px dashed rgba(148, 163, 184, 0.4);
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    color: #64748b;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+@media (max-width: 991.98px) {
+    .parent-user-pill {
+        border-radius: 1rem;
+    }
+}

@@ -6,6 +6,7 @@ use App\Entity\Activity;
 use App\Entity\Child;
 use App\Entity\Reservation;
 use App\Entity\User;
+use App\Enum\ReservationStatusEnum;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -51,12 +52,21 @@ class ReservationService
     public function cancelReservation(Reservation $reservation): void
     {
         if ($reservation->estAnnulee()) {
-            return;
+            throw new \DomainException('Cette reservation est deja annulee.');
+        }
+
+        if (ReservationStatusEnum::TERMINEE === $reservation->getStatut()) {
+            throw new \DomainException('Une reservation terminee ne peut plus etre annulee.');
+        }
+
+        $activity = $reservation->getActivity();
+        if (null !== $activity && !$activity->estFuture()) {
+            throw new \DomainException('Impossible d annuler une reservation pour une activite deja passee.');
         }
 
         $reservation->annuler();
         $reservation->setUpdatedAt(new \DateTimeImmutable());
-        $reservation->getActivity()?->updateStatutIfNeeded();
+        $activity?->updateStatutIfNeeded();
         $this->entityManager->flush();
     }
 
