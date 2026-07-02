@@ -3,25 +3,47 @@
 {% block title %}Inscription parent | Art Kids{% endblock %}
 
 {% block body %}
-    <div class="row justify-content-center">
-        <div class="col-lg-7">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h1 class="h4 mb-4">Inscription parent</h1>
-                    {{ form_start(registrationForm) }}
-                        {{ form_errors(registrationForm) }}
-                        <div class="row g-3">
-                            <div class="col-md-6">{{ form_row(registrationForm.nom) }}</div>
-                            <div class="col-md-6">{{ form_row(registrationForm.prenom) }}</div>
-                            <div class="col-12">{{ form_row(registrationForm.email) }}</div>
-                            <div class="col-12">{{ form_row(registrationForm.telephone) }}</div>
-                            <div class="col-md-6">{{ form_row(registrationForm.plainPassword.first) }}</div>
-                            <div class="col-md-6">{{ form_row(registrationForm.plainPassword.second) }}</div>
+    <section class="art-auth-shell">
+        <div class="art-auth-card">
+            <div class="row g-0">
+                <div class="col-lg-5">
+                    <div class="art-auth-aside h-100">
+                        <span class="art-auth-badge mb-4"><i class="bi bi-balloon-heart"></i>Nouveau parent</span>
+                        <h2 class="art-auth-title mb-3">Creez un espace inspire pour votre famille</h2>
+                        <p class="art-auth-text mb-0">Inscrivez-vous pour gerer les activites artistiques, ajouter vos enfants et suivre chaque reservation dans un environnement creatif et rassurant.</p>
+                        <ul class="art-auth-list">
+                            <li><i class="bi bi-person-hearts"></i><span>Un espace parent simple a utiliser</span></li>
+                            <li><i class="bi bi-brush"></i><span>Des activites visuelles et inspirantes</span></li>
+                            <li><i class="bi bi-calendar-heart"></i><span>Des inscriptions fluides et bien organisees</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="art-auth-panel">
+                        <div class="art-auth-heading">
+                            <h1 class="h2">Inscription parent</h1>
+                            <p class="text-muted mb-0">Remplissez ce formulaire pour rejoindre ArtKids et commencer l aventure creative.</p>
                         </div>
-                        <div class="mt-4">{{ form_row(registrationForm.save) }}</div>
-                    {{ form_end(registrationForm) }}
+
+                        {{ form_start(registrationForm) }}
+                            {{ form_errors(registrationForm) }}
+                            <div class="row g-3">
+                                <div class="col-md-6">{{ form_row(registrationForm.nom) }}</div>
+                                <div class="col-md-6">{{ form_row(registrationForm.prenom) }}</div>
+                                <div class="col-12">{{ form_row(registrationForm.email) }}</div>
+                                <div class="col-12">{{ form_row(registrationForm.telephone) }}</div>
+                                <div class="col-md-6">{{ form_row(registrationForm.plainPassword.first) }}</div>
+                                <div class="col-md-6">{{ form_row(registrationForm.plainPassword.second) }}</div>
+                            </div>
+                            <div class="mt-4">
+                                {{ form_widget(registrationForm.save, { attr: { class: 'btn btn-primary btn-lg w-100' } }) }}
+                            </div>
+                        {{ form_end(registrationForm) }}
+
+                        <p class="art-auth-footer">Vous avez deja un compte ? <a href="{{ path('app_front_login') }}">Se connecter</a></p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 {% endblock %}

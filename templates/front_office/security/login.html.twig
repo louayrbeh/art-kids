@@ -3,30 +3,52 @@
 {% block title %}Connexion | Art Kids{% endblock %}
 
 {% block body %}
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h1 class="h4 mb-4">Connexion</h1>
-
-                    {% if error %}
-                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                    {% endif %}
-
-                    <form method="post">
-                        <div class="mb-3">
-                            <label class="form-label" for="username">Email</label>
-                            <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
+    <section class="art-auth-shell">
+        <div class="art-auth-card">
+            <div class="row g-0">
+                <div class="col-lg-5">
+                    <div class="art-auth-aside h-100">
+                        <span class="art-auth-badge mb-4"><i class="bi bi-stars"></i>Espace securise</span>
+                        <h2 class="art-auth-title mb-3">Retrouvez votre univers ArtKids</h2>
+                        <p class="art-auth-text mb-0">Connectez-vous pour suivre les activites artistiques, les reservations et les progres creatifs de vos enfants dans une interface claire et chaleureuse.</p>
+                        <ul class="art-auth-list">
+                            <li><i class="bi bi-palette"></i><span>Acces rapide a vos activites favorites</span></li>
+                            <li><i class="bi bi-shield-check"></i><span>Suivi securise de vos reservations</span></li>
+                            <li><i class="bi bi-emoji-smile"></i><span>Experience simple, rassurante et moderne</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="art-auth-panel">
+                        <div class="art-auth-heading">
+                            <h1 class="h2">Connexion</h1>
+                            <p class="text-muted mb-0">Entrez vos identifiants pour acceder a votre espace ArtKids.</p>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="password">Mot de passe</label>
-                            <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
-                        </div>
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                        <button class="btn btn-primary w-100" type="submit">Se connecter</button>
-                    </form>
+
+                        {% if error %}
+                            <div class="alert alert-danger art-flash mb-4" role="alert">
+                                <span class="art-flash__icon"><i class="bi bi-exclamation-octagon"></i></span>
+                                <div class="art-flash__content">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                            </div>
+                        {% endif %}
+
+                        <form method="post">
+                            <div class="mb-3">
+                                <label class="form-label" for="username">Email</label>
+                                <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="password">Mot de passe</label>
+                                <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+                            </div>
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                            <button class="btn btn-primary w-100 btn-lg" type="submit">Se connecter</button>
+                        </form>
+
+                        <p class="art-auth-footer">Pas encore de compte parent ? <a href="{{ path('app_front_register') }}">Creer mon espace</a></p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 {% endblock %}

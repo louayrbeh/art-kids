@@ -15,6 +15,12 @@
 ###< phpunit/phpunit ###
 
 ###> symfony/asset-mapper ###
-/public/assets/
+/public/assets/*
 /assets/vendor/
+!/public/assets/css/
+!/public/assets/css/artkids-theme.css
+!/public/assets/css/artkids-forms.css
+!/public/assets/css/artkids-animations.css
+!/public/assets/js/
+!/public/assets/js/artkids-ui.js
 ###< symfony/asset-mapper ###

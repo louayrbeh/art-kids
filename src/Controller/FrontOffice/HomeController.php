@@ -14,37 +14,37 @@ class HomeController extends AbstractController
         return $this->render('front_office/home/index.html.twig', [
             'universes' => [
                 [
-                    'icon' => '🎨',
+                    'icon' => 'bi bi-palette2',
                     'title' => 'Dessin',
                     'description' => 'Exprimer ses idees et imaginer sans limites',
                     'theme' => 'blue',
                 ],
                 [
-                    'icon' => '🖌️',
+                    'icon' => 'bi bi-brush',
                     'title' => 'Peinture',
                     'description' => 'Jouer avec les couleurs et les textures',
                     'theme' => 'pink',
                 ],
                 [
-                    'icon' => '🎵',
+                    'icon' => 'bi bi-music-note-beamed',
                     'title' => 'Musique',
                     'description' => 'Decouvrir les sons et developper son oreille',
                     'theme' => 'green',
                 ],
                 [
-                    'icon' => '🎭',
+                    'icon' => 'bi bi-masks',
                     'title' => 'Theatre',
                     'description' => 'Jouer, se raconter et prendre confiance',
                     'theme' => 'gold',
                 ],
                 [
-                    'icon' => '💃',
+                    'icon' => 'bi bi-stars',
                     'title' => 'Danse',
                     'description' => 'Bouger, s\'exprimer et se depasser',
                     'theme' => 'violet',
                 ],
                 [
-                    'icon' => '🏺',
+                    'icon' => 'bi bi-scissors',
                     'title' => 'Sculpture',
                     'description' => 'Creer avec ses mains et faconner le monde',
                     'theme' => 'peach',

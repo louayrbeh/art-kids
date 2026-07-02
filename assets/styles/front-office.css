@@ -1,0 +1,60 @@
+.parent-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 10% 10%, rgba(79, 124, 255, 0.05), transparent 20%),
+        radial-gradient(circle at 90% 20%, rgba(255, 111, 177, 0.05), transparent 18%);
+}
+
+.parent-navbar {
+    border-bottom: 1px solid rgba(79, 124, 255, 0.08);
+    box-shadow: 0 14px 28px rgba(79, 124, 255, 0.08);
+}
+
+.parent-navbar .nav-link {
+    border-radius: 999px;
+    padding: 0.7rem 1rem;
+}
+
+.parent-navbar .nav-link.active,
+.parent-navbar .nav-link:hover {
+    background: rgba(79, 124, 255, 0.08);
+}
+
+.parent-shortcut {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 247, 255, 0.94));
+}
+
+.parent-shortcut i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    background: rgba(79, 124, 255, 0.09);
+}
+
+.parent-shortcut.active i,
+.parent-shortcut:hover i {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.parent-table tbody tr:hover {
+    background: rgba(79, 124, 255, 0.04);
+}
+
+.parent-empty {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(244, 247, 255, 0.92));
+}
+
+.parent-stat-card {
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 248, 255, 0.94));
+}
+
+.parent-form-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 248, 255, 0.95));
+}

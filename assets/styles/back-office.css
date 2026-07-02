@@ -1,0 +1,85 @@
+.admin-shell {
+    background:
+        radial-gradient(circle at top left, rgba(79, 124, 255, 0.18), transparent 24%),
+        radial-gradient(circle at bottom right, rgba(255, 179, 71, 0.16), transparent 22%),
+        linear-gradient(180deg, #f7f9ff 0%, #f3f6ff 100%);
+}
+
+.admin-sidebar-inner,
+.admin-offcanvas .offcanvas-body {
+    background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.16), transparent 24%),
+        linear-gradient(180deg, #15285e 0%, #263e91 36%, #6b51ea 100%);
+    border-right: 0;
+    color: #fff;
+}
+
+.admin-sidebar-inner .text-muted,
+.admin-offcanvas .offcanvas-body .text-muted,
+.admin-topbar .text-muted {
+    color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.admin-nav-link {
+    color: rgba(255, 255, 255, 0.88);
+}
+
+.admin-nav-link:hover,
+.admin-nav-link.active {
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 16px 30px rgba(15, 23, 42, 0.18);
+    color: #fff;
+}
+
+.admin-sidebar-footer .btn-outline-primary,
+.admin-sidebar-footer .btn-outline-danger,
+.admin-offcanvas .btn-outline-primary,
+.admin-offcanvas .btn-outline-danger {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.16);
+}
+
+.admin-topbar {
+    background: rgba(16, 27, 69, 0.82);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 16px 28px rgba(15, 23, 42, 0.12);
+}
+
+.admin-topbar h1,
+.admin-topbar .h5,
+.admin-topbar .fw-semibold {
+    color: #fff;
+}
+
+.admin-user-chip {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+.admin-page .admin-surface {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 248, 255, 0.95));
+}
+
+.admin-page .admin-table tbody tr:hover {
+    background: rgba(79, 124, 255, 0.05);
+}
+
+.admin-stat-card {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 249, 255, 0.94));
+}
+
+.admin-stat-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(140deg, rgba(255, 255, 255, 0.18), transparent 56%);
+    pointer-events: none;
+}
+
+.admin-form-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 247, 255, 0.95));
+}
