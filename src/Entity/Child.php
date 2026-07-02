@@ -32,16 +32,16 @@ class Child
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     #[Assert\NotBlank(message: 'La date de naissance est obligatoire.')]
     #[Assert\LessThanOrEqual('today', message: 'La date de naissance ne peut pas etre dans le futur.')]
-    private ?\DateTimeInterface $dateNaissance = null;
+    private ?\DateTimeImmutable $dateNaissance = null;
 
     #[ORM\Column(length: 20, enumType: SexeEnum::class)]
     #[Assert\NotNull(message: 'Le sexe est obligatoire.')]
     private ?SexeEnum $sexe = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $createdAt;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'children')]
@@ -90,12 +90,12 @@ class Child
         return $this;
     }
 
-    public function getDateNaissance(): ?\DateTimeInterface
+    public function getDateNaissance(): ?\DateTimeImmutable
     {
         return $this->dateNaissance;
     }
 
-    public function setDateNaissance(\DateTimeInterface $dateNaissance): self
+    public function setDateNaissance(?\DateTimeImmutable $dateNaissance): self
     {
         $this->dateNaissance = $dateNaissance;
 
@@ -119,9 +119,23 @@ class Child
         return $this->createdAt;
     }
 
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 
     public function getParent(): ?User

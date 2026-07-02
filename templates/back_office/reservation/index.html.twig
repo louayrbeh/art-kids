@@ -1,14 +1,27 @@
-{% extends 'base.html.twig' %}
+{% extends 'back_office/layout.html.twig' %}
+
+{% set reservationBadgeMap = {
+    'EN_ATTENTE': 'warning',
+    'CONFIRMEE': 'success',
+    'ANNULEE': 'danger',
+    'TERMINEE': 'secondary'
+} %}
 
 {% block title %}Reservations | Admin{% endblock %}
 
-{% block body %}
-    <h1 class="h3 mb-4">Reservations</h1>
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <table class="table align-middle">
+{% block admin_body %}
+    <div class="mb-4">
+        <h2 class="h3 mb-1">Reservations</h2>
+        <p class="text-muted mb-0">Toutes les reservations avec leurs actions de confirmation et d annulation.</p>
+    </div>
+
+    <div class="admin-surface p-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle admin-table mb-0">
                 <thead>
                     <tr>
+                        <th>ID</th>
+                        <th>Parent</th>
                         <th>Enfant</th>
                         <th>Activite</th>
                         <th>Statut</th>
@@ -19,24 +32,32 @@
                 <tbody>
                     {% for reservation in reservations %}
                         <tr>
+                            <td>#{{ reservation.id }}</td>
+                            <td>{{ reservation.child.parent.fullName }}</td>
                             <td>{{ reservation.child.fullName }}</td>
                             <td>{{ reservation.activity.titre }}</td>
-                            <td>{{ reservation.statut.value }}</td>
+                            <td><span class="badge text-bg-{{ reservationBadgeMap[reservation.statut.value] ?? 'secondary' }}">{{ reservation.statut.value }}</span></td>
                             <td>{{ reservation.dateReservation|date('d/m/Y H:i') }}</td>
                             <td class="text-end">
-                                <a class="btn btn-sm btn-outline-secondary" href="{{ path('app_back_reservation_show', {id: reservation.id}) }}">Voir</a>
-                                <form method="post" action="{{ path('app_back_reservation_confirm', {id: reservation.id}) }}" class="d-inline">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('confirm_reservation_' ~ reservation.id) }}">
-                                    <button class="btn btn-sm btn-outline-success">Confirmer</button>
-                                </form>
-                                <form method="post" action="{{ path('app_back_reservation_cancel', {id: reservation.id}) }}" class="d-inline">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('cancel_admin_reservation_' ~ reservation.id) }}">
-                                    <button class="btn btn-sm btn-outline-danger">Annuler</button>
-                                </form>
+                                <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_back_reservation_show', {id: reservation.id}) }}">Voir</a>
+                                {% if reservation.statut.value == 'EN_ATTENTE' %}
+                                    <form method="post" action="{{ path('app_back_reservation_confirm', {id: reservation.id}) }}" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('confirm_reservation_' ~ reservation.id) }}">
+                                        <button class="btn btn-sm btn-outline-success rounded-3">Confirmer</button>
+                                    </form>
+                                {% endif %}
+                                {% if reservation.statut.value != 'ANNULEE' %}
+                                    <form method="post" action="{{ path('app_back_reservation_cancel', {id: reservation.id}) }}" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('cancel_admin_reservation_' ~ reservation.id) }}">
+                                        <button class="btn btn-sm btn-outline-danger rounded-3">Annuler</button>
+                                    </form>
+                                {% endif %}
                             </td>
                         </tr>
                     {% else %}
-                        <tr><td colspan="5" class="text-muted">Aucune reservation.</td></tr>
+                        <tr>
+                            <td colspan="7" class="text-muted py-4">Aucune reservation enregistree.</td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>

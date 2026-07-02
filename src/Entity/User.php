@@ -44,6 +44,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 30, nullable: true)]
     #[Assert\Length(max: 30)]
+    #[Assert\Regex(
+        pattern: '/^[0-9+().\-\s]{6,30}$/',
+        message: 'Veuillez saisir un numero de telephone valide.'
+    )]
     private ?string $telephone = null;
 
     /** @var list<string> */
@@ -61,10 +65,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(options: ['default' => true])]
     private bool $isActive = true;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $createdAt;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
     /**

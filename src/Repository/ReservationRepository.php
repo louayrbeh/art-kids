@@ -58,4 +58,50 @@ class ReservationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    public function countByStatus(ReservationStatusEnum $status): int
+    {
+        return (int) $this->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->andWhere('r.statut = :status')
+            ->setParameter('status', $status)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * @return list<Reservation>
+     */
+    public function findLatest(int $limit = 10): array
+    {
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.child', 'c')
+            ->addSelect('c')
+            ->leftJoin('c.parent', 'p')
+            ->addSelect('p')
+            ->leftJoin('r.activity', 'a')
+            ->addSelect('a')
+            ->leftJoin('a.category', 'cat')
+            ->addSelect('cat')
+            ->orderBy('r.dateReservation', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return array<int, array{status: string, count: int}>
+     */
+    public function getReservationsByStatus(): array
+    {
+        $counts = [];
+        foreach (ReservationStatusEnum::cases() as $status) {
+            $counts[] = [
+                'status' => $status->value,
+                'count' => $this->countByStatus($status),
+            ];
+        }
+
+        return $counts;
+    }
 }

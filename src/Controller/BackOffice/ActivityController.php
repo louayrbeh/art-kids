@@ -32,6 +32,11 @@ class ActivityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $activity->setCreatedAt(new \DateTimeImmutable());
+            if (null === $activity->getStatut()) {
+                $activity->setStatut(\App\Enum\ActivityStatusEnum::OUVERTE);
+            }
+            $activity->updateStatutIfNeeded();
             $entityManager->persist($activity);
             $entityManager->flush();
             $this->addFlash('success', 'Activite creee avec succes.');
@@ -46,9 +51,13 @@ class ActivityController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
-    public function show(Activity $activity): Response
+    public function show(Activity $activity, EntityManagerInterface $entityManager): Response
     {
+        $previousStatus = $activity->getStatut();
         $activity->updateStatutIfNeeded();
+        if ($previousStatus !== $activity->getStatut()) {
+            $entityManager->flush();
+        }
 
         return $this->render('back_office/activity/show.html.twig', [
             'activity' => $activity,
@@ -62,6 +71,8 @@ class ActivityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $activity->setUpdatedAt(new \DateTimeImmutable());
+            $activity->updateStatutIfNeeded();
             $entityManager->flush();
             $this->addFlash('success', 'Activite modifiee avec succes.');
 
@@ -75,9 +86,20 @@ class ActivityController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
-    public function delete(Request $request, Activity $activity, EntityManagerInterface $entityManager): Response
+    public function delete(
+        Request $request,
+        Activity $activity,
+        EntityManagerInterface $entityManager,
+        ActivityRepository $activityRepository,
+    ): Response
     {
         if ($this->isCsrfTokenValid('delete_activity_'.$activity->getId(), (string) $request->request->get('_token'))) {
+            if ($activityRepository->hasActiveReservations($activity)) {
+                $this->addFlash('error', 'Impossible de supprimer une activite avec des reservations actives.');
+
+                return $this->redirectToRoute('app_back_activity_index');
+            }
+
             $entityManager->remove($activity);
             $entityManager->flush();
             $this->addFlash('success', 'Activite supprimee avec succes.');

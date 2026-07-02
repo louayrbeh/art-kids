@@ -26,6 +26,7 @@ class ChildType extends AbstractType
             ->add('dateNaissance', DateType::class, [
                 'label' => 'Date de naissance',
                 'widget' => 'single_text',
+                'input' => 'datetime_immutable',
             ])
             ->add('sexe', ChoiceType::class, [
                 'label' => 'Sexe',

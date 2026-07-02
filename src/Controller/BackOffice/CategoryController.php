@@ -73,9 +73,20 @@ class CategoryController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
-    public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
+    public function delete(
+        Request $request,
+        Category $category,
+        EntityManagerInterface $entityManager,
+        CategoryRepository $categoryRepository,
+    ): Response
     {
         if ($this->isCsrfTokenValid('delete_category_'.$category->getId(), (string) $request->request->get('_token'))) {
+            if ($categoryRepository->hasActivities($category)) {
+                $this->addFlash('error', 'Impossible de supprimer une categorie qui contient encore des activites.');
+
+                return $this->redirectToRoute('app_back_category_index');
+            }
+
             $entityManager->remove($category);
             $entityManager->flush();
             $this->addFlash('success', 'Categorie supprimee avec succes.');

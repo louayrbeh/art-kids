@@ -1,42 +1,73 @@
-{% extends 'base.html.twig' %}
+{% extends 'back_office/layout.html.twig' %}
 
 {% block title %}Utilisateurs | Admin{% endblock %}
 
-{% block body %}
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0">Utilisateurs</h1>
-        <a class="btn btn-primary" href="{{ path('app_back_user_new') }}">Nouvel utilisateur</a>
+{% block admin_body %}
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="h3 mb-1">Utilisateurs</h2>
+            <p class="text-muted mb-0">Liste complete des comptes venant de MySQL.</p>
+        </div>
+        <a class="btn btn-primary rounded-4 px-4" href="{{ path('app_back_user_new') }}">
+            <i class="bi bi-person-plus-fill me-2"></i>Nouvel utilisateur
+        </a>
     </div>
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <table class="table align-middle">
+
+    <div class="admin-surface p-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle admin-table mb-0">
                 <thead>
                     <tr>
-                        <th>Nom</th>
+                        <th>ID</th>
+                        <th>Nom complet</th>
                         <th>Email</th>
-                        <th>Roles</th>
-                        <th>Actif</th>
+                        <th>Telephone</th>
+                        <th>Role</th>
+                        <th>Statut</th>
+                        <th>Date creation</th>
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for user in users %}
                         <tr>
-                            <td>{{ user.fullName }}</td>
+                            <td>#{{ user.id }}</td>
+                            <td>
+                                <div class="fw-semibold">{{ user.fullName }}</div>
+                                <div class="small text-muted">{{ user.children|length }} enfant(s)</div>
+                            </td>
                             <td>{{ user.email }}</td>
-                            <td>{{ user.roles|join(', ') }}</td>
-                            <td>{{ user.isActive ? 'Oui' : 'Non' }}</td>
+                            <td>{{ user.telephone ?: '-' }}</td>
+                            <td>
+                                <span class="badge text-bg-{{ user.isAdmin ? 'danger' : 'success' }}">
+                                    {{ user.isAdmin ? 'ROLE_ADMIN' : 'ROLE_PARENT' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge text-bg-{{ user.isActive ? 'success' : 'secondary' }}">
+                                    {{ user.isActive ? 'Actif' : 'Desactive' }}
+                                </span>
+                            </td>
+                            <td>{{ user.createdAt|date('d/m/Y H:i') }}</td>
                             <td class="text-end">
-                                <a class="btn btn-sm btn-outline-secondary" href="{{ path('app_back_user_show', {id: user.id}) }}">Voir</a>
-                                <a class="btn btn-sm btn-outline-primary" href="{{ path('app_back_user_edit', {id: user.id}) }}">Modifier</a>
+                                <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_back_user_show', {id: user.id}) }}">Voir</a>
+                                <a class="btn btn-sm btn-outline-primary rounded-3" href="{{ path('app_back_user_edit', {id: user.id}) }}">Modifier</a>
+                                <form method="post" action="{{ path('app_back_user_toggle_status', {id: user.id}) }}" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('toggle_user_' ~ user.id) }}">
+                                    <button class="btn btn-sm btn-outline-warning rounded-3" {% if app.user and app.user.id == user.id and user.isActive %}title="Auto-desactivation interdite"{% endif %}>
+                                        {{ user.isActive ? 'Desactiver' : 'Activer' }}
+                                    </button>
+                                </form>
                                 <form method="post" action="{{ path('app_back_user_delete', {id: user.id}) }}" class="d-inline">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete_user_' ~ user.id) }}">
-                                    <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer cet utilisateur ?');">Supprimer</button>
+                                    <button class="btn btn-sm btn-outline-danger rounded-3" onclick="return confirm('Supprimer cet utilisateur ?');">Supprimer</button>
                                 </form>
                             </td>
                         </tr>
                     {% else %}
-                        <tr><td colspan="5" class="text-muted">Aucun utilisateur.</td></tr>
+                        <tr>
+                            <td colspan="8" class="text-muted py-4">Aucun utilisateur enregistre.</td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>

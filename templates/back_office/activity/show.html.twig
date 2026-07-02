@@ -1,18 +1,48 @@
-{% extends 'base.html.twig' %}
+{% extends 'back_office/layout.html.twig' %}
 
 {% block title %}Activite | Admin{% endblock %}
 
-{% block body %}
-    <div class="card shadow-sm"><div class="card-body">
-        <h1 class="h4 mb-4">{{ activity.titre }}</h1>
-        <dl class="row">
-            <dt class="col-sm-4">Categorie</dt><dd class="col-sm-8">{{ activity.category.nom }}</dd>
-            <dt class="col-sm-4">Date</dt><dd class="col-sm-8">{{ activity.dateActivite|date('d/m/Y') }}</dd>
-            <dt class="col-sm-4">Horaire</dt><dd class="col-sm-8">{{ activity.heureDebut|date('H:i') }} - {{ activity.heureFin|date('H:i') }}</dd>
-            <dt class="col-sm-4">Places restantes</dt><dd class="col-sm-8">{{ activity.placesDisponibles }}</dd>
-            <dt class="col-sm-4">Statut</dt><dd class="col-sm-8">{{ activity.statut.value }}</dd>
-            <dt class="col-sm-4">Lieu</dt><dd class="col-sm-8">{{ activity.lieu ?: 'A definir' }}</dd>
-        </dl>
-        <p class="mb-0">{{ activity.description }}</p>
-    </div></div>
+{% block admin_body %}
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="h3 mb-1">{{ activity.titre }}</h2>
+            <p class="text-muted mb-0">Fiche detaillee de l activite et de ses regles de reservation.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a class="btn btn-outline-primary rounded-4" href="{{ path('app_back_activity_edit', {id: activity.id}) }}">Modifier</a>
+            <a class="btn btn-outline-secondary rounded-4" href="{{ path('app_back_activity_index') }}">Retour</a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-8">
+            <div class="admin-surface p-4">
+                <dl class="row mb-4">
+                    <dt class="col-sm-4">Categorie</dt>
+                    <dd class="col-sm-8">{{ activity.category.nom }}</dd>
+                    <dt class="col-sm-4">Date</dt>
+                    <dd class="col-sm-8">{{ activity.dateActivite|date('d/m/Y') }}</dd>
+                    <dt class="col-sm-4">Horaire</dt>
+                    <dd class="col-sm-8">{{ activity.heureDebut|date('H:i') }} - {{ activity.heureFin|date('H:i') }}</dd>
+                    <dt class="col-sm-4">Lieu</dt>
+                    <dd class="col-sm-8">{{ activity.lieu ?: 'A definir' }}</dd>
+                    <dt class="col-sm-4">Prix</dt>
+                    <dd class="col-sm-8">{{ activity.prix ?: 'Gratuit' }}</dd>
+                    <dt class="col-sm-4">Statut</dt>
+                    <dd class="col-sm-8">{{ activity.statut.value }}</dd>
+                </dl>
+                <h3 class="h5">Description</h3>
+                <p class="mb-0">{{ activity.description }}</p>
+            </div>
+        </div>
+        <div class="col-xl-4">
+            <div class="admin-surface p-4">
+                <h3 class="h5 mb-3">Capacite et ages</h3>
+                <p class="mb-2"><strong>Capacite maximale :</strong> {{ activity.capaciteMax }}</p>
+                <p class="mb-2"><strong>Places disponibles :</strong> {{ activity.placesDisponibles }}</p>
+                <p class="mb-2"><strong>Age minimum :</strong> {{ activity.ageMin }} ans</p>
+                <p class="mb-0"><strong>Age maximum :</strong> {{ activity.ageMax }} ans</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}

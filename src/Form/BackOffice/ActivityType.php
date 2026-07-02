@@ -34,16 +34,19 @@ class ActivityType extends AbstractType
                 'required' => false,
             ])
             ->add('dateActivite', DateType::class, [
-                'label' => 'Date',
+                'label' => 'Date de l activite',
                 'widget' => 'single_text',
+                'input' => 'datetime_immutable',
             ])
             ->add('heureDebut', TimeType::class, [
                 'label' => 'Heure de debut',
                 'widget' => 'single_text',
+                'input' => 'datetime_immutable',
             ])
             ->add('heureFin', TimeType::class, [
                 'label' => 'Heure de fin',
                 'widget' => 'single_text',
+                'input' => 'datetime_immutable',
             ])
             ->add('capaciteMax', IntegerType::class, [
                 'label' => 'Capacite max',
@@ -57,7 +60,7 @@ class ActivityType extends AbstractType
             ->add('prix', MoneyType::class, [
                 'label' => 'Prix',
                 'required' => false,
-                'currency' => 'EUR',
+                'currency' => 'TND',
             ])
             ->add('statut', ChoiceType::class, [
                 'label' => 'Statut',

@@ -35,15 +35,16 @@ class Activity
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     #[Assert\NotNull(message: 'La date de l\'activite est obligatoire.')]
-    private ?\DateTimeInterface $dateActivite = null;
+    #[Assert\GreaterThan('today', message: 'La date de l\'activite doit etre superieure a la date d\'aujourd\'hui.')]
+    private ?\DateTimeImmutable $dateActivite = null;
 
     #[ORM\Column(type: Types::TIME_IMMUTABLE)]
     #[Assert\NotNull(message: 'L\'heure de debut est obligatoire.')]
-    private ?\DateTimeInterface $heureDebut = null;
+    private ?\DateTimeImmutable $heureDebut = null;
 
     #[ORM\Column(type: Types::TIME_IMMUTABLE)]
     #[Assert\NotNull(message: 'L\'heure de fin est obligatoire.')]
-    private ?\DateTimeInterface $heureFin = null;
+    private ?\DateTimeImmutable $heureFin = null;
 
     #[ORM\Column]
     #[Assert\NotNull(message: 'La capacite maximale est obligatoire.')]
@@ -71,10 +72,10 @@ class Activity
     #[Assert\Length(max: 255)]
     private ?string $lieu = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $createdAt;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'activities')]
@@ -135,36 +136,36 @@ class Activity
         return $this;
     }
 
-    public function getDateActivite(): ?\DateTimeInterface
+    public function getDateActivite(): ?\DateTimeImmutable
     {
         return $this->dateActivite;
     }
 
-    public function setDateActivite(\DateTimeInterface $dateActivite): self
+    public function setDateActivite(?\DateTimeImmutable $dateActivite): self
     {
         $this->dateActivite = $dateActivite;
 
         return $this;
     }
 
-    public function getHeureDebut(): ?\DateTimeInterface
+    public function getHeureDebut(): ?\DateTimeImmutable
     {
         return $this->heureDebut;
     }
 
-    public function setHeureDebut(\DateTimeInterface $heureDebut): self
+    public function setHeureDebut(?\DateTimeImmutable $heureDebut): self
     {
         $this->heureDebut = $heureDebut;
 
         return $this;
     }
 
-    public function getHeureFin(): ?\DateTimeInterface
+    public function getHeureFin(): ?\DateTimeImmutable
     {
         return $this->heureFin;
     }
 
-    public function setHeureFin(\DateTimeInterface $heureFin): self
+    public function setHeureFin(?\DateTimeImmutable $heureFin): self
     {
         $this->heureFin = $heureFin;
 
@@ -248,9 +249,23 @@ class Activity
         return $this->createdAt;
     }
 
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 
     public function getCategory(): ?Category
@@ -319,7 +334,7 @@ class Activity
             return false;
         }
 
-        return $this->dateActivite >= new \DateTimeImmutable('today');
+        return $this->dateActivite > new \DateTimeImmutable('today');
     }
 
     public function updateStatutIfNeeded(): void

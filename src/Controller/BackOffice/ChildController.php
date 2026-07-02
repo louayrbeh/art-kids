@@ -17,7 +17,7 @@ class ChildController extends AbstractController
     public function index(ChildRepository $childRepository): Response
     {
         return $this->render('back_office/child/index.html.twig', [
-            'children' => $childRepository->findBy([], ['nom' => 'ASC', 'prenom' => 'ASC']),
+            'children' => $childRepository->findAllWithParents(),
         ]);
     }
 

@@ -5,7 +5,7 @@ namespace App\Controller\FrontOffice;
 use App\Entity\Reservation;
 use App\Entity\User;
 use App\Repository\ReservationRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\ReservationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,13 +28,12 @@ class ParentReservationController extends AbstractController
     }
 
     #[Route('/{id}/cancel', name: 'cancel', methods: ['POST'])]
-    public function cancel(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
+    public function cancel(Request $request, Reservation $reservation, ReservationService $reservationService): Response
     {
         $this->denyUnlessOwnReservation($reservation);
 
         if ($this->isCsrfTokenValid('cancel_reservation_'.$reservation->getId(), (string) $request->request->get('_token'))) {
-            $reservation->annuler();
-            $entityManager->flush();
+            $reservationService->cancelReservation($reservation);
             $this->addFlash('success', 'Reservation annulee.');
         } else {
             $this->addFlash('error', 'Jeton CSRF invalide.');

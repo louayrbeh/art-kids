@@ -1,11 +1,44 @@
-{% extends 'base.html.twig' %}
+{% extends 'back_office/layout.html.twig' %}
 
 {% block title %}Categorie | Admin{% endblock %}
 
-{% block body %}
-    <div class="card shadow-sm"><div class="card-body">
-        <h1 class="h4 mb-4">{{ category.nom }}</h1>
-        <p>{{ category.description ?: 'Aucune description.' }}</p>
-        <p class="text-muted mb-0">Nombre d'activites : {{ category.activities|length }}</p>
-    </div></div>
+{% block admin_body %}
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="h3 mb-1">{{ category.nom }}</h2>
+            <p class="text-muted mb-0">Detail de la categorie et de ses activites associees.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a class="btn btn-outline-primary rounded-4" href="{{ path('app_back_category_edit', {id: category.id}) }}">Modifier</a>
+            <a class="btn btn-outline-secondary rounded-4" href="{{ path('app_back_category_index') }}">Retour</a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="admin-surface p-4">
+                <h3 class="h5 mb-3">Informations</h3>
+                <p class="mb-3">{{ category.description ?: 'Aucune description renseignee.' }}</p>
+                <p class="mb-1"><strong>Image :</strong> {{ category.image ?: 'Aucune image' }}</p>
+                <p class="mb-0"><strong>Nombre d activites :</strong> {{ category.activities|length }}</p>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="admin-surface p-4">
+                <h3 class="h5 mb-3">Activites liees</h3>
+                {% if category.activities|length > 0 %}
+                    <ul class="list-group list-group-flush">
+                        {% for activity in category.activities %}
+                            <li class="list-group-item px-0 d-flex justify-content-between">
+                                <span>{{ activity.titre }}</span>
+                                <a class="small text-decoration-none" href="{{ path('app_back_activity_show', {id: activity.id}) }}">Voir</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted mb-0">Aucune activite pour cette categorie.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

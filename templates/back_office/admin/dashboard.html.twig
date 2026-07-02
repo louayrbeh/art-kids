@@ -1,0 +1,344 @@
+{% extends 'back_office/layout.html.twig' %}
+
+{% set reservationBadgeMap = {
+    'EN_ATTENTE': 'warning',
+    'CONFIRMEE': 'success',
+    'ANNULEE': 'danger',
+    'TERMINEE': 'secondary'
+} %}
+
+{% block title %}Dashboard Admin | ArtKids{% endblock %}
+
+{% block admin_body %}
+    <section class="admin-surface p-4 p-xl-5 mb-4">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary px-3 py-2 mb-3">Dashboard Administrateur</span>
+                <h2 class="display-6 fw-bold mb-2">Vue globale de la plateforme ArtKids</h2>
+                <p class="text-muted mb-4">Pilotez les utilisateurs, les activites, les reservations et les alertes administratives depuis une seule interface claire et connectee a MySQL.</p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a class="btn btn-primary rounded-4 px-4" href="{{ path('app_back_user_new') }}">
+                        <i class="bi bi-person-plus-fill me-2"></i>Creer un utilisateur
+                    </a>
+                    <a class="btn btn-outline-primary rounded-4 px-4" href="{{ path('app_back_activity_new') }}">
+                        <i class="bi bi-palette-fill me-2"></i>Ajouter une activite
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="admin-surface h-100 p-4 bg-body-tertiary">
+                    <p class="text-muted small mb-2">Connecte</p>
+                    <h3 class="h4 mb-1">{{ app.user.fullName }}</h3>
+                    <p class="text-muted mb-4">Administrateur de la plateforme</p>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <span class="text-muted">Date du jour</span>
+                        <strong>{{ today|date('d/m/Y') }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="row g-4 mb-4">
+        {% set statCards = [
+            { label: 'Parents', value: dashboard.totalParents, icon: 'bi-people', class: 'bg-primary', helper: 'Comptes parents' },
+            { label: 'Administrateurs', value: dashboard.totalAdmins, icon: 'bi-shield-check', class: 'bg-danger', helper: 'Acces Back-Office' },
+            { label: 'Enfants', value: dashboard.totalChildren, icon: 'bi-balloon-heart', class: 'bg-success', helper: 'Profils enfants' },
+            { label: 'Categories', value: dashboard.totalCategories, icon: 'bi-tags', class: 'bg-warning', helper: 'Univers artistiques' },
+            { label: 'Activites', value: dashboard.totalActivities, icon: 'bi-palette', class: 'bg-info', helper: 'Catalogue total' },
+            { label: 'Reservations', value: dashboard.totalReservations, icon: 'bi-journal-check', class: 'bg-secondary', helper: 'Historique global' },
+            { label: 'En attente', value: dashboard.pendingReservations, icon: 'bi-hourglass-split', class: 'bg-dark', helper: 'Reservations a traiter' }
+        ] %}
+
+        {% for card in statCards %}
+            <div class="col-sm-6 col-xl-4 col-xxl">
+                <div class="card admin-stat-card h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start gap-3">
+                            <div>
+                                <p class="text-muted small mb-2">{{ card.label }}</p>
+                                <h3 class="display-6 fw-bold mb-1">{{ card.value }}</h3>
+                                <p class="mb-0 text-muted">{{ card.helper }}</p>
+                            </div>
+                            <span class="admin-stat-icon {{ card.class }}">
+                                <i class="bi {{ card.icon }}"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+
+    <section class="admin-surface p-4 mb-4">
+        <div class="admin-section-title mb-4">
+            <div>
+                <h2 class="h4 mb-1">Actions rapides</h2>
+                <p class="text-muted mb-0">Accedez directement aux operations les plus frequentes.</p>
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-6 col-xl-3"><a class="btn btn-outline-primary w-100 rounded-4 py-3" href="{{ path('app_back_category_new') }}"><i class="bi bi-tag-fill me-2"></i>Ajouter une categorie</a></div>
+            <div class="col-md-6 col-xl-3"><a class="btn btn-outline-primary w-100 rounded-4 py-3" href="{{ path('app_back_activity_new') }}"><i class="bi bi-palette-fill me-2"></i>Ajouter une activite</a></div>
+            <div class="col-md-6 col-xl-3"><a class="btn btn-outline-success w-100 rounded-4 py-3" href="{{ path('app_back_user_new') }}"><i class="bi bi-person-plus-fill me-2"></i>Creer un compte parent</a></div>
+            <div class="col-md-6 col-xl-3"><a class="btn btn-outline-danger w-100 rounded-4 py-3" href="{{ path('app_back_user_new') }}"><i class="bi bi-shield-plus me-2"></i>Creer un compte admin</a></div>
+            <div class="col-md-6 col-xl-4"><a class="btn btn-outline-secondary w-100 rounded-4 py-3" href="{{ path('app_back_reservation_index') }}"><i class="bi bi-journal-check me-2"></i>Voir les reservations</a></div>
+            <div class="col-md-6 col-xl-4"><a class="btn btn-outline-secondary w-100 rounded-4 py-3" href="{{ path('app_back_user_index') }}"><i class="bi bi-people-fill me-2"></i>Voir les utilisateurs</a></div>
+            <div class="col-md-12 col-xl-4"><a class="btn btn-outline-secondary w-100 rounded-4 py-3" href="{{ path('app_back_child_index') }}"><i class="bi bi-balloon-heart-fill me-2"></i>Voir les enfants</a></div>
+        </div>
+    </section>
+
+    <section class="row g-4 mb-4">
+        <div class="col-12 col-xxl-8">
+            <div class="admin-surface p-4 h-100">
+                <div class="admin-section-title mb-4">
+                    <div>
+                        <h2 class="h4 mb-1">Dernieres reservations</h2>
+                        <p class="text-muted mb-0">Les 10 reservations les plus recentes en base.</p>
+                    </div>
+                </div>
+
+                {% if dashboard.latestReservations %}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle admin-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Parent</th>
+                                    <th>Enfant</th>
+                                    <th>Activite</th>
+                                    <th>Date reservation</th>
+                                    <th>Statut</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reservation in dashboard.latestReservations %}
+                                    <tr>
+                                        <td>#{{ reservation.id }}</td>
+                                        <td>{{ reservation.child.parent.fullName }}</td>
+                                        <td>{{ reservation.child.fullName }}</td>
+                                        <td>{{ reservation.activity.titre }}</td>
+                                        <td>{{ reservation.dateReservation|date('d/m/Y H:i') }}</td>
+                                        <td><span class="badge text-bg-{{ reservationBadgeMap[reservation.statut.value] ?? 'secondary' }}">{{ reservation.statut.value }}</span></td>
+                                        <td class="text-end">
+                                            <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_back_reservation_show', {id: reservation.id}) }}">Voir</a>
+                                            {% if reservation.statut.value == 'EN_ATTENTE' %}
+                                                <form method="post" action="{{ path('app_back_reservation_confirm', {id: reservation.id}) }}" class="d-inline">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('confirm_reservation_' ~ reservation.id) }}">
+                                                    <button class="btn btn-sm btn-outline-success rounded-3">Confirmer</button>
+                                                </form>
+                                            {% endif %}
+                                            {% if reservation.statut.value != 'ANNULEE' %}
+                                                <form method="post" action="{{ path('app_back_reservation_cancel', {id: reservation.id}) }}" class="d-inline">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('cancel_admin_reservation_' ~ reservation.id) }}">
+                                                    <button class="btn btn-sm btn-outline-danger rounded-3">Annuler</button>
+                                                </form>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="admin-empty-state">Aucune reservation enregistree pour le moment.</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-12 col-xxl-4">
+            <div class="admin-surface p-4 h-100">
+                <div class="admin-section-title mb-4">
+                    <div>
+                        <h2 class="h4 mb-1">Alertes administratives</h2>
+                        <p class="text-muted mb-0">Points d attention a suivre de pres.</p>
+                    </div>
+                </div>
+
+                {% set alerts = [] %}
+                {% if dashboard.fullActivities|length > 0 %}
+                    {% set alerts = alerts|merge(['<strong>' ~ dashboard.fullActivities|length ~ '</strong> activite(s) complete(s).']) %}
+                {% endif %}
+                {% if dashboard.pendingReservations > 0 %}
+                    {% set alerts = alerts|merge(['<strong>' ~ dashboard.pendingReservations ~ '</strong> reservation(s) en attente de validation.']) %}
+                {% endif %}
+                {% if dashboard.cancelledActivities|length > 0 %}
+                    {% set alerts = alerts|merge(['<strong>' ~ dashboard.cancelledActivities|length ~ '</strong> activite(s) annulee(s).']) %}
+                {% endif %}
+                {% if dashboard.upcomingActivities|length > 0 %}
+                    {% set alerts = alerts|merge(['<strong>' ~ dashboard.upcomingActivities|length ~ '</strong> activite(s) prevue(s) dans les 7 prochains jours.']) %}
+                {% endif %}
+                {% if dashboard.disabledUsers|length > 0 %}
+                    {% set alerts = alerts|merge(['<strong>' ~ dashboard.disabledUsers|length ~ '</strong> utilisateur(s) desactive(s).']) %}
+                {% endif %}
+
+                {% if alerts %}
+                    <div class="list-group admin-alert-list">
+                        {% for alert in alerts %}
+                            <div class="list-group-item d-flex align-items-start gap-3">
+                                <span class="badge text-bg-warning rounded-pill mt-1"><i class="bi bi-exclamation-triangle-fill"></i></span>
+                                <div>{{ alert|raw }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="admin-empty-state">Aucune alerte pour le moment.</div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <section class="row g-4 mb-4">
+        <div class="col-12 col-xl-7">
+            <div class="admin-surface p-4 h-100">
+                <div class="admin-section-title mb-4">
+                    <div>
+                        <h2 class="h4 mb-1">Activites les plus reservees</h2>
+                        <p class="text-muted mb-0">Classement calcule depuis les reservations reelles.</p>
+                    </div>
+                </div>
+                {% if dashboard.popularActivities %}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle admin-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Activite</th>
+                                    <th>Categorie</th>
+                                    <th>Reservations</th>
+                                    <th>Capacite max</th>
+                                    <th>Taux de remplissage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in dashboard.popularActivities %}
+                                    <tr>
+                                        <td>{{ item.activity.titre }}</td>
+                                        <td>{{ item.activity.category.nom }}</td>
+                                        <td>{{ item.reservationCount }}</td>
+                                        <td>{{ item.activity.capaciteMax }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="progress flex-grow-1" role="progressbar" aria-valuenow="{{ item.fillRate }}" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar" style="width: {{ item.fillRate }}%"></div>
+                                                </div>
+                                                <span class="small fw-semibold">{{ item.fillRate }}%</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="admin-empty-state">Aucune donnee de popularite disponible.</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-5">
+            <div class="admin-surface p-4 h-100">
+                <div class="admin-section-title mb-4">
+                    <div>
+                        <h2 class="h4 mb-1">Graphiques statistiques</h2>
+                        <p class="text-muted mb-0">Lecture visuelle des tendances clefs.</p>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="admin-chart-card admin-surface p-3">
+                            <h3 class="h6">Reservations par statut</h3>
+                            <canvas id="reservationStatusChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="admin-chart-card admin-surface p-3">
+                            <h3 class="h6">Activites par categorie</h3>
+                            <canvas id="activityCategoryChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="admin-chart-card admin-surface p-3">
+                            <h3 class="h6">Utilisateurs par role</h3>
+                            <canvas id="usersByRoleChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script>
+        const reservationStatusData = {{ dashboard.reservationsByStatus|json_encode|raw }};
+        const activityCategoryData = {{ dashboard.activitiesByCategory|json_encode|raw }};
+        const usersByRoleData = {{ dashboard.usersByRole|json_encode|raw }};
+
+        const defaultColors = ['#2563eb', '#f97316', '#7c3aed', '#10b981', '#ef4444', '#06b6d4'];
+
+        const buildChart = (selector, type, labels, values, colors) => {
+            const canvas = document.getElementById(selector);
+            if (!canvas) {
+                return;
+            }
+
+            new Chart(canvas, {
+                type,
+                data: {
+                    labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: colors,
+                        borderRadius: 10,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: type === 'doughnut',
+                            position: 'bottom'
+                        }
+                    },
+                    scales: type === 'bar' ? {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    } : {}
+                }
+            });
+        };
+
+        buildChart(
+            'reservationStatusChart',
+            'doughnut',
+            reservationStatusData.map(item => item.status),
+            reservationStatusData.map(item => item.count),
+            ['#f59e0b', '#10b981', '#ef4444', '#64748b']
+        );
+
+        buildChart(
+            'activityCategoryChart',
+            'bar',
+            activityCategoryData.map(item => item.label),
+            activityCategoryData.map(item => item.count),
+            defaultColors
+        );
+
+        buildChart(
+            'usersByRoleChart',
+            'bar',
+            usersByRoleData.map(item => item.label),
+            usersByRoleData.map(item => item.count),
+            ['#2563eb', '#ef4444']
+        );
+    </script>
+{% endblock %}

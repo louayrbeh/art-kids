@@ -1,39 +1,48 @@
-{% extends 'base.html.twig' %}
+{% extends 'back_office/layout.html.twig' %}
 
 {% block title %}Categories | Admin{% endblock %}
 
-{% block body %}
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0">Categories</h1>
-        <a class="btn btn-primary" href="{{ path('app_back_category_new') }}">Nouvelle categorie</a>
+{% block admin_body %}
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="h3 mb-1">Categories</h2>
+            <p class="text-muted mb-0">Gestion des univers artistiques disponibles sur la plateforme.</p>
+        </div>
+        <a class="btn btn-primary rounded-4 px-4" href="{{ path('app_back_category_new') }}">
+            <i class="bi bi-tag-fill me-2"></i>Nouvelle categorie
+        </a>
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <table class="table align-middle">
+    <div class="admin-surface p-4">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle admin-table mb-0">
                 <thead>
                     <tr>
                         <th>Nom</th>
                         <th>Description</th>
+                        <th>Activites</th>
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for category in categories %}
                         <tr>
-                            <td>{{ category.nom }}</td>
+                            <td class="fw-semibold">{{ category.nom }}</td>
                             <td>{{ category.description ?: '-' }}</td>
+                            <td>{{ category.activities|length }}</td>
                             <td class="text-end">
-                                <a class="btn btn-sm btn-outline-secondary" href="{{ path('app_back_category_show', {id: category.id}) }}">Voir</a>
-                                <a class="btn btn-sm btn-outline-primary" href="{{ path('app_back_category_edit', {id: category.id}) }}">Modifier</a>
+                                <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_back_category_show', {id: category.id}) }}">Voir</a>
+                                <a class="btn btn-sm btn-outline-primary rounded-3" href="{{ path('app_back_category_edit', {id: category.id}) }}">Modifier</a>
                                 <form method="post" action="{{ path('app_back_category_delete', {id: category.id}) }}" class="d-inline">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete_category_' ~ category.id) }}">
-                                    <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer cette categorie ?');">Supprimer</button>
+                                    <button class="btn btn-sm btn-outline-danger rounded-3" onclick="return confirm('Supprimer cette categorie ?');">Supprimer</button>
                                 </form>
                             </td>
                         </tr>
                     {% else %}
-                        <tr><td colspan="3" class="text-muted">Aucune categorie.</td></tr>
+                        <tr>
+                            <td colspan="4" class="text-muted py-4">Aucune categorie enregistree.</td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>

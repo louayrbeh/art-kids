@@ -23,8 +23,11 @@ class ReservationService
         $this->assertReservationIsAllowed($child, $activity);
 
         $reservation = new Reservation();
-        $reservation->setChild($child);
-        $reservation->setActivity($activity);
+        $reservation
+            ->setChild($child)
+            ->setActivity($activity)
+            ->setDateReservation(new \DateTimeImmutable())
+            ->setCreatedAt(new \DateTimeImmutable());
 
         $this->entityManager->persist($reservation);
         $this->entityManager->flush();
@@ -32,6 +35,29 @@ class ReservationService
         $this->mailerService->sendReservationConfirmation($reservation);
 
         return $reservation;
+    }
+
+    public function canReserve(Child $child, Activity $activity): bool
+    {
+        try {
+            $this->assertReservationIsAllowed($child, $activity);
+
+            return true;
+        } catch (\DomainException) {
+            return false;
+        }
+    }
+
+    public function cancelReservation(Reservation $reservation): void
+    {
+        if ($reservation->estAnnulee()) {
+            return;
+        }
+
+        $reservation->annuler();
+        $reservation->setUpdatedAt(new \DateTimeImmutable());
+        $reservation->getActivity()?->updateStatutIfNeeded();
+        $this->entityManager->flush();
     }
 
     public function assertReservationIsAllowed(Child $child, Activity $activity, ?User $expectedParent = null): void

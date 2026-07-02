@@ -9,6 +9,7 @@
                 <div class="card-body">
                     <h1 class="h4 mb-4">Inscription parent</h1>
                     {{ form_start(registrationForm) }}
+                        {{ form_errors(registrationForm) }}
                         <div class="row g-3">
                             <div class="col-md-6">{{ form_row(registrationForm.nom) }}</div>
                             <div class="col-md-6">{{ form_row(registrationForm.prenom) }}</div>

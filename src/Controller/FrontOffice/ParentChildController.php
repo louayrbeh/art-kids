@@ -35,6 +35,9 @@ class ParentChildController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $child
+                ->setParent($this->getParentUser())
+                ->setCreatedAt(new \DateTimeImmutable());
             $entityManager->persist($child);
             $entityManager->flush();
 
@@ -68,6 +71,9 @@ class ParentChildController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $child
+                ->setParent($this->getParentUser())
+                ->setUpdatedAt(new \DateTimeImmutable());
             $entityManager->flush();
             $this->addFlash('success', 'Enfant modifie avec succes.');
 

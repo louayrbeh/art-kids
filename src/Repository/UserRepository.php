@@ -32,6 +32,57 @@ class UserRepository extends ServiceEntityRepository
 
     public function countParents(): int
     {
-        return count($this->findParents());
+        return $this->countByRole(UserRole::ROLE_PARENT->value);
+    }
+
+    public function countAdmins(): int
+    {
+        return $this->countByRole(UserRole::ROLE_ADMIN->value);
+    }
+
+    public function countActiveAdmins(): int
+    {
+        return count(array_filter(
+            $this->findAll(),
+            static fn (User $user): bool => $user->isAdmin() && $user->isActive()
+        ));
+    }
+
+    public function countDisabled(): int
+    {
+        return count(array_filter(
+            $this->findAll(),
+            static fn (User $user): bool => !$user->isActive()
+        ));
+    }
+
+    public function countByRole(string $role): int
+    {
+        return count(array_filter(
+            $this->findAll(),
+            static fn (User $user): bool => in_array($role, $user->getRoles(), true)
+        ));
+    }
+
+    /**
+     * @return array<int, array{label: string, count: int}>
+     */
+    public function getUsersByRole(): array
+    {
+        return [
+            ['label' => 'Parents', 'count' => $this->countParents()],
+            ['label' => 'Administrateurs', 'count' => $this->countAdmins()],
+        ];
+    }
+
+    /**
+     * @return list<User>
+     */
+    public function findDisabledUsers(): array
+    {
+        return array_values(array_filter(
+            $this->findBy([], ['nom' => 'ASC', 'prenom' => 'ASC']),
+            static fn (User $user): bool => !$user->isActive()
+        ));
     }
 }

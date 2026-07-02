@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Enum\ReservationStatusEnum;
 use App\Repository\ReservationRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -18,17 +19,18 @@ class Reservation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Assert\NotNull(message: 'La date de reservation est obligatoire.')]
     private \DateTimeImmutable $dateReservation;
 
     #[ORM\Column(length: 20, enumType: ReservationStatusEnum::class)]
     #[Assert\NotNull(message: 'Le statut est obligatoire.')]
     private ?ReservationStatusEnum $statut = ReservationStatusEnum::EN_ATTENTE;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $createdAt;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
@@ -82,9 +84,23 @@ class Reservation
         return $this->createdAt;
     }
 
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 
     public function getChild(): ?Child

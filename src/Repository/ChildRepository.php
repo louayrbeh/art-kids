@@ -23,10 +23,25 @@ class ChildRepository extends ServiceEntityRepository
     public function findByParent(User $parent): array
     {
         return $this->createQueryBuilder('c')
+            ->leftJoin('c.parent', 'p')
+            ->addSelect('p')
             ->andWhere('c.parent = :parent')
             ->setParameter('parent', $parent)
             ->orderBy('c.nom', 'ASC')
             ->addOrderBy('c.prenom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return list<Child>
+     */
+    public function findAllWithParents(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.parent', 'p')
+            ->addSelect('p')
+            ->orderBy('c.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
     }

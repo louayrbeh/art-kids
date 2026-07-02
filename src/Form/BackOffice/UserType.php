@@ -20,6 +20,11 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $user = $options['data'];
+        $selectedRole = $user instanceof User && $user->isAdmin()
+            ? UserRole::ROLE_ADMIN->value
+            : UserRole::ROLE_PARENT->value;
+
         $builder
             ->add('nom', TextType::class, [
                 'label' => 'Nom',
@@ -35,13 +40,16 @@ class UserType extends AbstractType
                 'required' => false,
             ])
             ->add('roles', ChoiceType::class, [
-                'label' => 'Roles',
+                'label' => 'Role',
                 'choices' => [
-                    'Administrateur' => UserRole::ROLE_ADMIN->value,
                     'Parent' => UserRole::ROLE_PARENT->value,
+                    'Administrateur' => UserRole::ROLE_ADMIN->value,
                 ],
-                'multiple' => true,
+                'multiple' => false,
                 'expanded' => true,
+                'mapped' => false,
+                'required' => true,
+                'data' => $selectedRole,
             ])
             ->add('plainPassword', PasswordType::class, [
                 'label' => $options['require_password'] ? 'Mot de passe' : 'Nouveau mot de passe',
