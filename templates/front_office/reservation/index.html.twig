@@ -47,9 +47,9 @@
                                 <td class="text-end">
                                     <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_front_reservation_show', {id: reservation.id}) }}">Voir</a>
                                     {% if reservation.statut.value not in ['ANNULEE', 'TERMINEE'] %}
-                                        <form method="post" action="{{ path('app_front_reservation_cancel', {id: reservation.id}) }}" class="d-inline">
+                                        <form method="post" action="{{ path('app_front_reservation_cancel', {id: reservation.id}) }}" class="d-inline" data-turbo="false">
                                             <input type="hidden" name="_token" value="{{ csrf_token('cancel_reservation_' ~ reservation.id) }}">
-                                            <button class="btn btn-sm btn-outline-danger rounded-3" onclick="return confirm('Annuler cette reservation ?');">Annuler</button>
+                                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-3" onclick="return confirm('Annuler cette reservation ?');">Annuler</button>
                                         </form>
                                     {% endif %}
                                 </td>

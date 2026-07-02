@@ -43,19 +43,19 @@ class ParentReservationController extends AbstractController
         $this->denyUnlessOwnReservation($reservation);
 
         if (!$this->isCsrfTokenValid('cancel_reservation_'.$reservation->getId(), (string) $request->request->get('_token'))) {
-            $this->addFlash('error', 'Jeton CSRF invalide.');
+            $this->addFlash('danger', 'Jeton CSRF invalide.');
 
-            return $this->redirectToRoute('app_front_reservation_index');
+            return $this->redirectToRoute('app_front_reservation_index', [], Response::HTTP_SEE_OTHER);
         }
 
         try {
             $reservationService->cancelReservation($reservation);
             $this->addFlash('success', 'Reservation annulee avec succes.');
-        } catch (\DomainException $exception) {
-            $this->addFlash('error', $exception->getMessage());
+        } catch (\Throwable $exception) {
+            $this->addFlash('danger', $exception->getMessage());
         }
 
-        return $this->redirectToRoute('app_front_reservation_index');
+        return $this->redirectToRoute('app_front_reservation_index', [], Response::HTTP_SEE_OTHER);
     }
 
     private function denyUnlessOwnReservation(Reservation $reservation): void

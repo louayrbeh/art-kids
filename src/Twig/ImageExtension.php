@@ -55,6 +55,10 @@ class ImageExtension extends AbstractExtension
         }
 
         if ($this->isExternalUrl($image)) {
+            if ($this->isBlockedPlaceholderUrl($image)) {
+                return $this->packages->getUrl(ltrim($placeholderPath, '/'));
+            }
+
             return $image;
         }
 
@@ -75,6 +79,13 @@ class ImageExtension extends AbstractExtension
     private function isExternalUrl(string $image): bool
     {
         return str_starts_with($image, 'http://') || str_starts_with($image, 'https://');
+    }
+
+    private function isBlockedPlaceholderUrl(string $image): bool
+    {
+        $host = parse_url($image, PHP_URL_HOST);
+
+        return is_string($host) && 'placehold.co' === strtolower($host);
     }
 
     private function isLocalFilenameAllowed(string $image): bool

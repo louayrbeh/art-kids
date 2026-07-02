@@ -3,10 +3,8 @@
 namespace App\Controller\FrontOffice;
 
 use App\Entity\Activity;
-use App\Entity\Category;
-use App\Entity\Reservation;
+use App\Entity\Child;
 use App\Entity\User;
-use App\Form\FrontOffice\ReservationType;
 use App\Repository\ActivityRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\ChildRepository;
@@ -56,95 +54,95 @@ class ParentActivityController extends AbstractController
         if (!$activity->estFuture() || null === $activity->getCategory()) {
             $this->addFlash('error', 'Cette activite n est plus disponible.');
 
-            return $this->redirectToRoute('app_front_activity_index');
+            return $this->redirectToRoute('app_front_activity_index', [], Response::HTTP_SEE_OTHER);
         }
 
         /** @var User $parent */
         $parent = $this->getUser();
         $children = $childRepository->findByParent($parent);
-        $compatibleChildren = array_values(array_filter(
-            $children,
-            static fn ($child): bool => $child->getAge() >= $activity->getAgeMin() && $child->getAge() <= $activity->getAgeMax()
-        ));
-
-        $reservationForm = null;
-        if ([] !== $compatibleChildren && $activity->estDisponible()) {
-            $reservationForm = $this->createForm(ReservationType::class, new Reservation(), [
-                'children' => $compatibleChildren,
-                'action' => $this->generateUrl('app_front_activity_reserve', ['id' => $activity->getId()]),
-                'method' => 'POST',
-            ])->createView();
-        }
-
-        $recommendations = [];
-        foreach ($compatibleChildren as $child) {
-            $recommendations[$child->getId()] = array_values(array_filter(
-                $recommendationService->recommendForChild($child),
-                static fn (Activity $recommendedActivity): bool => $recommendedActivity->getId() !== $activity->getId()
-            ));
-        }
+        $compatibleChildren = $this->getCompatibleChildren($children, $activity);
 
         return $this->render('front_office/activity/show.html.twig', [
             'activity' => $activity,
             'children' => $children,
             'compatibleChildren' => $compatibleChildren,
-            'recommendations' => $recommendations,
-            'reservationForm' => $reservationForm,
+            'recommendations' => $this->buildRecommendations($compatibleChildren, $activity, $recommendationService),
         ]);
     }
 
-    #[Route('/{id}/reserve', name: 'reserve', methods: ['GET', 'POST'])]
+    #[Route('/{id}/reserve', name: 'reserve', methods: ['POST'])]
     public function reserve(
         Request $request,
         Activity $activity,
         ChildRepository $childRepository,
         ReservationService $reservationService,
-        RecommendationService $recommendationService,
     ): Response {
-        if ('GET' === $request->getMethod()) {
-            return $this->redirectToRoute('app_front_activity_show', ['id' => $activity->getId()]);
+        if (!$this->isCsrfTokenValid('reserve_activity_'.$activity->getId(), (string) $request->request->get('_token'))) {
+            $this->addFlash('danger', 'Token CSRF invalide.');
+
+            return $this->redirectToRoute('app_front_activity_show', [
+                'id' => $activity->getId(),
+            ], Response::HTTP_SEE_OTHER);
         }
 
         /** @var User $parent */
         $parent = $this->getUser();
         $children = $childRepository->findByParent($parent);
-        $compatibleChildren = array_values(array_filter(
-            $children,
-            static fn ($child): bool => $child->getAge() >= $activity->getAgeMin() && $child->getAge() <= $activity->getAgeMax()
-        ));
-
         if ([] === $children) {
-            $this->addFlash('error', 'Ajoutez d abord un enfant avant de reserver une activite.');
+            $this->addFlash('danger', 'Ajoutez d abord un enfant avant de reserver une activite.');
 
-            return $this->redirectToRoute('app_front_child_new');
+            return $this->redirectToRoute('app_front_child_new', [], Response::HTTP_SEE_OTHER);
         }
 
-        if ([] === $compatibleChildren) {
-            $this->addFlash('error', 'Aucun de vos enfants n est compatible avec cette activite.');
+        $childId = $request->request->get('child_id');
+        $child = is_numeric($childId) ? $childRepository->find((int) $childId) : null;
 
-            return $this->redirectToRoute('app_front_activity_show', ['id' => $activity->getId()]);
+        if (!$child instanceof Child || $child->getParent() !== $parent) {
+            $this->addFlash('danger', 'Enfant invalide.');
+
+            return $this->redirectToRoute('app_front_activity_show', [
+                'id' => $activity->getId(),
+            ], Response::HTTP_SEE_OTHER);
         }
 
-        $reservation = new Reservation();
-        $form = $this->createForm(ReservationType::class, $reservation, [
-            'children' => $compatibleChildren,
-            'action' => $this->generateUrl('app_front_activity_reserve', ['id' => $activity->getId()]),
-            'method' => 'POST',
-        ]);
-        $form->handleRequest($request);
+        try {
+            $reservationService->assertReservationIsAllowed($child, $activity, $parent);
+            $reservationService->createReservation($child, $activity);
+            $this->addFlash('success', 'Reservation effectuee avec succes.');
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $reservationService->assertReservationIsAllowed($reservation->getChild(), $activity, $parent);
-                $reservationService->createReservation($reservation->getChild(), $activity);
-                $this->addFlash('success', 'Reservation effectuee avec succes.');
+            return $this->redirectToRoute('app_front_reservation_index', [], Response::HTTP_SEE_OTHER);
+        } catch (\Throwable $exception) {
+            $this->addFlash('danger', $exception->getMessage() ?: 'Impossible de creer la reservation.');
 
-                return $this->redirectToRoute('app_front_reservation_index');
-            } catch (\DomainException $exception) {
-                $this->addFlash('error', $exception->getMessage());
-            }
+            return $this->redirectToRoute('app_front_activity_show', [
+                'id' => $activity->getId(),
+            ], Response::HTTP_SEE_OTHER);
         }
+    }
 
+    /**
+     * @param list<Child> $children
+     *
+     * @return list<Child>
+     */
+    private function getCompatibleChildren(array $children, Activity $activity): array
+    {
+        return array_values(array_filter(
+            $children,
+            static fn (Child $child): bool => $child->getAge() >= $activity->getAgeMin() && $child->getAge() <= $activity->getAgeMax()
+        ));
+    }
+
+    /**
+     * @param list<Child> $compatibleChildren
+     *
+     * @return array<int, list<Activity>>
+     */
+    private function buildRecommendations(
+        array $compatibleChildren,
+        Activity $activity,
+        RecommendationService $recommendationService,
+    ): array {
         $recommendations = [];
         foreach ($compatibleChildren as $child) {
             $recommendations[$child->getId()] = array_values(array_filter(
@@ -153,12 +151,6 @@ class ParentActivityController extends AbstractController
             ));
         }
 
-        return $this->render('front_office/activity/show.html.twig', [
-            'activity' => $activity,
-            'children' => $children,
-            'compatibleChildren' => $compatibleChildren,
-            'recommendations' => $recommendations,
-            'reservationForm' => $form->createView(),
-        ]);
+        return $recommendations;
     }
 }

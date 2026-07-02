@@ -45,12 +45,23 @@
         <div class="col-lg-5">
             <div class="parent-surface p-4 mb-4">
                 <h2 class="h5">Inscrire un enfant</h2>
-                {% if reservationForm %}
-                    {{ form_start(reservationForm) }}
-                        {{ form_errors(reservationForm) }}
-                        {{ form_row(reservationForm.child) }}
-                        {{ form_row(reservationForm.save) }}
-                    {{ form_end(reservationForm) }}
+                {% if compatibleChildren and activity.estDisponible %}
+                    <form method="post" action="{{ path('app_front_activity_reserve', {'id': activity.id}) }}" data-turbo="false" class="d-grid gap-3">
+                        <input type="hidden" name="_token" value="{{ csrf_token('reserve_activity_' ~ activity.id) }}">
+                        <div>
+                            <label class="form-label" for="child_id">Choisissez un enfant</label>
+                            <select id="child_id" name="child_id" class="form-select" required>
+                                <option value="">Selectionnez un enfant</option>
+                                {% for child in compatibleChildren %}
+                                    <option value="{{ child.id }}">{{ child.fullName }} ({{ child.age }} ans)</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-art-primary">
+                            <i class="bi bi-check2-circle me-1"></i>
+                            Reserver
+                        </button>
+                    </form>
                 {% elseif children %}
                     <div class="parent-empty">Aucun de vos enfants n est compatible avec cette activite ou elle n est plus reservable.</div>
                 {% else %}

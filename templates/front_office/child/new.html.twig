@@ -3,27 +3,51 @@
 {% block title %}Ajouter un enfant | Art Kids{% endblock %}
 
 {% block parent_body %}
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-        <div>
-            <h1 class="h3 mb-1">Ajouter un enfant</h1>
-            <p class="text-muted mb-0">Ce profil sera automatiquement rattache a votre compte parent.</p>
-        </div>
-        <a class="btn btn-outline-secondary rounded-4" href="{{ path('app_front_child_index') }}">Retour</a>
-    </div>
+    <div class="parent-form-page">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-xl-7">
+                    <div class="art-form-card child-form-card hover-lift">
+                        <div class="d-flex justify-content-between align-items-center gap-3 mb-4">
+                            <a class="btn btn-art-secondary child-form-back" href="{{ path('app_front_child_index') }}">
+                                <i class="bi bi-arrow-left me-1"></i>
+                                Retour a mes enfants
+                            </a>
+                        </div>
 
-    <div class="parent-surface parent-form-card p-4 p-lg-5">
-        {{ form_start(form) }}
-            {{ form_errors(form) }}
-            <div class="row g-3">
-                <div class="col-md-6">{{ form_row(form.nom) }}</div>
-                <div class="col-md-6">{{ form_row(form.prenom) }}</div>
-                <div class="col-md-6">{{ form_row(form.dateNaissance) }}</div>
-                <div class="col-md-6">{{ form_row(form.sexe) }}</div>
+                        <div class="child-form-header mb-4">
+                            <div class="child-form-icon mb-3">
+                                <i class="bi bi-person-heart"></i>
+                            </div>
+                            <h1 class="art-form-title mb-2">Ajouter un enfant</h1>
+                            <p class="art-form-subtitle mb-0">Renseignez les informations de votre enfant afin de pouvoir l’inscrire aux activités adaptées à son âge.</p>
+                        </div>
+
+                        {{ form_start(form, {'attr': {'class': 'art-child-form'}}) }}
+                            {{ form_errors(form) }}
+
+                            <div class="row g-4">
+                                <div class="col-md-6">{{ form_row(form.nom) }}</div>
+                                <div class="col-md-6">{{ form_row(form.prenom) }}</div>
+                                <div class="col-md-6">{{ form_row(form.dateNaissance) }}</div>
+                                <div class="col-md-6">{{ form_row(form.sexe) }}</div>
+                            </div>
+
+                            <div class="form-actions mt-4">
+                                {{ form_widget(form.save, {
+                                    label: 'Ajouter l’enfant',
+                                    attr: { class: 'btn btn-art-primary' }
+                                }) }}
+
+                                <a href="{{ path('app_front_child_index') }}" class="btn btn-art-secondary">
+                                    <i class="bi bi-arrow-left me-1"></i>
+                                    Retour a mes enfants
+                                </a>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
             </div>
-            <div class="mt-4 d-flex gap-3">
-                {{ form_row(form.save) }}
-                <a class="btn btn-outline-secondary rounded-4" href="{{ path('app_front_child_index') }}">Annuler</a>
-            </div>
-        {{ form_end(form) }}
+        </div>
     </div>
 {% endblock %}
