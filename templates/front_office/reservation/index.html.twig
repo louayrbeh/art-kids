@@ -10,18 +10,18 @@
 {% block title %}Mes reservations | Art Kids{% endblock %}
 
 {% block parent_body %}
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div class="art-page-header">
         <div>
-            <h1 class="h3 mb-1">Mes reservations</h1>
-            <p class="text-muted mb-0">Historique complet des reservations de vos enfants.</p>
+            <h1 class="art-page-title">Mes reservations</h1>
+            <p class="art-page-subtitle">Historique complet des reservations de vos enfants.</p>
         </div>
-        <a class="btn btn-outline-secondary rounded-4" href="{{ path('app_front_parent_index') }}">Retour au dashboard</a>
+        <a class="btn btn-art-secondary" href="{{ path('app_front_parent_index') }}">Retour au dashboard</a>
     </div>
 
-    <div class="parent-surface p-4">
+    <div class="art-table-card">
         {% if reservations %}
             <div class="table-responsive">
-                <table class="table align-middle parent-table mb-0">
+                <table class="table art-table align-middle mb-0">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -43,13 +43,17 @@
                                 <td>{{ reservation.activity.category.nom }}</td>
                                 <td>{{ reservation.activity.dateActivite|date('d/m/Y') }}</td>
                                 <td>{{ reservation.dateReservation|date('d/m/Y H:i') }}</td>
-                                <td><span class="badge text-bg-{{ reservationBadgeMap[reservation.statut.value] ?? 'secondary' }}">{{ reservation.statut.value }}</span></td>
+                                <td><span class="art-badge {{ reservationBadgeMap[reservation.statut.value] == 'success' ? 'badge-art-success' : (reservationBadgeMap[reservation.statut.value] == 'warning' ? 'badge-art-warning' : (reservationBadgeMap[reservation.statut.value] == 'danger' ? 'badge-art-danger' : 'badge-art-muted')) }}">{{ reservation.statut.value }}</span></td>
                                 <td class="text-end">
-                                    <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_front_reservation_show', {id: reservation.id}) }}">Voir</a>
+                                    <a class="art-action-btn art-action-view" href="{{ path('app_front_reservation_show', {id: reservation.id}) }}" title="Voir">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
                                     {% if reservation.statut.value not in ['ANNULEE', 'TERMINEE'] %}
                                         <form method="post" action="{{ path('app_front_reservation_cancel', {id: reservation.id}) }}" class="d-inline" data-turbo="false">
                                             <input type="hidden" name="_token" value="{{ csrf_token('cancel_reservation_' ~ reservation.id) }}">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-3" onclick="return confirm('Annuler cette reservation ?');">Annuler</button>
+                                            <button type="submit" class="art-action-btn art-action-delete" onclick="return confirm('Annuler cette reservation ?');" title="Annuler">
+                                                <i class="bi bi-x-circle"></i>
+                                            </button>
                                         </form>
                                     {% endif %}
                                 </td>
@@ -59,7 +63,11 @@
                 </table>
             </div>
         {% else %}
-            <div class="parent-empty">Aucune reservation pour le moment.</div>
+            <div class="art-empty-state">
+                <i class="bi bi-journal-check"></i>
+                <h3>Aucune reservation</h3>
+                <p class="mb-0">Vos inscriptions à venir et passées apparaîtront ici.</p>
+            </div>
         {% endif %}
     </div>
 {% endblock %}

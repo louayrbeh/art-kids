@@ -3,19 +3,19 @@
 {% block title %}Activites | Admin{% endblock %}
 
 {% block admin_body %}
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div class="art-page-header">
         <div>
-            <h2 class="h3 mb-1">Activites</h2>
-            <p class="text-muted mb-0">Catalogue des activites artistiques gerees dans MySQL.</p>
+            <h1 class="art-page-title">Activites</h1>
+            <p class="art-page-subtitle">Catalogue des activites artistiques gerees dans MySQL.</p>
         </div>
-        <a class="btn btn-primary rounded-4 px-4" href="{{ path('app_back_activity_new') }}">
+        <a class="btn btn-art-primary" href="{{ path('app_back_activity_new') }}">
             <i class="bi bi-palette-fill me-2"></i>Nouvelle activite
         </a>
     </div>
 
-    <div class="admin-surface p-4">
+    <div class="art-table-card">
         <div class="table-responsive">
-            <table class="table table-hover align-middle admin-table mb-0">
+            <table class="table art-table align-middle mb-0">
                 <thead>
                     <tr>
                         <th>Image</th>
@@ -37,19 +37,35 @@
                             <td>{{ activity.category.nom }}</td>
                             <td>{{ activity.dateActivite|date('d/m/Y') }}</td>
                             <td>{{ activity.capaciteMax }}</td>
-                            <td><span class="badge text-bg-{{ activity.statut.value == 'OUVERTE' ? 'success' : (activity.statut.value == 'COMPLETE' ? 'warning' : (activity.statut.value == 'ANNULEE' ? 'danger' : 'secondary')) }}">{{ activity.statut.value }}</span></td>
+                            <td>
+                                <span class="art-badge {{ activity.statut.value == 'OUVERTE' ? 'badge-art-success' : (activity.statut.value == 'COMPLETE' ? 'badge-art-warning' : (activity.statut.value == 'ANNULEE' ? 'badge-art-danger' : 'badge-art-muted')) }}">
+                                    {{ activity.statut.value }}
+                                </span>
+                            </td>
                             <td class="text-end">
-                                <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_back_activity_show', {id: activity.id}) }}">Voir</a>
-                                <a class="btn btn-sm btn-outline-primary rounded-3" href="{{ path('app_back_activity_edit', {id: activity.id}) }}">Modifier</a>
+                                <a class="art-action-btn art-action-view" href="{{ path('app_back_activity_show', {id: activity.id}) }}" title="Voir">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a class="art-action-btn art-action-edit" href="{{ path('app_back_activity_edit', {id: activity.id}) }}" title="Modifier">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
                                 <form method="post" action="{{ path('app_back_activity_delete', {id: activity.id}) }}" class="d-inline">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete_activity_' ~ activity.id) }}">
-                                    <button class="btn btn-sm btn-outline-danger rounded-3" onclick="return confirm('Supprimer cette activite ?');">Supprimer</button>
+                                    <button class="art-action-btn art-action-delete" onclick="return confirm('Supprimer cette activite ?');" title="Supprimer">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="7" class="text-muted py-4">Aucune activite enregistree.</td>
+                            <td colspan="7" class="py-4">
+                                <div class="art-empty-state">
+                                    <i class="bi bi-palette"></i>
+                                    <h3>Aucune activite</h3>
+                                    <p class="mb-0">Ajoutez une activite pour enrichir le catalogue.</p>
+                                </div>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

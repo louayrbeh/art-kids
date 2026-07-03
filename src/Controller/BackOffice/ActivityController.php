@@ -48,7 +48,7 @@ class ActivityController extends AbstractController
                     return $this->render('back_office/activity/new.html.twig', [
                         'form' => $form->createView(),
                         'activity' => $activity,
-                    ]);
+                    ], new Response(null, Response::HTTP_UNPROCESSABLE_ENTITY));
                 }
             }
 
@@ -67,7 +67,7 @@ class ActivityController extends AbstractController
         return $this->render('back_office/activity/new.html.twig', [
             'form' => $form->createView(),
             'activity' => $activity,
-        ]);
+        ], new Response(null, $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK));
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
@@ -107,7 +107,7 @@ class ActivityController extends AbstractController
                     return $this->render('back_office/activity/edit.html.twig', [
                         'form' => $form->createView(),
                         'activity' => $activity,
-                    ]);
+                    ], new Response(null, Response::HTTP_UNPROCESSABLE_ENTITY));
                 }
 
                 $activity->setImage($newFilename);
@@ -129,7 +129,7 @@ class ActivityController extends AbstractController
         return $this->render('back_office/activity/edit.html.twig', [
             'form' => $form->createView(),
             'activity' => $activity,
-        ]);
+        ], new Response(null, $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK));
     }
 
     #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]

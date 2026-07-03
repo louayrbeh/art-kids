@@ -9,7 +9,10 @@
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
             <link rel="stylesheet" href="{{ asset('assets/css/artkids-theme.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/css/artkids-layout.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/css/artkids-components.css') }}">
             <link rel="stylesheet" href="{{ asset('assets/css/artkids-forms.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/css/artkids-tables.css') }}">
             <link rel="stylesheet" href="{{ asset('assets/css/artkids-animations.css') }}">
         {% endblock %}
 
@@ -28,9 +31,9 @@
     </head>
     <body class="artkids-body {% block body_class %}{% endblock %}">
         {% block navbar %}
-            <nav class="navbar navbar-expand-lg navbar-light art-navbar sticky-top">
+            <nav class="navbar navbar-expand-lg navbar-light art-navbar art-appbar sticky-top">
                 <div class="container art-navbar-shell">
-                    <a class="navbar-brand art-brand" href="{{ path('app_front_home') }}">
+                    <a class="navbar-brand art-brand art-navbar-brand" href="{{ path('app_front_home') }}">
                         <span class="art-brand-mark"><i class="bi bi-palette2"></i></span>
                         <span><span class="art-brand-art">Art</span><span class="art-brand-kids">Kids</span></span>
                     </a>
@@ -93,7 +96,7 @@
                 {% for label, messages in app.flashes %}
                     {% for message in messages %}
                         {% set normalized = label == 'error' ? 'danger' : label %}
-                        <div class="alert alert-{{ normalized }} art-flash alert-dismissible fade show slide-up" role="alert">
+                        <div class="alert alert-{{ normalized }} art-flash art-alert alert-dismissible fade show slide-up" role="alert">
                             <span class="art-flash__icon"><i class="bi {{ flashIcons[normalized] ?? 'bi-bell' }}"></i></span>
                             <div class="art-flash__content">{{ message }}</div>
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>

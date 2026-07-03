@@ -3,19 +3,19 @@
 {% block title %}Utilisateurs | Admin{% endblock %}
 
 {% block admin_body %}
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div class="art-page-header">
         <div>
-            <h2 class="h3 mb-1">Utilisateurs</h2>
-            <p class="text-muted mb-0">Liste complete des comptes venant de MySQL.</p>
+            <h1 class="art-page-title">Utilisateurs</h1>
+            <p class="art-page-subtitle">Liste complete des comptes venant de MySQL.</p>
         </div>
-        <a class="btn btn-primary rounded-4 px-4" href="{{ path('app_back_user_new') }}">
+        <a class="btn btn-art-primary" href="{{ path('app_back_user_new') }}">
             <i class="bi bi-person-plus-fill me-2"></i>Nouvel utilisateur
         </a>
     </div>
 
-    <div class="admin-surface p-4">
+    <div class="art-table-card">
         <div class="table-responsive">
-            <table class="table table-hover align-middle admin-table mb-0">
+            <table class="table art-table align-middle mb-0">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -39,34 +39,46 @@
                             <td>{{ user.email }}</td>
                             <td>{{ user.telephone ?: '-' }}</td>
                             <td>
-                                <span class="badge text-bg-{{ user.isAdmin ? 'danger' : 'success' }}">
+                                <span class="art-badge {{ user.isAdmin ? 'badge-art-danger' : 'badge-art-success' }}">
                                     {{ user.isAdmin ? 'ROLE_ADMIN' : 'ROLE_PARENT' }}
                                 </span>
                             </td>
                             <td>
-                                <span class="badge text-bg-{{ user.isActive ? 'success' : 'secondary' }}">
+                                <span class="art-badge {{ user.isActive ? 'badge-art-success' : 'badge-art-muted' }}">
                                     {{ user.isActive ? 'Actif' : 'Desactive' }}
                                 </span>
                             </td>
                             <td>{{ user.createdAt|date('d/m/Y H:i') }}</td>
                             <td class="text-end">
-                                <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_back_user_show', {id: user.id}) }}">Voir</a>
-                                <a class="btn btn-sm btn-outline-primary rounded-3" href="{{ path('app_back_user_edit', {id: user.id}) }}">Modifier</a>
+                                <a class="art-action-btn art-action-view" href="{{ path('app_back_user_show', {id: user.id}) }}" title="Voir">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a class="art-action-btn art-action-edit" href="{{ path('app_back_user_edit', {id: user.id}) }}" title="Modifier">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
                                 <form method="post" action="{{ path('app_back_user_toggle_status', {id: user.id}) }}" class="d-inline">
                                     <input type="hidden" name="_token" value="{{ csrf_token('toggle_user_' ~ user.id) }}">
-                                    <button class="btn btn-sm btn-outline-warning rounded-3" {% if app.user and app.user.id == user.id and user.isActive %}title="Auto-desactivation interdite"{% endif %}>
-                                        {{ user.isActive ? 'Desactiver' : 'Activer' }}
+                                    <button class="art-action-btn art-action-confirm" {% if app.user and app.user.id == user.id and user.isActive %}title="Auto-desactivation interdite"{% else %}title="{{ user.isActive ? 'Desactiver' : 'Activer' }}"{% endif %}>
+                                        <i class="bi {{ user.isActive ? 'bi-pause-circle' : 'bi-play-circle' }}"></i>
                                     </button>
                                 </form>
                                 <form method="post" action="{{ path('app_back_user_delete', {id: user.id}) }}" class="d-inline">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete_user_' ~ user.id) }}">
-                                    <button class="btn btn-sm btn-outline-danger rounded-3" onclick="return confirm('Supprimer cet utilisateur ?');">Supprimer</button>
+                                    <button class="art-action-btn art-action-delete" onclick="return confirm('Supprimer cet utilisateur ?');" title="Supprimer">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="8" class="text-muted py-4">Aucun utilisateur enregistre.</td>
+                            <td colspan="8" class="py-4">
+                                <div class="art-empty-state">
+                                    <i class="bi bi-people"></i>
+                                    <h3>Aucun utilisateur</h3>
+                                    <p class="mb-0">Créez un compte parent ou administrateur pour démarrer.</p>
+                                </div>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

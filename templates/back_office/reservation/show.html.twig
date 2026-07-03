@@ -3,47 +3,42 @@
 {% block title %}Reservation | Admin{% endblock %}
 
 {% block admin_body %}
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div class="art-page-header">
         <div>
-            <h2 class="h3 mb-1">Reservation #{{ reservation.id }}</h2>
-            <p class="text-muted mb-0">Detail complet de la reservation et de son contexte.</p>
+            <h1 class="art-page-title">Reservation #{{ reservation.id }}</h1>
+            <p class="art-page-subtitle">Detail complet de la reservation et de son contexte.</p>
         </div>
         <div class="d-flex gap-2">
-            <a class="btn btn-outline-secondary rounded-4" href="{{ path('app_back_reservation_index') }}">Retour a la liste</a>
+            <a class="btn btn-art-secondary" href="{{ path('app_back_reservation_index') }}">Retour a la liste</a>
         </div>
     </div>
 
     <div class="row g-4">
         <div class="col-xl-7">
-            <div class="admin-surface p-4">
-                <dl class="row mb-0">
-                    <dt class="col-sm-4">Parent</dt>
-                    <dd class="col-sm-8">{{ reservation.child.parent.fullName }}</dd>
-                    <dt class="col-sm-4">Enfant</dt>
-                    <dd class="col-sm-8">{{ reservation.child.fullName }}</dd>
-                    <dt class="col-sm-4">Activite</dt>
-                    <dd class="col-sm-8">{{ reservation.activity.titre }}</dd>
-                    <dt class="col-sm-4">Date reservation</dt>
-                    <dd class="col-sm-8">{{ reservation.dateReservation|date('d/m/Y H:i') }}</dd>
-                    <dt class="col-sm-4">Statut</dt>
-                    <dd class="col-sm-8">{{ reservation.statut.value }}</dd>
-                </dl>
+            <div class="art-detail-card">
+                <div class="art-detail-grid">
+                    <div class="art-detail-item"><div class="art-detail-label">Parent</div><div class="art-detail-value">{{ reservation.child.parent.fullName }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Enfant</div><div class="art-detail-value">{{ reservation.child.fullName }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Activite</div><div class="art-detail-value">{{ reservation.activity.titre }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Date reservation</div><div class="art-detail-value">{{ reservation.dateReservation|date('d/m/Y H:i') }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Statut</div><div class="art-detail-value">{{ reservation.statut.value }}</div></div>
+                </div>
             </div>
         </div>
         <div class="col-xl-5">
-            <div class="admin-surface p-4">
+            <div class="art-detail-card">
                 <h3 class="h5 mb-3">Actions</h3>
                 <div class="d-flex flex-wrap gap-2">
                     {% if reservation.statut.value == 'EN_ATTENTE' %}
                         <form method="post" action="{{ path('app_back_reservation_confirm', {id: reservation.id}) }}">
                             <input type="hidden" name="_token" value="{{ csrf_token('confirm_reservation_' ~ reservation.id) }}">
-                            <button class="btn btn-success rounded-4">Confirmer</button>
+                            <button class="btn btn-art-primary">Confirmer</button>
                         </form>
                     {% endif %}
                     {% if reservation.statut.value != 'ANNULEE' %}
                         <form method="post" action="{{ path('app_back_reservation_cancel', {id: reservation.id}) }}">
                             <input type="hidden" name="_token" value="{{ csrf_token('cancel_admin_reservation_' ~ reservation.id) }}">
-                            <button class="btn btn-outline-danger rounded-4">Annuler</button>
+                            <button class="btn btn-art-danger">Annuler</button>
                         </form>
                     {% endif %}
                 </div>

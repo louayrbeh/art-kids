@@ -3,9 +3,17 @@
 {% block title %}Detail activite | Art Kids{% endblock %}
 
 {% block parent_body %}
+    <div class="art-page-header">
+        <div>
+            <h1 class="art-page-title">{{ activity.titre }}</h1>
+            <p class="art-page-subtitle">Consultez les informations, la compatibilite et l inscription pour cette activite.</p>
+        </div>
+        <a class="btn btn-art-secondary" href="{{ path('app_front_activity_index') }}">Retour aux activites</a>
+    </div>
+
     <div class="row g-4">
         <div class="col-lg-7">
-            <div class="parent-surface p-4 h-100">
+            <div class="art-detail-card h-100">
                 <div class="mb-4">
                     <img class="img-fluid rounded-4 activity-image-detail" src="{{ activity_image_url(activity.image) }}" alt="{{ activity.titre }}">
                 </div>
@@ -15,35 +23,24 @@
                         <div class="small text-muted mb-2">{{ activity.category.nom }}</div>
                         <h1 class="h3">{{ activity.titre }}</h1>
                     </div>
-                    <span class="badge text-bg-{{ activity.estDisponible ? 'success' : 'secondary' }}">{{ activity.statut.value }}</span>
+                    <span class="art-badge {{ activity.estDisponible ? 'badge-art-success' : 'badge-art-muted' }}">{{ activity.statut.value }}</span>
                 </div>
 
                 <p>{{ activity.description }}</p>
 
-                <dl class="row mb-0">
-                    <dt class="col-sm-4">Date</dt>
-                    <dd class="col-sm-8">{{ activity.dateActivite|date('d/m/Y') }}</dd>
-
-                    <dt class="col-sm-4">Horaire</dt>
-                    <dd class="col-sm-8">{{ activity.heureDebut|date('H:i') }} - {{ activity.heureFin|date('H:i') }}</dd>
-
-                    <dt class="col-sm-4">Lieu</dt>
-                    <dd class="col-sm-8">{{ activity.lieu ?: 'A definir' }}</dd>
-
-                    <dt class="col-sm-4">Prix</dt>
-                    <dd class="col-sm-8">{{ activity.prix ? activity.prix ~ ' TND' : 'Gratuit' }}</dd>
-
-                    <dt class="col-sm-4">Age autorise</dt>
-                    <dd class="col-sm-8">{{ activity.ageMin }} - {{ activity.ageMax }} ans</dd>
-
-                    <dt class="col-sm-4">Places disponibles</dt>
-                    <dd class="col-sm-8">{{ activity.placesDisponibles }}</dd>
-                </dl>
+                <div class="art-detail-grid">
+                    <div class="art-detail-item"><div class="art-detail-label">Date</div><div class="art-detail-value">{{ activity.dateActivite|date('d/m/Y') }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Horaire</div><div class="art-detail-value">{{ activity.heureDebut|date('H:i') }} - {{ activity.heureFin|date('H:i') }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Lieu</div><div class="art-detail-value">{{ activity.lieu ?: 'A definir' }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Prix</div><div class="art-detail-value">{{ activity.prix ? activity.prix ~ ' TND' : 'Gratuit' }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Age autorise</div><div class="art-detail-value">{{ activity.ageMin }} - {{ activity.ageMax }} ans</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Places disponibles</div><div class="art-detail-value">{{ activity.placesDisponibles }}</div></div>
+                </div>
             </div>
         </div>
 
         <div class="col-lg-5">
-            <div class="parent-surface p-4 mb-4">
+            <div class="art-detail-card mb-4">
                 <h2 class="h5">Inscrire un enfant</h2>
                 {% if compatibleChildren and activity.estDisponible %}
                     <form method="post" action="{{ path('app_front_activity_reserve', {'id': activity.id}) }}" data-turbo="false" class="d-grid gap-3">
@@ -63,16 +60,16 @@
                         </button>
                     </form>
                 {% elseif children %}
-                    <div class="parent-empty">Aucun de vos enfants n est compatible avec cette activite ou elle n est plus reservable.</div>
+                    <div class="art-empty-state py-4">Aucun de vos enfants n est compatible avec cette activite ou elle n est plus reservable.</div>
                 {% else %}
-                    <div class="parent-empty">
+                    <div class="art-empty-state">
                         <p class="mb-3">Ajoutez un enfant pour pouvoir reserver cette activite.</p>
-                        <a class="btn btn-primary rounded-4" href="{{ path('app_front_child_new') }}">Ajouter un enfant</a>
+                        <a class="btn btn-art-primary" href="{{ path('app_front_child_new') }}">Ajouter un enfant</a>
                     </div>
                 {% endif %}
             </div>
 
-            <div class="parent-surface p-4">
+            <div class="art-detail-card">
                 <h2 class="h5 mb-3">Compatibilite de vos enfants</h2>
                 {% if children %}
                     <ul class="list-group list-group-flush">
@@ -91,27 +88,27 @@
                         {% endfor %}
                     </ul>
                 {% else %}
-                    <div class="parent-empty">Aucun enfant enregistre sur votre compte.</div>
+                    <div class="art-empty-state py-4">Aucun enfant enregistre sur votre compte.</div>
                 {% endif %}
             </div>
         </div>
     </div>
 
     {% if recommendations %}
-        <div class="parent-surface p-4 mt-4">
+        <div class="art-detail-card mt-4">
             <h2 class="h5 mb-3">Autres suggestions proches</h2>
             <div class="row g-3">
                 {% for childId, items in recommendations %}
                     {% for item in items|slice(0, 2) %}
                         {% set recommendation = item.activity %}
                         <div class="col-md-6 col-xl-4">
-                            <div class="parent-surface p-3 h-100 bg-body-tertiary">
+                            <div class="art-card p-3 h-100">
                                 <img class="parent-card-media activity-image mb-3" src="{{ activity_image_url(recommendation.image) }}" alt="{{ recommendation.titre }}">
                                 <div class="small text-muted mb-2">{{ recommendation.category.nom }}</div>
                                 <h3 class="h6">{{ recommendation.titre }}</h3>
                                 <p class="small text-muted mb-2">{{ recommendation.dateActivite|date('d/m/Y') }} - {{ recommendation.ageMin }}-{{ recommendation.ageMax }} ans</p>
                                 <p class="small recommendation-reason mb-3">{{ item.reason }}</p>
-                                <a class="btn btn-sm btn-outline-primary rounded-3" href="{{ path('app_front_activity_show', {id: recommendation.id, child: childId}) }}">Voir details</a>
+                                <a class="btn btn-art-secondary btn-sm" href="{{ path('app_front_activity_show', {id: recommendation.id, child: childId}) }}">Voir details</a>
                             </div>
                         </div>
                     {% endfor %}

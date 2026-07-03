@@ -58,10 +58,10 @@
 
         <div class="container-fluid">
             <div class="row g-0">
-                <aside class="col-lg-3 col-xl-2 d-none d-lg-block admin-sidebar">
+                <aside class="col-lg-3 col-xl-2 d-none d-lg-block admin-sidebar art-sidebar">
                     <div class="admin-sidebar-inner">
                         <div class="mb-4">
-                            <div class="admin-brand mb-1">
+                            <div class="admin-brand art-sidebar-brand mb-1">
                                 <span class="admin-brand-art">Art</span><span class="admin-brand-kids">Kids</span>
                             </div>
                             <p class="small text-muted mb-0">Administration de la plateforme</p>
@@ -123,7 +123,7 @@
                         {% for label, messages in app.flashes %}
                             {% for message in messages %}
                                 {% set normalized = label == 'error' ? 'danger' : label %}
-                                <div class="alert alert-{{ normalized }} art-flash alert-dismissible fade show rounded-4 border-0 slide-up" role="alert">
+                                <div class="alert alert-{{ normalized }} art-flash art-alert alert-dismissible fade show rounded-4 border-0 slide-up" role="alert">
                                     <span class="art-flash__icon"><i class="bi {{ flashIcons[normalized] ?? 'bi-bell' }}"></i></span>
                                     <div class="art-flash__content">{{ message }}</div>
                                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>

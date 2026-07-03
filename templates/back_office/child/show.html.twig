@@ -3,31 +3,27 @@
 {% block title %}Enfant | Admin{% endblock %}
 
 {% block admin_body %}
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div class="art-page-header">
         <div>
-            <h2 class="h3 mb-1">{{ child.fullName }}</h2>
-            <p class="text-muted mb-0">Detail de l enfant et de ses reservations associees.</p>
+            <h1 class="art-page-title">{{ child.fullName }}</h1>
+            <p class="art-page-subtitle">Detail de l enfant et de ses reservations associees.</p>
         </div>
-        <a class="btn btn-outline-secondary rounded-4" href="{{ path('app_back_child_index') }}">Retour a la liste</a>
+        <a class="btn btn-art-secondary" href="{{ path('app_back_child_index') }}">Retour a la liste</a>
     </div>
 
     <div class="row g-4">
         <div class="col-xl-5">
-            <div class="admin-surface p-4">
-                <dl class="row mb-0">
-                    <dt class="col-sm-5">Parent</dt>
-                    <dd class="col-sm-7">{{ child.parent.fullName }}</dd>
-                    <dt class="col-sm-5">Date de naissance</dt>
-                    <dd class="col-sm-7">{{ child.dateNaissance|date('d/m/Y') }}</dd>
-                    <dt class="col-sm-5">Age</dt>
-                    <dd class="col-sm-7">{{ child.age }} ans</dd>
-                    <dt class="col-sm-5">Sexe</dt>
-                    <dd class="col-sm-7">{{ child.sexe.value }}</dd>
-                </dl>
+            <div class="art-detail-card">
+                <div class="art-detail-grid">
+                    <div class="art-detail-item"><div class="art-detail-label">Parent</div><div class="art-detail-value">{{ child.parent.fullName }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Date de naissance</div><div class="art-detail-value">{{ child.dateNaissance|date('d/m/Y') }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Age</div><div class="art-detail-value">{{ child.age }} ans</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Sexe</div><div class="art-detail-value">{{ child.sexe.value }}</div></div>
+                </div>
             </div>
         </div>
         <div class="col-xl-7">
-            <div class="admin-surface p-4">
+            <div class="art-detail-card">
                 <h3 class="h5 mb-3">Reservations liees</h3>
                 {% if child.reservations|length > 0 %}
                     <ul class="list-group list-group-flush">
@@ -37,12 +33,18 @@
                                     <div class="fw-semibold">{{ reservation.activity.titre }}</div>
                                     <div class="small text-muted">{{ reservation.dateReservation|date('d/m/Y H:i') }}</div>
                                 </div>
-                                <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_back_reservation_show', {id: reservation.id}) }}">Voir</a>
+                                <a class="art-action-btn art-action-view" href="{{ path('app_back_reservation_show', {id: reservation.id}) }}" title="Voir">
+                                    <i class="bi bi-eye"></i>
+                                </a>
                             </li>
                         {% endfor %}
                     </ul>
                 {% else %}
-                    <p class="text-muted mb-0">Aucune reservation pour cet enfant.</p>
+                    <div class="art-empty-state py-4">
+                        <i class="bi bi-journal-check"></i>
+                        <h3>Aucune reservation</h3>
+                        <p class="mb-0">Aucune reservation pour cet enfant.</p>
+                    </div>
                 {% endif %}
             </div>
         </div>

@@ -3,46 +3,32 @@
 {% block title %}Utilisateur | Admin{% endblock %}
 
 {% block admin_body %}
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div class="art-page-header">
         <div>
-            <h2 class="h3 mb-1">{{ user.fullName }}</h2>
-            <p class="text-muted mb-0">Detail du compte administrateur ou parent.</p>
+            <h1 class="art-page-title">{{ user.fullName }}</h1>
+            <p class="art-page-subtitle">Detail du compte administrateur ou parent.</p>
         </div>
         <div class="d-flex gap-2">
-            <a class="btn btn-outline-primary rounded-4" href="{{ path('app_back_user_edit', {id: user.id}) }}">Modifier</a>
-            <a class="btn btn-outline-secondary rounded-4" href="{{ path('app_back_user_index') }}">Retour a la liste</a>
+            <a class="btn btn-art-primary" href="{{ path('app_back_user_edit', {id: user.id}) }}">Modifier</a>
+            <a class="btn btn-art-secondary" href="{{ path('app_back_user_index') }}">Retour a la liste</a>
         </div>
     </div>
 
     <div class="row g-4">
         <div class="col-lg-8">
-            <div class="admin-surface p-4">
-                <dl class="row mb-0">
-                    <dt class="col-sm-4">Email</dt>
-                    <dd class="col-sm-8">{{ user.email }}</dd>
-                    <dt class="col-sm-4">Telephone</dt>
-                    <dd class="col-sm-8">{{ user.telephone ?: '-' }}</dd>
-                    <dt class="col-sm-4">Role</dt>
-                    <dd class="col-sm-8">
-                        <span class="badge text-bg-{{ user.isAdmin ? 'danger' : 'success' }}">
-                            {{ user.isAdmin ? 'ROLE_ADMIN' : 'ROLE_PARENT' }}
-                        </span>
-                    </dd>
-                    <dt class="col-sm-4">Statut</dt>
-                    <dd class="col-sm-8">
-                        <span class="badge text-bg-{{ user.isActive ? 'success' : 'secondary' }}">
-                            {{ user.isActive ? 'Actif' : 'Desactive' }}
-                        </span>
-                    </dd>
-                    <dt class="col-sm-4">Date creation</dt>
-                    <dd class="col-sm-8">{{ user.createdAt|date('d/m/Y H:i') }}</dd>
-                    <dt class="col-sm-4">Derniere mise a jour</dt>
-                    <dd class="col-sm-8">{{ user.updatedAt ? user.updatedAt|date('d/m/Y H:i') : '-' }}</dd>
-                </dl>
+            <div class="art-detail-card">
+                <div class="art-detail-grid">
+                    <div class="art-detail-item"><div class="art-detail-label">Email</div><div class="art-detail-value">{{ user.email }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Telephone</div><div class="art-detail-value">{{ user.telephone ?: '-' }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Role</div><div class="art-detail-value">{{ user.isAdmin ? 'ROLE_ADMIN' : 'ROLE_PARENT' }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Statut</div><div class="art-detail-value">{{ user.isActive ? 'Actif' : 'Desactive' }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Date creation</div><div class="art-detail-value">{{ user.createdAt|date('d/m/Y H:i') }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Derniere mise a jour</div><div class="art-detail-value">{{ user.updatedAt ? user.updatedAt|date('d/m/Y H:i') : '-' }}</div></div>
+                </div>
             </div>
         </div>
         <div class="col-lg-4">
-            <div class="admin-surface p-4">
+            <div class="art-detail-card">
                 <h3 class="h5 mb-3">Resume</h3>
                 <p class="mb-2"><strong>{{ user.children|length }}</strong> enfant(s) rattache(s)</p>
                 <p class="mb-0 text-muted">Les comptes avec historique sont de preference desactives plutot que supprimes.</p>

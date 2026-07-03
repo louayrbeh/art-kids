@@ -3,48 +3,43 @@
 {% block title %}Activite | Admin{% endblock %}
 
 {% block admin_body %}
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div class="art-page-header">
         <div>
-            <h2 class="h3 mb-1">{{ activity.titre }}</h2>
-            <p class="text-muted mb-0">Fiche detaillee de l activite et de ses regles de reservation.</p>
+            <h1 class="art-page-title">{{ activity.titre }}</h1>
+            <p class="art-page-subtitle">Fiche detaillee de l activite et de ses regles de reservation.</p>
         </div>
         <div class="d-flex gap-2">
-            <a class="btn btn-outline-primary rounded-4" href="{{ path('app_back_activity_edit', {id: activity.id}) }}">Modifier</a>
-            <a class="btn btn-outline-secondary rounded-4" href="{{ path('app_back_activity_index') }}">Retour</a>
+            <a class="btn btn-art-primary" href="{{ path('app_back_activity_edit', {id: activity.id}) }}">Modifier</a>
+            <a class="btn btn-art-secondary" href="{{ path('app_back_activity_index') }}">Retour</a>
         </div>
     </div>
 
     <div class="row g-4">
         <div class="col-xl-8">
-            <div class="admin-surface p-4">
+            <div class="art-detail-card">
                 <div class="mb-4">
                     <img src="{{ activity_image_url(activity.image) }}" alt="{{ activity.titre }}" class="img-fluid rounded-4 admin-image-preview activity-image">
                 </div>
-                <dl class="row mb-4">
-                    <dt class="col-sm-4">Categorie</dt>
-                    <dd class="col-sm-8">{{ activity.category.nom }}</dd>
-                    <dt class="col-sm-4">Date</dt>
-                    <dd class="col-sm-8">{{ activity.dateActivite|date('d/m/Y') }}</dd>
-                    <dt class="col-sm-4">Horaire</dt>
-                    <dd class="col-sm-8">{{ activity.heureDebut|date('H:i') }} - {{ activity.heureFin|date('H:i') }}</dd>
-                    <dt class="col-sm-4">Lieu</dt>
-                    <dd class="col-sm-8">{{ activity.lieu ?: 'A definir' }}</dd>
-                    <dt class="col-sm-4">Prix</dt>
-                    <dd class="col-sm-8">{{ activity.prix ?: 'Gratuit' }}</dd>
-                    <dt class="col-sm-4">Statut</dt>
-                    <dd class="col-sm-8">{{ activity.statut.value }}</dd>
-                </dl>
-                <h3 class="h5">Description</h3>
-                <p class="mb-0">{{ activity.description }}</p>
+                <div class="art-detail-grid">
+                    <div class="art-detail-item"><div class="art-detail-label">Categorie</div><div class="art-detail-value">{{ activity.category.nom }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Date</div><div class="art-detail-value">{{ activity.dateActivite|date('d/m/Y') }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Horaire</div><div class="art-detail-value">{{ activity.heureDebut|date('H:i') }} - {{ activity.heureFin|date('H:i') }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Lieu</div><div class="art-detail-value">{{ activity.lieu ?: 'A definir' }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Prix</div><div class="art-detail-value">{{ activity.prix ?: 'Gratuit' }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Statut</div><div class="art-detail-value">{{ activity.statut.value }}</div></div>
+                    <div class="art-detail-item art-detail-item--full"><div class="art-detail-label">Description</div><div class="art-detail-value">{{ activity.description }}</div></div>
+                </div>
             </div>
         </div>
         <div class="col-xl-4">
-            <div class="admin-surface p-4">
+            <div class="art-detail-card">
                 <h3 class="h5 mb-3">Capacite et ages</h3>
-                <p class="mb-2"><strong>Capacite maximale :</strong> {{ activity.capaciteMax }}</p>
-                <p class="mb-2"><strong>Places disponibles :</strong> {{ activity.placesDisponibles }}</p>
-                <p class="mb-2"><strong>Age minimum :</strong> {{ activity.ageMin }} ans</p>
-                <p class="mb-0"><strong>Age maximum :</strong> {{ activity.ageMax }} ans</p>
+                <div class="art-detail-grid">
+                    <div class="art-detail-item"><div class="art-detail-label">Capacite maximale</div><div class="art-detail-value">{{ activity.capaciteMax }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Places disponibles</div><div class="art-detail-value">{{ activity.placesDisponibles }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Age minimum</div><div class="art-detail-value">{{ activity.ageMin }} ans</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Age maximum</div><div class="art-detail-value">{{ activity.ageMax }} ans</div></div>
+                </div>
             </div>
         </div>
     </div>

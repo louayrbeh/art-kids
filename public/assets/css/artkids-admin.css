@@ -1,3 +1,58 @@
+.admin-sidebar,
+.art-sidebar {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #2c4a52 0%, #537072 100%);
+    color: #fff;
+    box-shadow: 18px 0 40px rgba(44, 74, 82, 0.18);
+}
+
+.art-sidebar-brand {
+    color: #f4ebdb;
+    font-size: 1.4rem;
+    font-weight: 900;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.art-sidebar .nav-link,
+.admin-sidebar .nav-link,
+.art-sidebar .admin-nav-link,
+.admin-sidebar .admin-nav-link {
+    color: rgba(244, 235, 219, 0.78) !important;
+    font-weight: 700;
+    border-radius: 16px;
+    padding: 0.85rem 1rem;
+    margin: 0.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    transition: all 0.22s ease;
+}
+
+.art-sidebar .nav-link:hover,
+.art-sidebar .nav-link.active,
+.admin-sidebar .nav-link:hover,
+.admin-sidebar .nav-link.active,
+.art-sidebar .admin-nav-link:hover,
+.art-sidebar .admin-nav-link.active,
+.admin-sidebar .admin-nav-link:hover,
+.admin-sidebar .admin-nav-link.active {
+    color: #2c4a52 !important;
+    background: #f4ebdb;
+    transform: translateX(4px);
+}
+
+.art-sidebar-section-title {
+    color: rgba(244, 235, 219, 0.6);
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    padding: 1rem 1.5rem 0.4rem;
+    letter-spacing: 0.08em;
+}
+
 .art-admin-body {
     background:
         radial-gradient(circle at top right, rgba(83, 112, 114, 0.16), transparent 28%),
@@ -72,8 +127,8 @@
 
 .admin-nav-link:hover,
 .admin-nav-link.active {
-    background: rgba(244, 235, 219, 0.14);
-    color: #fff;
+    background: #f4ebdb;
+    color: #2c4a52;
     transform: translateX(4px);
 }
 

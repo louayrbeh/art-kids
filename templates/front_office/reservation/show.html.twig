@@ -10,48 +10,39 @@
 {% block title %}Detail reservation | Art Kids{% endblock %}
 
 {% block parent_body %}
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div class="art-page-header">
         <div>
-            <h1 class="h3 mb-1">Reservation #{{ reservation.id }}</h1>
-            <p class="text-muted mb-0">Detail complet de cette inscription.</p>
+            <h1 class="art-page-title">Reservation #{{ reservation.id }}</h1>
+            <p class="art-page-subtitle">Detail complet de cette inscription.</p>
         </div>
-        <a class="btn btn-outline-secondary rounded-4" href="{{ path('app_front_reservation_index') }}">Retour a la liste</a>
+        <a class="btn btn-art-secondary" href="{{ path('app_front_reservation_index') }}">Retour a la liste</a>
     </div>
 
     <div class="row g-4">
         <div class="col-lg-7">
-            <div class="parent-surface p-4">
-                <dl class="row mb-0">
-                    <dt class="col-sm-4">Enfant</dt>
-                    <dd class="col-sm-8">{{ reservation.child.fullName }}</dd>
-                    <dt class="col-sm-4">Activite</dt>
-                    <dd class="col-sm-8">{{ reservation.activity.titre }}</dd>
-                    <dt class="col-sm-4">Categorie</dt>
-                    <dd class="col-sm-8">{{ reservation.activity.category.nom }}</dd>
-                    <dt class="col-sm-4">Date activite</dt>
-                    <dd class="col-sm-8">{{ reservation.activity.dateActivite|date('d/m/Y') }}</dd>
-                    <dt class="col-sm-4">Heure</dt>
-                    <dd class="col-sm-8">{{ reservation.activity.heureDebut|date('H:i') }} - {{ reservation.activity.heureFin|date('H:i') }}</dd>
-                    <dt class="col-sm-4">Lieu</dt>
-                    <dd class="col-sm-8">{{ reservation.activity.lieu ?: 'A definir' }}</dd>
-                    <dt class="col-sm-4">Prix</dt>
-                    <dd class="col-sm-8">{{ reservation.activity.prix ? reservation.activity.prix ~ ' TND' : 'Gratuit' }}</dd>
-                    <dt class="col-sm-4">Date reservation</dt>
-                    <dd class="col-sm-8">{{ reservation.dateReservation|date('d/m/Y H:i') }}</dd>
-                    <dt class="col-sm-4">Statut</dt>
-                    <dd class="col-sm-8"><span class="badge text-bg-{{ reservationBadgeMap[reservation.statut.value] ?? 'secondary' }}">{{ reservation.statut.value }}</span></dd>
-                </dl>
+            <div class="art-detail-card">
+                <div class="art-detail-grid">
+                    <div class="art-detail-item"><div class="art-detail-label">Enfant</div><div class="art-detail-value">{{ reservation.child.fullName }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Activite</div><div class="art-detail-value">{{ reservation.activity.titre }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Categorie</div><div class="art-detail-value">{{ reservation.activity.category.nom }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Date activite</div><div class="art-detail-value">{{ reservation.activity.dateActivite|date('d/m/Y') }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Heure</div><div class="art-detail-value">{{ reservation.activity.heureDebut|date('H:i') }} - {{ reservation.activity.heureFin|date('H:i') }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Lieu</div><div class="art-detail-value">{{ reservation.activity.lieu ?: 'A definir' }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Prix</div><div class="art-detail-value">{{ reservation.activity.prix ? reservation.activity.prix ~ ' TND' : 'Gratuit' }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Date reservation</div><div class="art-detail-value">{{ reservation.dateReservation|date('d/m/Y H:i') }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Statut</div><div class="art-detail-value">{{ reservation.statut.value }}</div></div>
+                </div>
             </div>
         </div>
         <div class="col-lg-5">
-            <div class="parent-surface p-4">
+            <div class="art-detail-card">
                 <h2 class="h5 mb-3">Actions</h2>
                 <div class="d-flex flex-wrap gap-2">
-                    <a class="btn btn-outline-primary rounded-4" href="{{ path('app_front_activity_show', {id: reservation.activity.id}) }}">Voir l activite</a>
+                    <a class="btn btn-art-secondary" href="{{ path('app_front_activity_show', {id: reservation.activity.id}) }}">Voir l activite</a>
                     {% if reservation.statut.value not in ['ANNULEE', 'TERMINEE'] %}
                         <form method="post" action="{{ path('app_front_reservation_cancel', {id: reservation.id}) }}" data-turbo="false">
                             <input type="hidden" name="_token" value="{{ csrf_token('cancel_reservation_' ~ reservation.id) }}">
-                            <button type="submit" class="btn btn-outline-danger rounded-4">Annuler la reservation</button>
+                            <button type="submit" class="btn btn-art-danger">Annuler la reservation</button>
                         </form>
                     {% endif %}
                 </div>

@@ -20,9 +20,9 @@
 {% block flashes %}{% endblock %}
 
 {% block navbar %}
-    <nav class="navbar navbar-expand-lg navbar-light parent-navbar">
+    <nav class="navbar navbar-expand-lg navbar-light parent-navbar art-appbar">
         <div class="container-fluid px-4">
-            <a class="navbar-brand d-flex align-items-center gap-2" href="{{ path('app_front_home') }}">
+            <a class="navbar-brand d-flex align-items-center gap-2 art-navbar-brand" href="{{ path('app_front_home') }}">
                 <span class="parent-brand-art">Art</span><span class="parent-brand-kids">Kids</span>
             </a>
             <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#parentNav" aria-controls="parentNav" aria-expanded="false" aria-label="Menu">
@@ -79,7 +79,7 @@
             {% for label, messages in app.flashes %}
                 {% for message in messages %}
                     {% set normalized = label == 'error' ? 'danger' : label %}
-                    <div class="alert alert-{{ normalized }} art-flash alert-dismissible fade show slide-up mb-4" role="alert">
+                    <div class="alert alert-{{ normalized }} art-flash art-alert alert-dismissible fade show slide-up mb-4" role="alert">
                         <span class="art-flash__icon"><i class="bi {{ flashIcons[normalized] ?? 'bi-bell' }}"></i></span>
                         <div class="art-flash__content">{{ message }}</div>
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>

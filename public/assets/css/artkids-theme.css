@@ -4,10 +4,12 @@
     --art-soft: #8e9b97;
     --art-ivory: #f4ebdb;
     --art-white: #ffffff;
+    --art-light: #faf7ef;
     --art-danger: #b94a48;
     --art-success: #4e8c6a;
     --art-warning: #c99848;
     --art-info: #5b7f95;
+    --art-muted: #6f7f7c;
     --art-radius-sm: 14px;
     --art-radius-md: 22px;
     --art-radius-lg: 32px;
@@ -35,12 +37,66 @@ body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--art-dark);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+p {
+    color: var(--art-medium);
+    line-height: 1.7;
+}
+
 a {
     color: var(--art-dark);
+    text-decoration: none;
 }
 
 a:hover {
     color: var(--art-medium);
+}
+
+.text-art-dark {
+    color: var(--art-dark) !important;
+}
+
+.text-art-medium {
+    color: var(--art-medium) !important;
+}
+
+.text-art-soft {
+    color: var(--art-soft) !important;
+}
+
+.art-page-title {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 900;
+    color: var(--art-dark);
+    margin-bottom: 0.6rem;
+}
+
+.art-page-subtitle {
+    color: var(--art-medium);
+    font-size: 1rem;
+    max-width: 760px;
+}
+
+.art-section-title {
+    font-size: clamp(1.5rem, 3vw, 2.3rem);
+    font-weight: 900;
+    color: var(--art-dark);
+}
+
+.art-small-title {
+    color: var(--art-dark);
+    font-size: 1rem;
+    font-weight: 800;
 }
 
 .art-main {
@@ -91,11 +147,6 @@ a:hover {
     color: var(--art-medium);
     padding: 2rem;
     text-align: center;
-}
-
-.art-section-title {
-    color: var(--art-dark);
-    font-weight: 800;
 }
 
 .art-section-subtitle {
@@ -435,6 +486,21 @@ a:hover {
     font-size: 3rem;
 }
 
+.art-empty-state i {
+    font-size: 2.8rem;
+    color: var(--art-soft);
+    margin-bottom: 1rem;
+}
+
+.art-empty-state h3 {
+    color: var(--art-dark);
+    font-weight: 900;
+}
+
+.art-empty-state p {
+    color: var(--art-medium);
+}
+
 .art-orb,
 .art-blob {
     position: absolute;
@@ -473,5 +539,11 @@ a:hover {
 
     .art-navbar-user {
         margin-top: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .art-page-title {
+        font-size: 1.8rem;
     }
 }

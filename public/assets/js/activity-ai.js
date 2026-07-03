@@ -20,6 +20,12 @@ const initActivityAi = () => {
         return;
     }
 
+    if (button.dataset.activityAiBound === '1') {
+        return;
+    }
+
+    button.dataset.activityAiBound = '1';
+
     const renderAlert = (type, message) => {
         feedbackContainer.innerHTML = `<div class="alert alert-${type} rounded-4 border-0 shadow-sm mb-0" role="alert">${message}</div>`;
     };
@@ -33,12 +39,6 @@ const initActivityAi = () => {
 
         return Number.parseInt(rawValue, 10);
     };
-
-    if (button.dataset.activityAiBound === '1') {
-        return;
-    }
-
-    button.dataset.activityAiBound = '1';
 
     button.addEventListener('click', async () => {
         const title = titleInput.value.trim();

@@ -10,14 +10,16 @@
 {% block title %}Reservations | Admin{% endblock %}
 
 {% block admin_body %}
-    <div class="mb-4">
-        <h2 class="h3 mb-1">Reservations</h2>
-        <p class="text-muted mb-0">Toutes les reservations avec leurs actions de confirmation et d annulation.</p>
+    <div class="art-page-header">
+        <div>
+            <h1 class="art-page-title">Reservations</h1>
+            <p class="art-page-subtitle">Toutes les reservations avec leurs actions de confirmation et d annulation.</p>
+        </div>
     </div>
 
-    <div class="admin-surface p-4">
+    <div class="art-table-card">
         <div class="table-responsive">
-            <table class="table table-hover align-middle admin-table mb-0">
+            <table class="table art-table align-middle mb-0">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -36,27 +38,39 @@
                             <td>{{ reservation.child.parent.fullName }}</td>
                             <td>{{ reservation.child.fullName }}</td>
                             <td>{{ reservation.activity.titre }}</td>
-                            <td><span class="badge text-bg-{{ reservationBadgeMap[reservation.statut.value] ?? 'secondary' }}">{{ reservation.statut.value }}</span></td>
+                            <td><span class="art-badge {{ reservationBadgeMap[reservation.statut.value] == 'success' ? 'badge-art-success' : (reservationBadgeMap[reservation.statut.value] == 'warning' ? 'badge-art-warning' : (reservationBadgeMap[reservation.statut.value] == 'danger' ? 'badge-art-danger' : 'badge-art-muted')) }}">{{ reservation.statut.value }}</span></td>
                             <td>{{ reservation.dateReservation|date('d/m/Y H:i') }}</td>
                             <td class="text-end">
-                                <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_back_reservation_show', {id: reservation.id}) }}">Voir</a>
+                                <a class="art-action-btn art-action-view" href="{{ path('app_back_reservation_show', {id: reservation.id}) }}" title="Voir">
+                                    <i class="bi bi-eye"></i>
+                                </a>
                                 {% if reservation.statut.value == 'EN_ATTENTE' %}
                                     <form method="post" action="{{ path('app_back_reservation_confirm', {id: reservation.id}) }}" class="d-inline">
                                         <input type="hidden" name="_token" value="{{ csrf_token('confirm_reservation_' ~ reservation.id) }}">
-                                        <button class="btn btn-sm btn-outline-success rounded-3">Confirmer</button>
+                                        <button class="art-action-btn art-action-confirm" title="Confirmer">
+                                            <i class="bi bi-check-circle"></i>
+                                        </button>
                                     </form>
                                 {% endif %}
                                 {% if reservation.statut.value != 'ANNULEE' %}
                                     <form method="post" action="{{ path('app_back_reservation_cancel', {id: reservation.id}) }}" class="d-inline">
                                         <input type="hidden" name="_token" value="{{ csrf_token('cancel_admin_reservation_' ~ reservation.id) }}">
-                                        <button class="btn btn-sm btn-outline-danger rounded-3">Annuler</button>
+                                        <button class="art-action-btn art-action-delete" title="Annuler">
+                                            <i class="bi bi-x-circle"></i>
+                                        </button>
                                     </form>
                                 {% endif %}
                             </td>
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="7" class="text-muted py-4">Aucune reservation enregistree.</td>
+                            <td colspan="7" class="py-4">
+                                <div class="art-empty-state">
+                                    <i class="bi bi-calendar-check"></i>
+                                    <h3>Aucune reservation</h3>
+                                    <p class="mb-0">Les reservations apparaîtront ici au fil des inscriptions.</p>
+                                </div>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

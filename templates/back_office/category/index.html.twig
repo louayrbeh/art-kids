@@ -3,19 +3,19 @@
 {% block title %}Categories | Admin{% endblock %}
 
 {% block admin_body %}
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div class="art-page-header">
         <div>
-            <h2 class="h3 mb-1">Categories</h2>
-            <p class="text-muted mb-0">Gestion des univers artistiques disponibles sur la plateforme.</p>
+            <h1 class="art-page-title">Categories</h1>
+            <p class="art-page-subtitle">Gestion des univers artistiques disponibles sur la plateforme.</p>
         </div>
-        <a class="btn btn-primary rounded-4 px-4" href="{{ path('app_back_category_new') }}">
+        <a class="btn btn-art-primary" href="{{ path('app_back_category_new') }}">
             <i class="bi bi-tag-fill me-2"></i>Nouvelle categorie
         </a>
     </div>
 
-    <div class="admin-surface p-4">
+    <div class="art-table-card">
         <div class="table-responsive">
-            <table class="table table-hover align-middle admin-table mb-0">
+            <table class="table art-table align-middle mb-0">
                 <thead>
                     <tr>
                         <th>Image</th>
@@ -35,17 +35,29 @@
                             <td>{{ category.description ?: '-' }}</td>
                             <td>{{ category.activities|length }}</td>
                             <td class="text-end">
-                                <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_back_category_show', {id: category.id}) }}">Voir</a>
-                                <a class="btn btn-sm btn-outline-primary rounded-3" href="{{ path('app_back_category_edit', {id: category.id}) }}">Modifier</a>
+                                <a class="art-action-btn art-action-view" href="{{ path('app_back_category_show', {id: category.id}) }}" title="Voir">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a class="art-action-btn art-action-edit" href="{{ path('app_back_category_edit', {id: category.id}) }}" title="Modifier">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
                                 <form method="post" action="{{ path('app_back_category_delete', {id: category.id}) }}" class="d-inline">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete_category_' ~ category.id) }}">
-                                    <button class="btn btn-sm btn-outline-danger rounded-3" onclick="return confirm('Supprimer cette categorie ?');">Supprimer</button>
+                                    <button class="art-action-btn art-action-delete" onclick="return confirm('Supprimer cette categorie ?');" title="Supprimer">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="5" class="text-muted py-4">Aucune categorie enregistree.</td>
+                            <td colspan="5" class="py-4">
+                                <div class="art-empty-state">
+                                    <i class="bi bi-tags"></i>
+                                    <h3>Aucune categorie</h3>
+                                    <p class="mb-0">Commencez par creer un premier univers artistique.</p>
+                                </div>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

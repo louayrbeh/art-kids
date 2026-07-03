@@ -51,7 +51,7 @@ class ParentChildController extends AbstractController
         return $this->render('front_office/child/new.html.twig', [
             'form' => $form->createView(),
             'child' => $child,
-        ]);
+        ], new Response(null, $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK));
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
@@ -96,7 +96,7 @@ class ParentChildController extends AbstractController
         return $this->render('front_office/child/edit.html.twig', [
             'form' => $form->createView(),
             'child' => $child,
-        ]);
+        ], new Response(null, $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK));
     }
 
     #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]

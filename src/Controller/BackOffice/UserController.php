@@ -61,7 +61,7 @@ class UserController extends AbstractController
         return $this->render('back_office/user/new.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
-        ]);
+        ], new Response(null, $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK));
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
@@ -129,7 +129,7 @@ class UserController extends AbstractController
         return $this->render('back_office/user/edit.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
-        ]);
+        ], new Response(null, $form->isSubmitted() ? Response::HTTP_UNPROCESSABLE_ENTITY : Response::HTTP_OK));
     }
 
     #[Route('/{id}/toggle-status', name: 'toggle_status', methods: ['POST'])]

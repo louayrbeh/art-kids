@@ -3,35 +3,31 @@
 {% block title %}Mon enfant | Art Kids{% endblock %}
 
 {% block parent_body %}
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div class="art-page-header">
         <div>
-            <h1 class="h3 mb-1">{{ child.fullName }}</h1>
-            <p class="text-muted mb-0">Consultez les informations, l historique de reservations et les recommandations de votre enfant.</p>
+            <h1 class="art-page-title">{{ child.fullName }}</h1>
+            <p class="art-page-subtitle">Consultez les informations, l historique de reservations et les recommandations de votre enfant.</p>
         </div>
         <div class="d-flex gap-2">
-            <a class="btn btn-outline-primary rounded-4" href="{{ path('app_front_child_edit', {id: child.id}) }}">Modifier</a>
-            <a class="btn btn-outline-secondary rounded-4" href="{{ path('app_front_child_index') }}">Retour</a>
+            <a class="btn btn-art-primary" href="{{ path('app_front_child_edit', {id: child.id}) }}">Modifier</a>
+            <a class="btn btn-art-secondary" href="{{ path('app_front_child_index') }}">Retour</a>
         </div>
     </div>
 
     <div class="row g-4">
         <div class="col-lg-5">
-            <div class="parent-surface p-4 h-100">
-                <dl class="row mb-0">
-                    <dt class="col-sm-5">Date de naissance</dt>
-                    <dd class="col-sm-7">{{ child.dateNaissance|date('d/m/Y') }}</dd>
-                    <dt class="col-sm-5">Age</dt>
-                    <dd class="col-sm-7">{{ child.age }} ans</dd>
-                    <dt class="col-sm-5">Sexe</dt>
-                    <dd class="col-sm-7">{{ child.sexe.value }}</dd>
-                    <dt class="col-sm-5">Reservations</dt>
-                    <dd class="col-sm-7">{{ child.reservations|length }}</dd>
-                </dl>
+            <div class="art-detail-card h-100">
+                <div class="art-detail-grid">
+                    <div class="art-detail-item"><div class="art-detail-label">Date de naissance</div><div class="art-detail-value">{{ child.dateNaissance|date('d/m/Y') }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Age</div><div class="art-detail-value">{{ child.age }} ans</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Sexe</div><div class="art-detail-value">{{ child.sexe.value }}</div></div>
+                    <div class="art-detail-item"><div class="art-detail-label">Reservations</div><div class="art-detail-value">{{ child.reservations|length }}</div></div>
+                </div>
             </div>
         </div>
 
         <div class="col-lg-7">
-            <div class="parent-surface p-4 h-100">
+            <div class="art-detail-card h-100">
                 <h2 class="h5 mb-3">Historique des reservations</h2>
                 {% if child.reservations|length > 0 %}
                     <ul class="list-group list-group-flush">
@@ -41,12 +37,14 @@
                                     <div class="fw-semibold">{{ reservation.activity.titre }}</div>
                                     <div class="small text-muted">{{ reservation.dateReservation|date('d/m/Y H:i') }} - {{ reservation.statut.value }}</div>
                                 </div>
-                                <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_front_reservation_show', {id: reservation.id}) }}">Voir</a>
+                                <a class="art-action-btn art-action-view" href="{{ path('app_front_reservation_show', {id: reservation.id}) }}" title="Voir">
+                                    <i class="bi bi-eye"></i>
+                                </a>
                             </li>
                         {% endfor %}
                     </ul>
                 {% else %}
-                    <div class="parent-empty">Aucune reservation pour cet enfant.</div>
+                    <div class="art-empty-state py-4">Aucune reservation pour cet enfant.</div>
                 {% endif %}
             </div>
         </div>

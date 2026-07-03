@@ -25,10 +25,13 @@ class ReservationService
 
         $reservation = new Reservation();
         $reservation
-            ->setChild($child)
-            ->setActivity($activity)
+            ->setStatut(ReservationStatusEnum::EN_ATTENTE)
             ->setDateReservation(new \DateTimeImmutable())
             ->setCreatedAt(new \DateTimeImmutable());
+
+        $child->addReservation($reservation);
+        $activity->addReservation($reservation);
+        $activity->updateStatutIfNeeded();
 
         $this->entityManager->persist($reservation);
         $this->entityManager->flush();

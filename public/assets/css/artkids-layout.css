@@ -1,0 +1,62 @@
+.art-appbar {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(83, 112, 114, 0.12);
+    box-shadow: 0 8px 24px rgba(44, 74, 82, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+}
+
+.art-navbar-brand {
+    color: var(--art-dark) !important;
+    font-weight: 900;
+    font-size: 1.35rem;
+}
+
+.art-appbar .nav-link {
+    color: var(--art-medium) !important;
+    font-weight: 700;
+    border-radius: 14px;
+    padding: 0.6rem 0.9rem !important;
+    transition: all 0.2s ease;
+}
+
+.art-appbar .nav-link:hover,
+.art-appbar .nav-link.active {
+    color: var(--art-dark) !important;
+    background: rgba(244, 235, 219, 0.8);
+}
+
+.art-page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.art-shell {
+    position: relative;
+}
+
+.art-sidebar-layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    min-height: 100vh;
+}
+
+.art-sidebar-content {
+    min-width: 0;
+}
+
+@media (max-width: 991.98px) {
+    .art-page-header {
+        align-items: stretch;
+    }
+
+    .art-sidebar-layout {
+        grid-template-columns: 1fr;
+    }
+}

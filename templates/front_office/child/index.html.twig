@@ -3,18 +3,18 @@
 {% block title %}Mes enfants | Art Kids{% endblock %}
 
 {% block parent_body %}
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div class="art-page-header">
         <div>
-            <h1 class="h3 mb-1">Mes enfants</h1>
-            <p class="text-muted mb-0">Gestion securisee des enfants rattaches a votre compte.</p>
+            <h1 class="art-page-title">Mes enfants</h1>
+            <p class="art-page-subtitle">Gestion securisee des enfants rattaches a votre compte.</p>
         </div>
-        <a class="btn btn-primary rounded-4" href="{{ path('app_front_child_new') }}">Ajouter un enfant</a>
+        <a class="btn btn-art-primary" href="{{ path('app_front_child_new') }}">Ajouter un enfant</a>
     </div>
 
-    <div class="parent-surface p-4">
+    <div class="art-table-card">
         {% if children %}
             <div class="table-responsive">
-                <table class="table align-middle parent-table mb-0">
+                <table class="table art-table align-middle mb-0">
                     <thead>
                         <tr>
                             <th>Nom</th>
@@ -30,27 +30,37 @@
                             <tr>
                                 <td class="fw-semibold">{{ child.fullName }}</td>
                                 <td>{{ child.dateNaissance|date('d/m/Y') }}</td>
-                                <td>{{ child.age }} ans</td>
-                                <td>{{ child.sexe.value }}</td>
-                                <td>{{ child.reservations|length }}</td>
-                                <td class="text-end">
-                                    <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_front_child_show', {id: child.id}) }}">Voir</a>
-                                    <a class="btn btn-sm btn-outline-primary rounded-3" href="{{ path('app_front_child_edit', {id: child.id}) }}">Modifier</a>
-                                    <a class="btn btn-sm btn-outline-success rounded-3" href="{{ path('app_front_activity_index', {age: child.age}) }}">Recommandations</a>
+                            <td>{{ child.age }} ans</td>
+                            <td>{{ child.sexe.value }}</td>
+                            <td>{{ child.reservations|length }}</td>
+                            <td class="text-end">
+                                    <a class="art-action-btn art-action-view" href="{{ path('app_front_child_show', {id: child.id}) }}" title="Voir">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a class="art-action-btn art-action-edit" href="{{ path('app_front_child_edit', {id: child.id}) }}" title="Modifier">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a class="art-action-btn art-action-confirm" href="{{ path('app_front_activity_index', {age: child.age}) }}" title="Recommandations">
+                                        <i class="bi bi-stars"></i>
+                                    </a>
                                     <form method="post" action="{{ path('app_front_child_delete', {id: child.id}) }}" class="d-inline">
                                         <input type="hidden" name="_token" value="{{ csrf_token('delete_child_' ~ child.id) }}">
-                                        <button class="btn btn-sm btn-outline-danger rounded-3" onclick="return confirm('Supprimer cet enfant ?');">Supprimer</button>
+                                        <button class="art-action-btn art-action-delete" onclick="return confirm('Supprimer cet enfant ?');" title="Supprimer">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
                                     </form>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% else %}
-            <div class="parent-empty">
+            <div class="art-empty-state">
+                <i class="bi bi-person-heart"></i>
+                <h3>Vous n avez pas encore d enfant</h3>
                 <p class="mb-3">Vous n avez pas encore ajoute d enfant.</p>
-                <a class="btn btn-primary rounded-4" href="{{ path('app_front_child_new') }}">Ajouter mon premier enfant</a>
+                <a class="btn btn-art-primary" href="{{ path('app_front_child_new') }}">Ajouter mon premier enfant</a>
             </div>
         {% endif %}
     </div>

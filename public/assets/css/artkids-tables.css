@@ -1,0 +1,65 @@
+.art-table-card {
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(83, 112, 114, 0.14);
+    border-radius: var(--art-radius-lg);
+    box-shadow: var(--art-shadow-sm);
+    padding: 1.25rem;
+    overflow: hidden;
+}
+
+.art-table-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+}
+
+.art-table {
+    width: 100%;
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.art-table thead th {
+    background: rgba(244, 235, 219, 0.85);
+    color: var(--art-dark);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 900;
+    border: none;
+    padding: 1rem;
+}
+
+.art-table tbody td {
+    color: var(--art-medium);
+    font-weight: 600;
+    padding: 1rem;
+    border-bottom: 1px solid rgba(83, 112, 114, 0.12);
+    vertical-align: middle;
+}
+
+.art-table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.art-table tbody tr:hover {
+    background: rgba(142, 155, 151, 0.12);
+}
+
+.art-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+@media (max-width: 768px) {
+    .art-table-toolbar {
+        align-items: stretch;
+    }
+
+    .art-table-toolbar .btn {
+        width: 100%;
+    }
+}

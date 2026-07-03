@@ -28,46 +28,32 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $admin = (new User())
-            ->setNom('Admin')
-            ->setPrenom('Super')
-            ->setEmail('admin@artkids.test')
-            ->setTelephone('0102030405')
-            ->setRoles([UserRole::ROLE_ADMIN->value]);
-        $admin->setPassword($this->passwordHasher->hashPassword($admin, 'admin123'));
+        $users = [
+            'admin_dev' => $this->createUser('Admin', 'Super', 'admin@artkids.test', '0102030405', 'admin123', UserRole::ROLE_ADMIN),
+            'parent_dev' => $this->createUser('Dupont', 'Marie', 'parent@artkids.test', '0607080910', 'parent123', UserRole::ROLE_PARENT),
+            'admin_test' => $this->createUser('Admin', 'Test', 'admin@test.com', '0111222333', 'password', UserRole::ROLE_ADMIN),
+            'parent_test' => $this->createUser('Ben Ali', 'Ahmed', 'parent@test.com', '0555001100', 'password', UserRole::ROLE_PARENT),
+            'parent_test_two' => $this->createUser('Trabelsi', 'Nour', 'parent2@test.com', '0555002200', 'password', UserRole::ROLE_PARENT),
+        ];
 
-        $parent = (new User())
-            ->setNom('Dupont')
-            ->setPrenom('Marie')
-            ->setEmail('parent@artkids.test')
-            ->setTelephone('0607080910')
-            ->setRoles([UserRole::ROLE_PARENT->value]);
-        $parent->setPassword($this->passwordHasher->hashPassword($parent, 'parent123'));
+        foreach ($users as $user) {
+            $manager->persist($user);
+        }
 
-        $manager->persist($admin);
-        $manager->persist($parent);
+        $children = [
+            'leo' => $this->createChild($users['parent_dev'], 'Dupont', 'Leo', '-8 years', SexeEnum::GARCON),
+            'emma' => $this->createChild($users['parent_dev'], 'Dupont', 'Emma', '-10 years', SexeEnum::FILLE),
+            'ahmed7' => $this->createChild($users['parent_test'], 'Ben Ali', 'Youssef', '-7 years', SexeEnum::GARCON),
+            'ahmed10' => $this->createChild($users['parent_test'], 'Ben Ali', 'Sara', '-10 years', SexeEnum::FILLE),
+            'nour8' => $this->createChild($users['parent_test_two'], 'Trabelsi', 'Adam', '-8 years', SexeEnum::GARCON),
+        ];
 
-        $childOne = (new Child())
-            ->setNom('Dupont')
-            ->setPrenom('Leo')
-            ->setDateNaissance(new \DateTimeImmutable('-8 years'))
-            ->setSexe(SexeEnum::GARCON);
+        foreach ($children as $child) {
+            $manager->persist($child);
+        }
 
-        $childTwo = (new Child())
-            ->setNom('Dupont')
-            ->setPrenom('Emma')
-            ->setDateNaissance(new \DateTimeImmutable('-10 years'))
-            ->setSexe(SexeEnum::FILLE);
-
-        $parent->addChild($childOne);
-        $parent->addChild($childTwo);
-
-        $manager->persist($childOne);
-        $manager->persist($childTwo);
-
-        $categoryNames = ['Dessin', 'Peinture', 'Musique', 'Theatre', 'Danse'];
         $categories = [];
-        foreach ($categoryNames as $name) {
+        foreach (['Peinture', 'Musique', 'Theatre', 'Dessin', 'Danse'] as $name) {
             $category = (new Category())
                 ->setNom($name)
                 ->setDescription(sprintf('Categorie %s pour les activites artistiques des enfants.', $name))
@@ -77,63 +63,117 @@ class AppFixtures extends Fixture
             $manager->persist($category);
         }
 
-        $activityDefinitions = [
-            ['Atelier crayons magiques', 'Dessin', '+3 days', '10:00', '11:30', 12, 5, 8, '15.00', 'Salle A'],
-            ['Peinture au doigt', 'Peinture', '+4 days', '14:00', '15:30', 10, 4, 7, '12.50', 'Salle B'],
-            ['Initiation piano', 'Musique', '+5 days', '09:30', '11:00', 8, 7, 11, '18.00', 'Studio musique'],
-            ['Jeux de scene', 'Theatre', '+6 days', '13:30', '15:00', 14, 8, 12, '16.00', 'Scene 1'],
-            ['Danse creative', 'Danse', '+7 days', '10:30', '12:00', 16, 6, 10, '14.00', 'Salle de danse'],
-            ['Croquis nature', 'Dessin', '+8 days', '15:00', '16:30', 10, 8, 12, '13.50', 'Jardin'],
-            ['Aquarelle debutant', 'Peinture', '+9 days', '10:00', '11:30', 9, 7, 12, '17.00', 'Salle couleur'],
-            ['Percussions junior', 'Musique', '+10 days', '14:30', '16:00', 10, 8, 12, '19.00', 'Studio rythme'],
-            ['Impro theatrale', 'Theatre', '+11 days', '09:00', '10:30', 8, 9, 12, '20.00', 'Scene 2'],
-            ['Choregraphie kids', 'Danse', '+12 days', '16:00', '17:30', 12, 8, 11, '18.50', 'Salle de danse'],
+        $activities = [
+            'peinture_7' => $this->createActivity('Peinture creative 7 ans', $categories['Peinture'], '+5 days', '10:00', '11:30', 6, 6, 8, '15.00', 'Salle Couleurs'),
+            'theatre_10' => $this->createActivity('Theatre expression 10 ans', $categories['Theatre'], '+6 days', '14:00', '15:30', 8, 9, 11, '18.00', 'Scene Junior'),
+            'complete' => $this->createActivity('Atelier complet', $categories['Dessin'], '+7 days', '09:30', '11:00', 1, 7, 9, '12.00', 'Salle A'),
+            'cancelled' => $this->createActivity('Activite annulee', $categories['Musique'], '+8 days', '13:00', '14:30', 10, 7, 10, '16.00', 'Studio 2', ActivityStatusEnum::ANNULEE),
+            'past' => $this->createActivity('Activite passee', $categories['Danse'], '-2 days', '15:00', '16:30', 12, 6, 10, '14.00', 'Salle Danse'),
+            'future_open' => $this->createActivity('Musique future ouverte', $categories['Musique'], '+9 days', '11:00', '12:30', 10, 8, 11, '17.00', 'Studio Rythme'),
+            'limited' => $this->createActivity('Activite capacite limitee', $categories['Peinture'], '+10 days', '16:00', '17:00', 3, 7, 10, '19.00', 'Atelier 3'),
+            'music_10' => $this->createActivity('Initiation piano 10 ans', $categories['Musique'], '+11 days', '09:00', '10:30', 5, 9, 11, '20.00', 'Studio Piano'),
         ];
 
-        $activities = [];
-        foreach ($activityDefinitions as [$title, $categoryName, $date, $start, $end, $capacity, $ageMin, $ageMax, $price, $place]) {
-            $activity = (new Activity())
-                ->setTitre($title)
-                ->setDescription($this->activityAiService->generateDescription($title, $categoryName))
-                ->setCategory($categories[$categoryName])
-                ->setDateActivite(new \DateTimeImmutable($date))
-                ->setHeureDebut(new \DateTimeImmutable($start))
-                ->setHeureFin(new \DateTimeImmutable($end))
-                ->setCapaciteMax($capacity)
-                ->setAgeMin($ageMin)
-                ->setAgeMax($ageMax)
-                ->setPrix($price)
-                ->setLieu($place)
-                ->setImage($this->externalImageService->getPlaceholder($title))
-                ->setStatut(ActivityStatusEnum::OUVERTE);
-
-            $activities[] = $activity;
+        foreach ($activities as $activity) {
             $manager->persist($activity);
         }
 
-        $reservationOne = (new Reservation())
-            ->setStatut(ReservationStatusEnum::CONFIRMEE);
-        $childOne->addReservation($reservationOne);
-        $activities[0]->addReservation($reservationOne);
+        $reservations = [
+            $this->createReservation($children['ahmed7'], $activities['complete'], ReservationStatusEnum::CONFIRMEE),
+            $this->createReservation($children['ahmed10'], $activities['music_10'], ReservationStatusEnum::EN_ATTENTE),
+            $this->createReservation($children['ahmed7'], $activities['cancelled'], ReservationStatusEnum::ANNULEE),
+            $this->createReservation($children['nour8'], $activities['limited'], ReservationStatusEnum::CONFIRMEE),
+            $this->createReservation($children['leo'], $activities['limited'], ReservationStatusEnum::CONFIRMEE),
+            $this->createReservation($children['emma'], $activities['future_open'], ReservationStatusEnum::CONFIRMEE),
+        ];
 
-        $reservationTwo = (new Reservation())
-            ->setStatut(ReservationStatusEnum::EN_ATTENTE);
-        $childTwo->addReservation($reservationTwo);
-        $activities[2]->addReservation($reservationTwo);
-
-        $reservationThree = (new Reservation())
-            ->setStatut(ReservationStatusEnum::ANNULEE);
-        $childOne->addReservation($reservationThree);
-        $activities[4]->addReservation($reservationThree);
-
-        $manager->persist($reservationOne);
-        $manager->persist($reservationTwo);
-        $manager->persist($reservationThree);
+        foreach ($reservations as $reservation) {
+            $manager->persist($reservation);
+        }
 
         foreach ($activities as $activity) {
             $activity->updateStatutIfNeeded();
         }
 
         $manager->flush();
+    }
+
+    private function createUser(
+        string $nom,
+        string $prenom,
+        string $email,
+        ?string $telephone,
+        string $password,
+        UserRole $role,
+    ): User {
+        $user = (new User())
+            ->setNom($nom)
+            ->setPrenom($prenom)
+            ->setEmail($email)
+            ->setTelephone($telephone)
+            ->setRoles([$role->value])
+            ->setIsActive(true);
+
+        $user->setPassword($this->passwordHasher->hashPassword($user, $password));
+
+        return $user;
+    }
+
+    private function createChild(
+        User $parent,
+        string $nom,
+        string $prenom,
+        string $dateNaissance,
+        SexeEnum $sexe,
+    ): Child {
+        $child = (new Child())
+            ->setNom($nom)
+            ->setPrenom($prenom)
+            ->setDateNaissance(new \DateTimeImmutable($dateNaissance))
+            ->setSexe($sexe);
+
+        $parent->addChild($child);
+
+        return $child;
+    }
+
+    private function createActivity(
+        string $title,
+        Category $category,
+        string $date,
+        string $start,
+        string $end,
+        int $capacity,
+        int $ageMin,
+        int $ageMax,
+        ?string $price,
+        ?string $place,
+        ActivityStatusEnum $status = ActivityStatusEnum::OUVERTE,
+    ): Activity {
+        return (new Activity())
+            ->setTitre($title)
+            ->setDescription($this->activityAiService->generateDescription($title, $category->getNom(), $ageMin, $ageMax))
+            ->setCategory($category)
+            ->setDateActivite(new \DateTimeImmutable($date))
+            ->setHeureDebut(new \DateTimeImmutable($start))
+            ->setHeureFin(new \DateTimeImmutable($end))
+            ->setCapaciteMax($capacity)
+            ->setAgeMin($ageMin)
+            ->setAgeMax($ageMax)
+            ->setPrix($price)
+            ->setLieu($place)
+            ->setImage($this->externalImageService->getPlaceholder($title))
+            ->setStatut($status);
+    }
+
+    private function createReservation(Child $child, Activity $activity, ReservationStatusEnum $status): Reservation
+    {
+        $reservation = (new Reservation())
+            ->setStatut($status);
+
+        $child->addReservation($reservation);
+        $activity->addReservation($reservation);
+
+        return $reservation;
     }
 }

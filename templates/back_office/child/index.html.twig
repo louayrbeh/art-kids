@@ -3,14 +3,16 @@
 {% block title %}Enfants | Admin{% endblock %}
 
 {% block admin_body %}
-    <div class="mb-4">
-        <h2 class="h3 mb-1">Enfants</h2>
-        <p class="text-muted mb-0">Consultation des enfants et de leur parent de rattachement.</p>
+    <div class="art-page-header">
+        <div>
+            <h1 class="art-page-title">Enfants</h1>
+            <p class="art-page-subtitle">Consultation des enfants et de leur parent de rattachement.</p>
+        </div>
     </div>
 
-    <div class="admin-surface p-4">
+    <div class="art-table-card">
         <div class="table-responsive">
-            <table class="table table-hover align-middle admin-table mb-0">
+            <table class="table art-table align-middle mb-0">
                 <thead>
                     <tr>
                         <th>Nom</th>
@@ -30,12 +32,20 @@
                             <td>{{ child.sexe.value }}</td>
                             <td>{{ child.reservations|length }}</td>
                             <td class="text-end">
-                                <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_back_child_show', {id: child.id}) }}">Voir</a>
+                                <a class="art-action-btn art-action-view" href="{{ path('app_back_child_show', {id: child.id}) }}" title="Voir">
+                                    <i class="bi bi-eye"></i>
+                                </a>
                             </td>
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="6" class="text-muted py-4">Aucun enfant enregistre.</td>
+                            <td colspan="6" class="py-4">
+                                <div class="art-empty-state">
+                                    <i class="bi bi-person-heart"></i>
+                                    <h3>Aucun enfant</h3>
+                                    <p class="mb-0">Les enfants rattachés aux parents s’afficheront ici.</p>
+                                </div>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

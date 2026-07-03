@@ -83,6 +83,11 @@
     background: rgba(244, 235, 219, 0.88);
 }
 
+.parent-table-card,
+.parent-surface {
+    border-radius: var(--art-radius-lg);
+}
+
 .parent-surface {
     padding: 1.5rem;
 }
