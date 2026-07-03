@@ -99,14 +99,14 @@
                                     <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
                                         <div>
                                             <h3 class="h5 mb-1">{{ child.fullName }}</h3>
-                                            <div class="text-muted">{{ child.age }} ans • {{ child.sexe.value }}</div>
+                                            <div class="text-muted">{{ child.age }} ans - {{ child.sexe.value }}</div>
                                         </div>
                                         <span class="badge text-bg-primary">{{ child.reservations|length }} reservation(s)</span>
                                     </div>
                                     <div class="d-flex flex-wrap gap-2">
                                         <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_front_child_show', {id: child.id}) }}">Voir</a>
                                         <a class="btn btn-sm btn-outline-primary rounded-3" href="{{ path('app_front_child_edit', {id: child.id}) }}">Modifier</a>
-                                        <a class="btn btn-sm btn-outline-success rounded-3" href="{{ path('app_front_activity_index', {age: child.age}) }}">Voir recommandations</a>
+                                        <a class="btn btn-sm btn-outline-success rounded-3" href="{{ path('app_front_child_show', {id: child.id}) }}#recommendations">Voir recommandations</a>
                                         <form method="post" action="{{ path('app_front_child_delete', {id: child.id}) }}" class="d-inline">
                                             <input type="hidden" name="_token" value="{{ csrf_token('delete_child_' ~ child.id) }}">
                                             <button class="btn btn-sm btn-outline-danger rounded-3" {% if child.reservations|length > 0 %}title="Suppression impossible avec reservations"{% endif %}>Supprimer</button>
@@ -171,36 +171,69 @@
     <section id="recommendations" class="parent-surface p-4 mb-4">
         <div class="d-flex justify-content-between align-items-center gap-3 mb-4">
             <div>
-                <h2 class="h4 mb-1">Activites recommandees</h2>
-                <p class="text-muted mb-0">Suggestions calculees selon l age de vos enfants et les disponibilites reelles.</p>
+                <h2 class="h4 mb-1">Recommandations intelligentes pour vos enfants</h2>
+                <p class="text-muted mb-0">Des activites adaptees a leur age, a leur disponibilite et a leur parcours creatif.</p>
             </div>
             <a class="btn btn-sm btn-outline-primary rounded-4" href="{{ path('app_front_activity_index') }}">Toutes les activites</a>
         </div>
 
-        {% if recommendations %}
-            <div class="row g-4">
-                {% for item in recommendations %}
-                    {% set activity = item.activity %}
-                    <div class="col-md-6 col-xl-4">
-                        <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
-                            <img class="parent-card-media activity-image" src="{{ activity_image_url(activity.image) }}" alt="{{ activity.titre }}">
-                            <div class="card-body">
-                                <div class="small text-muted mb-2">{{ activity.category.nom }}</div>
-                                <h3 class="h5">{{ activity.titre }}</h3>
-                                <p class="text-muted small mb-3">Pour {{ item.childNames|join(', ') }}</p>
-                                <ul class="list-unstyled small mb-4">
-                                    <li>Date : {{ activity.dateActivite|date('d/m/Y') }}</li>
-                                    <li>Age : {{ activity.ageMin }} - {{ activity.ageMax }} ans</li>
-                                    <li>Places disponibles : {{ activity.placesDisponibles }}</li>
-                                </ul>
-                                <a class="btn btn-primary rounded-4" href="{{ path('app_front_activity_show', {id: activity.id}) }}">Voir details</a>
-                            </div>
+        {% if recommendationsByChild is not empty %}
+            {% for group in recommendationsByChild %}
+                <section class="{{ not loop.last ? 'mb-4 pb-4 border-bottom border-light-subtle' : '' }}">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+                        <div>
+                            <h3 class="h5 mb-1">Recommandations pour {{ group.child.prenom }}</h3>
+                            <p class="text-muted mb-0">Des activites compatibles avec ses {{ group.child.age }} ans et son univers artistique.</p>
                         </div>
+                        <a class="btn btn-art-secondary btn-sm" href="{{ path('app_front_child_show', {id: group.child.id}) }}#recommendations">Voir la fiche enfant</a>
                     </div>
-                {% endfor %}
+
+                    <div class="row g-4">
+                        {% for item in group.recommendations %}
+                            {% set activity = item.activity %}
+                            <div class="col-md-6 col-xl-4">
+                                <article class="art-card recommendation-card h-100 overflow-hidden hover-lift">
+                                    <img class="parent-card-media activity-image" src="{{ activity_image_url(activity.image) }}" alt="{{ activity.titre }}">
+                                    <div class="card-body p-4">
+                                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                                            <span class="art-badge">{{ activity.category.nom }}</span>
+                                            <span class="badge text-bg-success">{{ activity.statut.value }}</span>
+                                        </div>
+                                        <h4 class="h5 mb-2">{{ activity.titre }}</h4>
+                                        <p class="recommendation-reason small mb-3">{{ item.reason }}</p>
+                                        <ul class="list-unstyled small recommendation-meta mb-4">
+                                            <li><i class="bi bi-calendar-event me-2"></i>{{ activity.dateActivite|date('d/m/Y') }}</li>
+                                            <li><i class="bi bi-people me-2"></i>{{ activity.ageMin }} - {{ activity.ageMax }} ans</li>
+                                            <li><i class="bi bi-ticket-perforated me-2"></i>{{ activity.placesDisponibles }} place(s) disponible(s)</li>
+                                            <li><i class="bi bi-stars me-2"></i>Score de pertinence : {{ item.score }}</li>
+                                        </ul>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <a href="{{ path('app_front_activity_show', {id: activity.id}) }}" class="btn btn-art-secondary btn-sm">Voir details</a>
+                                            {% if activity.estDisponible %}
+                                                <a href="{{ path('app_front_activity_show', {id: activity.id, child: group.child.id}) }}" class="btn btn-art-primary btn-sm">Reserver</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        {% else %}
+                            <div class="col-12">
+                                <div class="art-empty-state">
+                                    Aucune activite recommandee pour {{ group.child.prenom }} pour le moment.
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endfor %}
+        {% elseif children %}
+            <div class="art-empty-state">
+                Aucune activite recommandee pour le moment.
             </div>
         {% else %}
-            <div class="parent-empty">Aucune recommandation disponible pour le moment.</div>
+            <div class="art-empty-state">
+                Ajoutez un enfant pour recevoir des recommandations personnalisees.
+            </div>
         {% endif %}
     </section>
 

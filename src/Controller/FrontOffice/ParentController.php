@@ -4,6 +4,7 @@ namespace App\Controller\FrontOffice;
 
 use App\Entity\User;
 use App\Repository\ChildRepository;
+use App\Service\AiRecommendationService;
 use App\Service\ParentStatisticService;
 use App\Service\RecommendationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,16 +22,29 @@ class ParentController extends AbstractController
         ParentStatisticService $parentStatisticService,
         ChildRepository $childRepository,
         RecommendationService $recommendationService,
+        AiRecommendationService $aiRecommendationService,
     ): Response {
         /** @var User $parent */
         $parent = $this->getUser();
         $children = $childRepository->findByParentWithRelations($parent);
+        $recommendationsByChild = $recommendationService->recommendForParent($parent, 4);
+        $remainingAiExplanations = 10;
+
+        foreach ($recommendationsByChild as &$group) {
+            foreach ($group['recommendations'] as &$item) {
+                if ($remainingAiExplanations > 0) {
+                    $item['reason'] = $aiRecommendationService->explainRecommendation($group['child'], $item['activity']);
+                    --$remainingAiExplanations;
+                }
+            }
+        }
+        unset($group, $item);
 
         return $this->render('front_office/parent/dashboard.html.twig', [
             'parent' => $parent,
             'children' => $children,
             'dashboard' => $parentStatisticService->getDashboardData($parent),
-            'recommendations' => $recommendationService->recommendForParent($parent),
+            'recommendationsByChild' => $recommendationsByChild,
             'today' => new \DateTimeImmutable(),
         ]);
     }

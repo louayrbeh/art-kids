@@ -126,6 +126,37 @@
     object-fit: cover;
 }
 
+.activity-image-detail {
+    width: 100%;
+    max-height: 380px;
+    object-fit: cover;
+    box-shadow: var(--art-shadow-sm);
+}
+
+.recommendation-card {
+    overflow: hidden;
+}
+
+.recommendation-card .card-body {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(244, 235, 219, 0.72));
+}
+
+.recommendation-reason {
+    color: var(--art-medium);
+    line-height: 1.55;
+}
+
+.recommendation-meta li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.45rem;
+    color: var(--art-dark);
+}
+
+.recommendation-meta li i {
+    color: var(--art-medium);
+}
+
 .child-form-card {
     position: relative;
     overflow: hidden;

@@ -53,7 +53,7 @@
                             <select id="child_id" name="child_id" class="form-select" required>
                                 <option value="">Selectionnez un enfant</option>
                                 {% for child in compatibleChildren %}
-                                    <option value="{{ child.id }}">{{ child.fullName }} ({{ child.age }} ans)</option>
+                                    <option value="{{ child.id }}" {{ selectedChildId == child.id ? 'selected' : '' }}>{{ child.fullName }} ({{ child.age }} ans)</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -102,14 +102,16 @@
             <h2 class="h5 mb-3">Autres suggestions proches</h2>
             <div class="row g-3">
                 {% for childId, items in recommendations %}
-                    {% for recommendation in items|slice(0, 2) %}
+                    {% for item in items|slice(0, 2) %}
+                        {% set recommendation = item.activity %}
                         <div class="col-md-6 col-xl-4">
                             <div class="parent-surface p-3 h-100 bg-body-tertiary">
                                 <img class="parent-card-media activity-image mb-3" src="{{ activity_image_url(recommendation.image) }}" alt="{{ recommendation.titre }}">
                                 <div class="small text-muted mb-2">{{ recommendation.category.nom }}</div>
                                 <h3 class="h6">{{ recommendation.titre }}</h3>
-                                <p class="small text-muted mb-3">{{ recommendation.dateActivite|date('d/m/Y') }} - {{ recommendation.ageMin }}-{{ recommendation.ageMax }} ans</p>
-                                <a class="btn btn-sm btn-outline-primary rounded-3" href="{{ path('app_front_activity_show', {id: recommendation.id}) }}">Voir details</a>
+                                <p class="small text-muted mb-2">{{ recommendation.dateActivite|date('d/m/Y') }} - {{ recommendation.ageMin }}-{{ recommendation.ageMax }} ans</p>
+                                <p class="small recommendation-reason mb-3">{{ item.reason }}</p>
+                                <a class="btn btn-sm btn-outline-primary rounded-3" href="{{ path('app_front_activity_show', {id: recommendation.id, child: childId}) }}">Voir details</a>
                             </div>
                         </div>
                     {% endfor %}

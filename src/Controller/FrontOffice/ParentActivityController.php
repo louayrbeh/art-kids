@@ -47,6 +47,7 @@ class ParentActivityController extends AbstractController
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(
+        Request $request,
         Activity $activity,
         ChildRepository $childRepository,
         RecommendationService $recommendationService,
@@ -61,12 +62,14 @@ class ParentActivityController extends AbstractController
         $parent = $this->getUser();
         $children = $childRepository->findByParent($parent);
         $compatibleChildren = $this->getCompatibleChildren($children, $activity);
+        $selectedChildId = max(0, $request->query->getInt('child'));
 
         return $this->render('front_office/activity/show.html.twig', [
             'activity' => $activity,
             'children' => $children,
             'compatibleChildren' => $compatibleChildren,
             'recommendations' => $this->buildRecommendations($compatibleChildren, $activity, $recommendationService),
+            'selectedChildId' => $selectedChildId > 0 ? $selectedChildId : null,
         ]);
     }
 
@@ -136,7 +139,7 @@ class ParentActivityController extends AbstractController
     /**
      * @param list<Child> $compatibleChildren
      *
-     * @return array<int, list<Activity>>
+     * @return array<int, list<array{activity: Activity, score: int, reason: string}>>
      */
     private function buildRecommendations(
         array $compatibleChildren,
@@ -146,8 +149,8 @@ class ParentActivityController extends AbstractController
         $recommendations = [];
         foreach ($compatibleChildren as $child) {
             $recommendations[$child->getId()] = array_values(array_filter(
-                $recommendationService->recommendForChild($child),
-                static fn (Activity $recommendedActivity): bool => $recommendedActivity->getId() !== $activity->getId()
+                $recommendationService->recommendForChild($child, 3),
+                static fn (array $item): bool => $item['activity']->getId() !== $activity->getId()
             ));
         }
 

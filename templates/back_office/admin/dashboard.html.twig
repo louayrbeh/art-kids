@@ -1,38 +1,49 @@
 {% extends 'back_office/layout.html.twig' %}
 
 {% set reservationBadgeMap = {
-    'EN_ATTENTE': 'warning',
-    'CONFIRMEE': 'success',
-    'ANNULEE': 'danger',
-    'TERMINEE': 'secondary'
+    'EN_ATTENTE': 'badge-art-pending',
+    'CONFIRMEE': 'badge-art-confirmed',
+    'ANNULEE': 'badge-art-cancelled',
+    'TERMINEE': 'badge-art-finished'
+} %}
+
+{% set activityBadgeMap = {
+    'OUVERTE': 'badge-art-open',
+    'COMPLETE': 'badge-art-complete',
+    'ANNULEE': 'badge-art-cancelled',
+    'TERMINEE': 'badge-art-finished'
 } %}
 
 {% block title %}Dashboard Admin | ArtKids{% endblock %}
 
 {% block admin_body %}
-    <section class="admin-surface p-4 p-xl-5 mb-4">
+    <section class="admin-surface admin-dashboard-header p-4 p-xl-5 mb-4 animate-slide-up">
         <div class="row align-items-center g-4">
             <div class="col-lg-8">
-                <span class="badge rounded-pill text-bg-primary-subtle text-primary px-3 py-2 mb-3">Dashboard Administrateur</span>
-                <h2 class="display-6 fw-bold mb-2">Vue globale de la plateforme ArtKids</h2>
-                <p class="text-muted mb-4">Pilotez les utilisateurs, les activites, les reservations et les alertes administratives depuis une seule interface claire et connectee a MySQL.</p>
+                <span class="art-badge mb-3">Dashboard Administrateur</span>
+                <h2 class="display-6 fw-bold mb-2">Tableau de bord statistique ArtKids</h2>
+                <p class="text-muted mb-4">Analysez les utilisateurs, les activites, les reservations et la capacite globale de la plateforme a partir des vraies donnees MySQL.</p>
                 <div class="d-flex flex-wrap gap-3">
-                    <a class="btn btn-primary rounded-4 px-4" href="{{ path('app_back_user_new') }}">
+                    <a class="btn btn-art-primary" href="{{ path('app_back_user_new') }}">
                         <i class="bi bi-person-plus-fill me-2"></i>Creer un utilisateur
                     </a>
-                    <a class="btn btn-outline-primary rounded-4 px-4" href="{{ path('app_back_activity_new') }}">
+                    <a class="btn btn-art-secondary" href="{{ path('app_back_activity_new') }}">
                         <i class="bi bi-palette-fill me-2"></i>Ajouter une activite
                     </a>
                 </div>
             </div>
             <div class="col-lg-4">
-                <div class="admin-surface h-100 p-4 bg-body-tertiary">
-                    <p class="text-muted small mb-2">Connecte</p>
+                <div class="admin-summary-card h-100">
+                    <span class="admin-summary-label">Session active</span>
                     <h3 class="h4 mb-1">{{ app.user.fullName }}</h3>
                     <p class="text-muted mb-4">Administrateur de la plateforme</p>
-                    <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex justify-content-between small">
                         <span class="text-muted">Date du jour</span>
                         <strong>{{ today|date('d/m/Y') }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between small mt-2">
+                        <span class="text-muted">Dernier parent cree</span>
+                        <strong>{{ dashboard.latestParent ? dashboard.latestParent.fullName : 'Aucune donnee disponible' }}</strong>
                     </div>
                 </div>
             </div>
@@ -41,51 +52,38 @@
 
     <section class="row g-4 mb-4">
         {% set statCards = [
-            { label: 'Parents', value: dashboard.totalParents, icon: 'bi-people', class: 'bg-primary', helper: 'Comptes parents' },
-            { label: 'Administrateurs', value: dashboard.totalAdmins, icon: 'bi-shield-check', class: 'bg-danger', helper: 'Acces Back-Office' },
-            { label: 'Enfants', value: dashboard.totalChildren, icon: 'bi-balloon-heart', class: 'bg-success', helper: 'Profils enfants' },
-            { label: 'Categories', value: dashboard.totalCategories, icon: 'bi-tags', class: 'bg-warning', helper: 'Univers artistiques' },
-            { label: 'Activites', value: dashboard.totalActivities, icon: 'bi-palette', class: 'bg-info', helper: 'Catalogue total' },
-            { label: 'Reservations', value: dashboard.totalReservations, icon: 'bi-journal-check', class: 'bg-secondary', helper: 'Historique global' },
-            { label: 'En attente', value: dashboard.pendingReservations, icon: 'bi-hourglass-split', class: 'bg-dark', helper: 'Reservations a traiter' }
+            { label: 'Utilisateurs', value: dashboard.totalUsers, icon: 'bi-people-fill', helper: 'Total des comptes' },
+            { label: 'Parents', value: dashboard.totalParents, icon: 'bi-person-hearts', helper: 'Comptes parents' },
+            { label: 'Administrateurs', value: dashboard.totalAdmins, icon: 'bi-shield-lock-fill', helper: 'Acces Back-Office' },
+            { label: 'Enfants', value: dashboard.totalChildren, icon: 'bi-balloon-heart-fill', helper: 'Profils enfants' },
+            { label: 'Categories', value: dashboard.totalCategories, icon: 'bi-tags-fill', helper: 'Univers artistiques' },
+            { label: 'Activites', value: dashboard.totalActivities, icon: 'bi-palette-fill', helper: 'Catalogue total' },
+            { label: 'Reservations', value: dashboard.totalReservations, icon: 'bi-journal-check', helper: 'Historique global' },
+            { label: 'En attente', value: dashboard.pendingReservations, icon: 'bi-hourglass-split', helper: 'A traiter' },
+            { label: 'Confirmees', value: dashboard.confirmedReservations, icon: 'bi-check2-circle', helper: 'Validees' },
+            { label: 'Annulees', value: dashboard.cancelledReservations, icon: 'bi-x-circle', helper: 'Reservations annulees' },
+            { label: 'Activites ouvertes', value: dashboard.openActivities, icon: 'bi-door-open-fill', helper: 'Encore reservables' },
+            { label: 'Activites completes', value: dashboard.completeActivities, icon: 'bi-exclamation-circle', helper: 'Capacite atteinte' },
+            { label: 'Activites annulees', value: dashboard.cancelledActivitiesCount, icon: 'bi-slash-circle', helper: 'A surveiller' },
+            { label: 'Activites terminees', value: dashboard.finishedActivities, icon: 'bi-flag-fill', helper: 'Passees' },
+            { label: 'Prochaines activites', value: dashboard.upcomingActivitiesCount, icon: 'bi-calendar-event-fill', helper: 'A venir' },
+            { label: 'Activites passees', value: dashboard.pastActivitiesCount, icon: 'bi-clock-history', helper: 'Deja deroulees' }
         ] %}
 
         {% for card in statCards %}
-            <div class="col-sm-6 col-xl-4 col-xxl">
-                <div class="card admin-stat-card h-100">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-start gap-3">
-                            <div>
-                                <p class="text-muted small mb-2">{{ card.label }}</p>
-                                <h3 class="display-6 fw-bold mb-1">{{ card.value }}</h3>
-                                <p class="mb-0 text-muted">{{ card.helper }}</p>
-                            </div>
-                            <span class="admin-stat-icon {{ card.class }}">
-                                <i class="bi {{ card.icon }}"></i>
-                            </span>
-                        </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="admin-stat-card hover-lift h-100">
+                    <div class="stat-icon">
+                        <i class="bi {{ card.icon }}"></i>
+                    </div>
+                    <div>
+                        <span class="stat-label">{{ card.label }}</span>
+                        <h3>{{ card.value }}</h3>
+                        <p class="mb-0 text-muted small">{{ card.helper }}</p>
                     </div>
                 </div>
             </div>
         {% endfor %}
-    </section>
-
-    <section class="admin-surface p-4 mb-4">
-        <div class="admin-section-title mb-4">
-            <div>
-                <h2 class="h4 mb-1">Actions rapides</h2>
-                <p class="text-muted mb-0">Accedez directement aux operations les plus frequentes.</p>
-            </div>
-        </div>
-        <div class="row g-3">
-            <div class="col-md-6 col-xl-3"><a class="btn btn-outline-primary w-100 rounded-4 py-3" href="{{ path('app_back_category_new') }}"><i class="bi bi-tag-fill me-2"></i>Ajouter une categorie</a></div>
-            <div class="col-md-6 col-xl-3"><a class="btn btn-outline-primary w-100 rounded-4 py-3" href="{{ path('app_back_activity_new') }}"><i class="bi bi-palette-fill me-2"></i>Ajouter une activite</a></div>
-            <div class="col-md-6 col-xl-3"><a class="btn btn-outline-success w-100 rounded-4 py-3" href="{{ path('app_back_user_new') }}"><i class="bi bi-person-plus-fill me-2"></i>Creer un compte parent</a></div>
-            <div class="col-md-6 col-xl-3"><a class="btn btn-outline-danger w-100 rounded-4 py-3" href="{{ path('app_back_user_new') }}"><i class="bi bi-shield-plus me-2"></i>Creer un compte admin</a></div>
-            <div class="col-md-6 col-xl-4"><a class="btn btn-outline-secondary w-100 rounded-4 py-3" href="{{ path('app_back_reservation_index') }}"><i class="bi bi-journal-check me-2"></i>Voir les reservations</a></div>
-            <div class="col-md-6 col-xl-4"><a class="btn btn-outline-secondary w-100 rounded-4 py-3" href="{{ path('app_back_user_index') }}"><i class="bi bi-people-fill me-2"></i>Voir les utilisateurs</a></div>
-            <div class="col-md-12 col-xl-4"><a class="btn btn-outline-secondary w-100 rounded-4 py-3" href="{{ path('app_back_child_index') }}"><i class="bi bi-balloon-heart-fill me-2"></i>Voir les enfants</a></div>
-        </div>
     </section>
 
     <section class="row g-4 mb-4">
@@ -93,57 +91,91 @@
             <div class="admin-surface p-4 h-100">
                 <div class="admin-section-title mb-4">
                     <div>
-                        <h2 class="h4 mb-1">Dernieres reservations</h2>
-                        <p class="text-muted mb-0">Les 10 reservations les plus recentes en base.</p>
+                        <h2 class="h4 mb-1">Resume global</h2>
+                        <p class="text-muted mb-0">Les indicateurs les plus importants pour piloter la plateforme.</p>
                     </div>
                 </div>
 
-                {% if dashboard.latestReservations %}
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle admin-table mb-0">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Parent</th>
-                                    <th>Enfant</th>
-                                    <th>Activite</th>
-                                    <th>Date reservation</th>
-                                    <th>Statut</th>
-                                    <th class="text-end">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for reservation in dashboard.latestReservations %}
-                                    <tr>
-                                        <td>#{{ reservation.id }}</td>
-                                        <td>{{ reservation.child.parent.fullName }}</td>
-                                        <td>{{ reservation.child.fullName }}</td>
-                                        <td>{{ reservation.activity.titre }}</td>
-                                        <td>{{ reservation.dateReservation|date('d/m/Y H:i') }}</td>
-                                        <td><span class="badge text-bg-{{ reservationBadgeMap[reservation.statut.value] ?? 'secondary' }}">{{ reservation.statut.value }}</span></td>
-                                        <td class="text-end">
-                                            <a class="btn btn-sm btn-outline-secondary rounded-3" href="{{ path('app_back_reservation_show', {id: reservation.id}) }}">Voir</a>
-                                            {% if reservation.statut.value == 'EN_ATTENTE' %}
-                                                <form method="post" action="{{ path('app_back_reservation_confirm', {id: reservation.id}) }}" class="d-inline">
-                                                    <input type="hidden" name="_token" value="{{ csrf_token('confirm_reservation_' ~ reservation.id) }}">
-                                                    <button class="btn btn-sm btn-outline-success rounded-3">Confirmer</button>
-                                                </form>
-                                            {% endif %}
-                                            {% if reservation.statut.value != 'ANNULEE' %}
-                                                <form method="post" action="{{ path('app_back_reservation_cancel', {id: reservation.id}) }}" class="d-inline">
-                                                    <input type="hidden" name="_token" value="{{ csrf_token('cancel_admin_reservation_' ~ reservation.id) }}">
-                                                    <button class="btn btn-sm btn-outline-danger rounded-3">Annuler</button>
-                                                </form>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                <div class="row g-3">
+                    <div class="col-md-6 col-xl-4">
+                        <div class="admin-summary-card h-100">
+                            <span class="admin-summary-label">Activite la plus reservee</span>
+                            <h3 class="h5 mb-1">{{ dashboard.mostReservedActivity ? dashboard.mostReservedActivity.activity.titre : 'Aucune donnee disponible' }}</h3>
+                            <p class="text-muted small mb-0">
+                                {% if dashboard.mostReservedActivity %}
+                                    {{ dashboard.mostReservedActivity.value }} reservation(s) - {{ dashboard.mostReservedActivity.fillRate }}% de remplissage
+                                {% else %}
+                                    Aucune reservation enregistree pour le moment.
+                                {% endif %}
+                            </p>
+                        </div>
                     </div>
-                {% else %}
-                    <div class="admin-empty-state">Aucune reservation enregistree pour le moment.</div>
-                {% endif %}
+                    <div class="col-md-6 col-xl-4">
+                        <div class="admin-summary-card h-100">
+                            <span class="admin-summary-label">Categorie la plus populaire</span>
+                            <h3 class="h5 mb-1">{{ dashboard.mostPopularCategory ? dashboard.mostPopularCategory.category : 'Aucune donnee disponible' }}</h3>
+                            <p class="text-muted small mb-0">
+                                {% if dashboard.mostPopularCategory %}
+                                    {{ dashboard.mostPopularCategory.value }} reservation(s)
+                                {% else %}
+                                    Aucune categorie populaire pour le moment.
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-4">
+                        <div class="admin-summary-card h-100">
+                            <span class="admin-summary-label">Parent le plus actif</span>
+                            <h3 class="h5 mb-1">{{ dashboard.mostActiveParent ? dashboard.mostActiveParent.user.fullName : 'Aucune donnee disponible' }}</h3>
+                            <p class="text-muted small mb-0">
+                                {% if dashboard.mostActiveParent %}
+                                    {{ dashboard.mostActiveParent.value }} reservation(s)
+                                {% else %}
+                                    Aucune activite parent mesuree.
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-4">
+                        <div class="admin-summary-card h-100">
+                            <span class="admin-summary-label">Enfant le plus actif</span>
+                            <h3 class="h5 mb-1">{{ dashboard.mostActiveChild ? dashboard.mostActiveChild.child.fullName : 'Aucune donnee disponible' }}</h3>
+                            <p class="text-muted small mb-0">
+                                {% if dashboard.mostActiveChild %}
+                                    {{ dashboard.mostActiveChild.value }} reservation(s)
+                                {% else %}
+                                    Aucune activite enfant mesuree.
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-4">
+                        <div class="admin-summary-card h-100">
+                            <span class="admin-summary-label">Derniere reservation</span>
+                            <h3 class="h5 mb-1">{{ dashboard.latestReservation ? dashboard.latestReservation.activity.titre : 'Aucune donnee disponible' }}</h3>
+                            <p class="text-muted small mb-0">
+                                {% if dashboard.latestReservation %}
+                                    {{ dashboard.latestReservation.child.fullName }} - {{ dashboard.latestReservation.dateReservation|date('d/m/Y H:i') }}
+                                {% else %}
+                                    Aucune reservation recente.
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-xl-4">
+                        <div class="admin-summary-card h-100">
+                            <span class="admin-summary-label">Dernier compte parent</span>
+                            <h3 class="h5 mb-1">{{ dashboard.latestParent ? dashboard.latestParent.fullName : 'Aucune donnee disponible' }}</h3>
+                            <p class="text-muted small mb-0">
+                                {% if dashboard.latestParent %}
+                                    Cree le {{ dashboard.latestParent.createdAt|date('d/m/Y H:i') }}
+                                {% else %}
+                                    Aucun parent enregistre.
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -151,40 +183,101 @@
             <div class="admin-surface p-4 h-100">
                 <div class="admin-section-title mb-4">
                     <div>
-                        <h2 class="h4 mb-1">Alertes administratives</h2>
-                        <p class="text-muted mb-0">Points d attention a suivre de pres.</p>
+                        <h2 class="h4 mb-1">Capacite et remplissage</h2>
+                        <p class="text-muted mb-0">Vue rapide sur la capacite globale des activites.</p>
                     </div>
                 </div>
 
-                {% set alerts = [] %}
-                {% if dashboard.fullActivities|length > 0 %}
-                    {% set alerts = alerts|merge(['<strong>' ~ dashboard.fullActivities|length ~ '</strong> activite(s) complete(s).']) %}
-                {% endif %}
-                {% if dashboard.pendingReservations > 0 %}
-                    {% set alerts = alerts|merge(['<strong>' ~ dashboard.pendingReservations ~ '</strong> reservation(s) en attente de validation.']) %}
-                {% endif %}
-                {% if dashboard.cancelledActivities|length > 0 %}
-                    {% set alerts = alerts|merge(['<strong>' ~ dashboard.cancelledActivities|length ~ '</strong> activite(s) annulee(s).']) %}
-                {% endif %}
-                {% if dashboard.upcomingActivities|length > 0 %}
-                    {% set alerts = alerts|merge(['<strong>' ~ dashboard.upcomingActivities|length ~ '</strong> activite(s) prevue(s) dans les 7 prochains jours.']) %}
-                {% endif %}
-                {% if dashboard.disabledUsers|length > 0 %}
-                    {% set alerts = alerts|merge(['<strong>' ~ dashboard.disabledUsers|length ~ '</strong> utilisateur(s) desactive(s).']) %}
-                {% endif %}
-
-                {% if alerts %}
-                    <div class="list-group admin-alert-list">
-                        {% for alert in alerts %}
-                            <div class="list-group-item d-flex align-items-start gap-3">
-                                <span class="badge text-bg-warning rounded-pill mt-1"><i class="bi bi-exclamation-triangle-fill"></i></span>
-                                <div>{{ alert|raw }}</div>
-                            </div>
-                        {% endfor %}
+                <div class="admin-metric-list">
+                    <div class="admin-metric-row">
+                        <span>Taux moyen de remplissage</span>
+                        <strong>{{ dashboard.averageFillRate|number_format(1, ',', ' ') }}%</strong>
                     </div>
-                {% else %}
-                    <div class="admin-empty-state">Aucune alerte pour le moment.</div>
-                {% endif %}
+                    <div class="admin-metric-row">
+                        <span>Total des places disponibles</span>
+                        <strong>{{ dashboard.totalAvailablePlaces }}</strong>
+                    </div>
+                    <div class="admin-metric-row">
+                        <span>Total des places reservees</span>
+                        <strong>{{ dashboard.totalReservedPlaces }}</strong>
+                    </div>
+                    <div class="admin-metric-row">
+                        <span>Activites bientot completes</span>
+                        <strong>{{ dashboard.almostFullActivities|length }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="admin-surface p-4 mb-4">
+        <div class="admin-section-title mb-4">
+            <div>
+                <h2 class="h4 mb-1">Analyse visuelle</h2>
+                <p class="text-muted mb-0">Des graphiques dynamiques calcules depuis les donnees MySQL.</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-xl-6">
+                <div class="admin-chart-card h-100">
+                    <h3 class="h6 mb-3">Reservations par statut</h3>
+                    {% if dashboard.totalReservations > 0 %}
+                        <div class="admin-chart-wrap"><canvas id="reservationsStatusChart"></canvas></div>
+                    {% else %}
+                        <div class="admin-empty-state">Aucune donnee disponible pour le moment.</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="admin-chart-card h-100">
+                    <h3 class="h6 mb-3">Activites par statut</h3>
+                    {% if dashboard.totalActivities > 0 %}
+                        <div class="admin-chart-wrap"><canvas id="activitiesStatusChart"></canvas></div>
+                    {% else %}
+                        <div class="admin-empty-state">Aucune donnee disponible pour le moment.</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="admin-chart-card h-100">
+                    <h3 class="h6 mb-3">Reservations par mois</h3>
+                    {% if dashboard.totalReservations > 0 %}
+                        <div class="admin-chart-wrap"><canvas id="reservationsMonthChart"></canvas></div>
+                    {% else %}
+                        <div class="admin-empty-state">Aucune donnee disponible pour le moment.</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="admin-chart-card h-100">
+                    <h3 class="h6 mb-3">Activites par categorie</h3>
+                    {% if dashboard.activitiesByCategory %}
+                        <div class="admin-chart-wrap"><canvas id="activitiesCategoryChart"></canvas></div>
+                    {% else %}
+                        <div class="admin-empty-state">Aucune donnee disponible pour le moment.</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="admin-chart-card h-100">
+                    <h3 class="h6 mb-3">Utilisateurs par role</h3>
+                    {% if dashboard.totalUsers > 0 %}
+                        <div class="admin-chart-wrap"><canvas id="usersRoleChart"></canvas></div>
+                    {% else %}
+                        <div class="admin-empty-state">Aucune donnee disponible pour le moment.</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="admin-chart-card h-100">
+                    <h3 class="h6 mb-3">Top 5 des activites les plus reservees</h3>
+                    {% if dashboard.topReservedActivities %}
+                        <div class="admin-chart-wrap"><canvas id="topActivitiesChart"></canvas></div>
+                    {% else %}
+                        <div class="admin-empty-state">Aucune donnee disponible pour le moment.</div>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </section>
@@ -194,11 +287,12 @@
             <div class="admin-surface p-4 h-100">
                 <div class="admin-section-title mb-4">
                     <div>
-                        <h2 class="h4 mb-1">Activites les plus reservees</h2>
-                        <p class="text-muted mb-0">Classement calcule depuis les reservations reelles.</p>
+                        <h2 class="h4 mb-1">Top activites reservees</h2>
+                        <p class="text-muted mb-0">Classement des activites qui concentrent le plus de reservations.</p>
                     </div>
                 </div>
-                {% if dashboard.popularActivities %}
+
+                {% if dashboard.topReservedActivitiesDetailed %}
                     <div class="table-responsive">
                         <table class="table table-hover align-middle admin-table mb-0">
                             <thead>
@@ -211,11 +305,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for item in dashboard.popularActivities %}
+                                {% for item in dashboard.topReservedActivitiesDetailed %}
                                     <tr>
                                         <td>{{ item.activity.titre }}</td>
                                         <td>{{ item.activity.category.nom }}</td>
-                                        <td>{{ item.reservationCount }}</td>
+                                        <td>{{ item.value }}</td>
                                         <td>{{ item.activity.capaciteMax }}</td>
                                         <td>
                                             <div class="d-flex align-items-center gap-2">
@@ -240,30 +334,124 @@
             <div class="admin-surface p-4 h-100">
                 <div class="admin-section-title mb-4">
                     <div>
-                        <h2 class="h4 mb-1">Graphiques statistiques</h2>
-                        <p class="text-muted mb-0">Lecture visuelle des tendances clefs.</p>
+                        <h2 class="h4 mb-1">Activites bientot completes</h2>
+                        <p class="text-muted mb-0">Detection automatique des activites a forte pression de reservation.</p>
                     </div>
                 </div>
-                <div class="row g-3">
-                    <div class="col-12">
-                        <div class="admin-chart-card admin-surface p-3">
-                            <h3 class="h6">Reservations par statut</h3>
-                            <canvas id="reservationStatusChart"></canvas>
-                        </div>
+
+                {% if dashboard.almostFullActivities %}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle admin-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Activite</th>
+                                    <th>Reservees</th>
+                                    <th>Restantes</th>
+                                    <th>Taux</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in dashboard.almostFullActivities %}
+                                    <tr>
+                                        <td>
+                                            <div class="fw-semibold">{{ item.activity.titre }}</div>
+                                            <div class="small text-muted">{{ item.activity.category.nom }}</div>
+                                        </td>
+                                        <td>{{ item.reservedPlaces }}/{{ item.activity.capaciteMax }}</td>
+                                        <td>{{ item.remainingPlaces }}</td>
+                                        <td><span class="badge badge-art-complete">{{ item.fillRate }}%</span></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="col-12">
-                        <div class="admin-chart-card admin-surface p-3">
-                            <h3 class="h6">Activites par categorie</h3>
-                            <canvas id="activityCategoryChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="admin-chart-card admin-surface p-3">
-                            <h3 class="h6">Utilisateurs par role</h3>
-                            <canvas id="usersByRoleChart"></canvas>
-                        </div>
+                {% else %}
+                    <div class="admin-empty-state">Aucune activite bientot complete.</div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <section class="row g-4">
+        <div class="col-12 col-xxl-6">
+            <div class="admin-surface p-4 h-100">
+                <div class="admin-section-title mb-4">
+                    <div>
+                        <h2 class="h4 mb-1">Dernieres reservations</h2>
+                        <p class="text-muted mb-0">Les 8 reservations les plus recentes en base.</p>
                     </div>
                 </div>
+
+                {% if dashboard.latestReservations %}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle admin-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Parent</th>
+                                    <th>Enfant</th>
+                                    <th>Activite</th>
+                                    <th>Statut</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reservation in dashboard.latestReservations %}
+                                    <tr>
+                                        <td>#{{ reservation.id }}</td>
+                                        <td>{{ reservation.child.parent.fullName }}</td>
+                                        <td>{{ reservation.child.fullName }}</td>
+                                        <td>{{ reservation.activity.titre }}</td>
+                                        <td><span class="badge {{ reservationBadgeMap[reservation.statut.value] ?? 'badge-art-finished' }}">{{ reservation.statut.value }}</span></td>
+                                        <td>{{ reservation.dateReservation|date('d/m/Y H:i') }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="admin-empty-state">Aucune reservation recente.</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-12 col-xxl-6">
+            <div class="admin-surface p-4 h-100">
+                <div class="admin-section-title mb-4">
+                    <div>
+                        <h2 class="h4 mb-1">Prochaines activites</h2>
+                        <p class="text-muted mb-0">Les 8 prochaines activites programmees.</p>
+                    </div>
+                </div>
+
+                {% if dashboard.upcomingActivities %}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle admin-table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Activite</th>
+                                    <th>Categorie</th>
+                                    <th>Date</th>
+                                    <th>Statut</th>
+                                    <th>Places</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for activity in dashboard.upcomingActivities %}
+                                    <tr>
+                                        <td>{{ activity.titre }}</td>
+                                        <td>{{ activity.category.nom }}</td>
+                                        <td>{{ activity.dateActivite|date('d/m/Y') }}<br><span class="small text-muted">{{ activity.heureDebut|date('H:i') }}</span></td>
+                                        <td><span class="badge {{ activityBadgeMap[activity.statut.value] ?? 'badge-art-finished' }}">{{ activity.statut.value }}</span></td>
+                                        <td>{{ activity.placesDisponibles }}/{{ activity.capaciteMax }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="admin-empty-state">Aucune activite prochaine.</div>
+                {% endif %}
             </div>
         </div>
     </section>
@@ -271,13 +459,16 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const reservationStatusData = {{ dashboard.reservationsByStatus|json_encode|raw }};
-        const activityCategoryData = {{ dashboard.activitiesByCategory|json_encode|raw }};
-        const usersByRoleData = {{ dashboard.usersByRole|json_encode|raw }};
+        const reservationsByStatus = {{ dashboard.reservationsByStatus|json_encode|raw }};
+        const activitiesByStatus = {{ dashboard.activitiesByStatus|json_encode|raw }};
+        const reservationsByMonth = {{ dashboard.reservationsByMonth|json_encode|raw }};
+        const activitiesByCategory = {{ dashboard.activitiesByCategory|json_encode|raw }};
+        const usersByRole = {{ dashboard.usersByRole|json_encode|raw }};
+        const topReservedActivities = {{ dashboard.topReservedActivities|json_encode|raw }};
 
-        const defaultColors = ['#2C4A52', '#537072', '#8E9B97', '#C99848', '#4E8C6A', '#B94A48'];
+        const chartColors = ['#2C4A52', '#537072', '#8E9B97', '#F4EBDB', '#B94A48', '#4E8C6A', '#C99848'];
 
         const buildChart = (selector, type, labels, values, colors) => {
             const canvas = document.getElementById(selector);
@@ -292,8 +483,10 @@
                     datasets: [{
                         data: values,
                         backgroundColor: colors,
-                        borderRadius: 10,
-                        borderWidth: 0
+                        borderColor: '#ffffff',
+                        borderWidth: type === 'line' ? 3 : 1,
+                        borderRadius: type === 'bar' ? 10 : 0,
+                        tension: type === 'line' ? 0.35 : 0
                     }]
                 },
                 options: {
@@ -305,11 +498,19 @@
                             position: 'bottom'
                         }
                     },
-                    scales: type === 'bar' ? {
+                    scales: type === 'bar' || type === 'line' ? {
                         y: {
                             beginAtZero: true,
                             ticks: {
                                 precision: 0
+                            },
+                            grid: {
+                                color: 'rgba(83, 112, 114, 0.12)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
                             }
                         }
                     } : {}
@@ -318,27 +519,51 @@
         };
 
         buildChart(
-            'reservationStatusChart',
+            'reservationsStatusChart',
             'doughnut',
-            reservationStatusData.map(item => item.status),
-            reservationStatusData.map(item => item.count),
-            ['#C99848', '#4E8C6A', '#B94A48', '#537072']
+            reservationsByStatus.map(item => item.label),
+            reservationsByStatus.map(item => item.value),
+            ['#C99848', '#4E8C6A', '#B94A48', '#8E9B97']
         );
 
         buildChart(
-            'activityCategoryChart',
-            'bar',
-            activityCategoryData.map(item => item.label),
-            activityCategoryData.map(item => item.count),
-            defaultColors
+            'activitiesStatusChart',
+            'doughnut',
+            activitiesByStatus.map(item => item.label),
+            activitiesByStatus.map(item => item.value),
+            ['#4E8C6A', '#C99848', '#B94A48', '#537072']
         );
 
         buildChart(
-            'usersByRoleChart',
+            'reservationsMonthChart',
+            'line',
+            reservationsByMonth.map(item => item.label),
+            reservationsByMonth.map(item => item.value),
+            ['#2C4A52']
+        );
+
+        buildChart(
+            'activitiesCategoryChart',
             'bar',
-            usersByRoleData.map(item => item.label),
-            usersByRoleData.map(item => item.count),
+            activitiesByCategory.map(item => item.label),
+            activitiesByCategory.map(item => item.value),
+            chartColors
+        );
+
+        buildChart(
+            'usersRoleChart',
+            'bar',
+            usersByRole.map(item => item.label),
+            usersByRole.map(item => item.value),
             ['#2C4A52', '#8E9B97']
+        );
+
+        buildChart(
+            'topActivitiesChart',
+            'bar',
+            topReservedActivities.map(item => item.label),
+            topReservedActivities.map(item => item.value),
+            ['#537072', '#2C4A52', '#8E9B97', '#4E8C6A', '#C99848']
         );
     </script>
 {% endblock %}

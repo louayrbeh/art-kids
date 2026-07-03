@@ -6,6 +6,8 @@ use App\Entity\Child;
 use App\Entity\User;
 use App\Form\FrontOffice\ChildType;
 use App\Repository\ChildRepository;
+use App\Service\AiRecommendationService;
+use App\Service\RecommendationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,12 +55,23 @@ class ParentChildController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
-    public function show(Child $child): Response
+    public function show(
+        Child $child,
+        RecommendationService $recommendationService,
+        AiRecommendationService $aiRecommendationService,
+    ): Response
     {
         $this->denyUnlessOwnChild($child);
 
+        $recommendations = $recommendationService->recommendForChild($child, 4);
+        foreach ($recommendations as &$item) {
+            $item['reason'] = $aiRecommendationService->explainRecommendation($child, $item['activity']);
+        }
+        unset($item);
+
         return $this->render('front_office/child/show.html.twig', [
             'child' => $child,
+            'recommendations' => $recommendations,
         ]);
     }
 
