@@ -19,18 +19,21 @@
                             <div class="child-form-icon mb-3">
                                 <i class="bi bi-pencil-square"></i>
                             </div>
-                            <h1 class="art-form-title mb-2">Modifier les informations de l’enfant</h1>
-                            <p class="art-form-subtitle mb-0">Mettez à jour les informations de votre enfant pour garder son profil correct.</p>
+                            <h1 class="art-form-title mb-2">Modifier les informations de l enfant</h1>
+                            <p class="art-form-subtitle mb-0">Mettez a jour les informations de votre enfant pour garder son profil correct.</p>
                         </div>
 
                         {{ form_start(form, {'attr': {'class': 'art-child-form'}}) }}
                             {{ form_errors(form) }}
 
-                            <div class="row g-4">
-                                <div class="col-md-6">{{ form_row(form.nom) }}</div>
-                                <div class="col-md-6">{{ form_row(form.prenom) }}</div>
-                                <div class="col-md-6">{{ form_row(form.dateNaissance) }}</div>
-                                <div class="col-md-6">{{ form_row(form.sexe) }}</div>
+                            <div class="art-fieldset">
+                                <div class="art-fieldset-title">Informations de l enfant</div>
+                                <div class="row g-4">
+                                    <div class="col-md-6">{{ form_row(form.nom) }}</div>
+                                    <div class="col-md-6">{{ form_row(form.prenom) }}</div>
+                                    <div class="col-md-6">{{ form_row(form.dateNaissance) }}</div>
+                                    <div class="col-md-6">{{ form_row(form.sexe) }}</div>
+                                </div>
                             </div>
 
                             <div class="form-actions mt-4">

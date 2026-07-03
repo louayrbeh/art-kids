@@ -20,22 +20,25 @@
                                 <i class="bi bi-person-heart"></i>
                             </div>
                             <h1 class="art-form-title mb-2">Ajouter un enfant</h1>
-                            <p class="art-form-subtitle mb-0">Renseignez les informations de votre enfant afin de pouvoir l’inscrire aux activités adaptées à son âge.</p>
+                            <p class="art-form-subtitle mb-0">Renseignez les informations de votre enfant afin de pouvoir l inscrire aux activites adaptees a son age.</p>
                         </div>
 
                         {{ form_start(form, {'attr': {'class': 'art-child-form'}}) }}
                             {{ form_errors(form) }}
 
-                            <div class="row g-4">
-                                <div class="col-md-6">{{ form_row(form.nom) }}</div>
-                                <div class="col-md-6">{{ form_row(form.prenom) }}</div>
-                                <div class="col-md-6">{{ form_row(form.dateNaissance) }}</div>
-                                <div class="col-md-6">{{ form_row(form.sexe) }}</div>
+                            <div class="art-fieldset">
+                                <div class="art-fieldset-title">Informations de l enfant</div>
+                                <div class="row g-4">
+                                    <div class="col-md-6">{{ form_row(form.nom) }}</div>
+                                    <div class="col-md-6">{{ form_row(form.prenom) }}</div>
+                                    <div class="col-md-6">{{ form_row(form.dateNaissance) }}</div>
+                                    <div class="col-md-6">{{ form_row(form.sexe) }}</div>
+                                </div>
                             </div>
 
                             <div class="form-actions mt-4">
                                 {{ form_widget(form.save, {
-                                    label: 'Ajouter l’enfant',
+                                    label: 'Ajouter l enfant',
                                     attr: { class: 'btn btn-art-primary' }
                                 }) }}
 

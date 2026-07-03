@@ -3,32 +3,42 @@
 {% block title %}Nouvelle categorie | Admin{% endblock %}
 
 {% block admin_body %}
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-        <div>
-            <h2 class="h3 mb-1">Nouvelle categorie</h2>
-            <p class="text-muted mb-0">Ajoutez un nouvel univers artistique dans le catalogue.</p>
-        </div>
-        <a class="btn btn-outline-secondary rounded-4" href="{{ path('app_back_category_index') }}">Retour a la liste</a>
-    </div>
+    <div class="art-form-page">
+        <div class="art-form-card animate-slide-up">
+            <div class="mb-4 d-flex flex-wrap justify-content-between align-items-start gap-3">
+                <div>
+                    <span class="art-badge">ArtKids Admin</span>
+                    <h1 class="art-form-title mt-3 mb-2">Nouvelle categorie</h1>
+                    <p class="art-form-subtitle mb-0">Ajoutez un nouvel univers artistique dans le catalogue avec un visuel et une description soignes.</p>
+                </div>
+                <a class="btn btn-art-secondary" href="{{ path('app_back_category_index') }}">
+                    <i class="bi bi-arrow-left me-1"></i>Retour a la liste
+                </a>
+            </div>
 
-    <div class="admin-surface admin-form-card p-4 p-lg-5">
-        {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
-            {{ form_errors(form) }}
-            <div class="row g-4">
-                <div class="col-md-6">{{ form_row(form.nom) }}</div>
-                <div class="col-md-6">
-                    <div class="art-upload-panel">
-                        {{ form_row(form.imageFile) }}
-                        <div class="art-upload-meta">Formats acceptes : JPG, PNG, WEBP - taille maximale 2 Mo.</div>
-                        <div class="art-upload-filename" data-upload-filename>Aucun fichier selectionne</div>
+            {{ form_start(form, {'attr': {'enctype': 'multipart/form-data', 'class': 'art-form'}}) }}
+                {{ form_errors(form) }}
+
+                <div class="art-fieldset">
+                    <div class="art-fieldset-title">Informations generales</div>
+                    <div class="row g-4">
+                        <div class="col-md-6">{{ form_row(form.nom) }}</div>
+                        <div class="col-md-6">
+                            <div class="art-upload-panel">
+                                {{ form_row(form.imageFile) }}
+                                <div class="art-upload-meta">Formats acceptes : JPG, PNG, WEBP. Taille maximale : 2 Mo.</div>
+                                <div class="art-upload-filename" data-upload-filename>Aucun fichier selectionne</div>
+                            </div>
+                        </div>
+                        <div class="col-12">{{ form_row(form.description) }}</div>
                     </div>
                 </div>
-                <div class="col-12">{{ form_row(form.description) }}</div>
-            </div>
-            <div class="mt-4 d-flex gap-3">
-                {{ form_widget(form.save, { attr: { class: 'btn btn-primary rounded-4 px-4' } }) }}
-                <a class="btn btn-outline-secondary rounded-4 px-4" href="{{ path('app_back_category_index') }}">Annuler</a>
-            </div>
-        {{ form_end(form) }}
+
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    {{ form_widget(form.save, { attr: { class: 'btn btn-art-primary' } }) }}
+                    <a class="btn btn-art-secondary" href="{{ path('app_back_category_index') }}">Annuler</a>
+                </div>
+            {{ form_end(form) }}
+        </div>
     </div>
 {% endblock %}

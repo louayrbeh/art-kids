@@ -25,7 +25,7 @@
                             <p class="text-muted mb-0">Remplissez ce formulaire pour rejoindre ArtKids et commencer l aventure creative.</p>
                         </div>
 
-                        {{ form_start(registrationForm) }}
+                        {{ form_start(registrationForm, {'attr': {'class': 'art-form'}}) }}
                             {{ form_errors(registrationForm) }}
                             <div class="row g-3">
                                 <div class="col-md-6">{{ form_row(registrationForm.nom) }}</div>
@@ -36,7 +36,7 @@
                                 <div class="col-md-6">{{ form_row(registrationForm.plainPassword.second) }}</div>
                             </div>
                             <div class="mt-4">
-                                {{ form_widget(registrationForm.save, { attr: { class: 'btn btn-primary btn-lg w-100' } }) }}
+                                {{ form_widget(registrationForm.save, { attr: { class: 'btn btn-art-primary btn-lg w-100' } }) }}
                             </div>
                         {{ form_end(registrationForm) }}
 

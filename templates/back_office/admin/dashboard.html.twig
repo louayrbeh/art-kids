@@ -277,7 +277,7 @@
         const activityCategoryData = {{ dashboard.activitiesByCategory|json_encode|raw }};
         const usersByRoleData = {{ dashboard.usersByRole|json_encode|raw }};
 
-        const defaultColors = ['#2563eb', '#f97316', '#7c3aed', '#10b981', '#ef4444', '#06b6d4'];
+        const defaultColors = ['#2C4A52', '#537072', '#8E9B97', '#C99848', '#4E8C6A', '#B94A48'];
 
         const buildChart = (selector, type, labels, values, colors) => {
             const canvas = document.getElementById(selector);
@@ -322,7 +322,7 @@
             'doughnut',
             reservationStatusData.map(item => item.status),
             reservationStatusData.map(item => item.count),
-            ['#f59e0b', '#10b981', '#ef4444', '#64748b']
+            ['#C99848', '#4E8C6A', '#B94A48', '#537072']
         );
 
         buildChart(
@@ -338,7 +338,7 @@
             'bar',
             usersByRoleData.map(item => item.label),
             usersByRoleData.map(item => item.count),
-            ['#2563eb', '#ef4444']
+            ['#2C4A52', '#8E9B97']
         );
     </script>
 {% endblock %}

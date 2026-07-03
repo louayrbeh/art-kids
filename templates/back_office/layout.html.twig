@@ -13,11 +13,10 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('styles/back-office.css') }}">
-    <link rel="stylesheet" href="{{ asset('styles/admin-dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/artkids-admin.css') }}">
 {% endblock %}
 
-{% block body_class %}bg-body-tertiary{% endblock %}
+{% block body_class %}art-admin-body{% endblock %}
 {% block navbar %}{% endblock %}
 {% block main_class %}p-0{% endblock %}
 {% block flashes %}{% endblock %}
@@ -47,10 +46,10 @@
                     {% endfor %}
                 </nav>
                 <div class="mt-auto pt-4 d-grid gap-2">
-                    <a class="btn btn-outline-primary rounded-4" href="{{ path('app_front_home') }}">
+                    <a class="btn btn-art-secondary" href="{{ path('app_front_home') }}">
                         <i class="bi bi-house-door me-2"></i>Retour au site
                     </a>
-                    <a class="btn btn-outline-danger rounded-4" href="{{ path('app_logout') }}">
+                    <a class="btn btn-art-outline" href="{{ path('app_logout') }}">
                         <i class="bi bi-box-arrow-right me-2"></i>Deconnexion
                     </a>
                 </div>
@@ -81,10 +80,10 @@
                         </nav>
 
                         <div class="admin-sidebar-footer mt-auto">
-                            <a class="btn btn-outline-primary w-100 rounded-4 mb-2" href="{{ path('app_front_home') }}">
+                            <a class="btn btn-art-secondary w-100 mb-2" href="{{ path('app_front_home') }}">
                                 <i class="bi bi-house-door me-2"></i>Retour au site
                             </a>
-                            <a class="btn btn-outline-danger w-100 rounded-4" href="{{ path('app_logout') }}">
+                            <a class="btn btn-art-outline w-100" href="{{ path('app_logout') }}">
                                 <i class="bi bi-box-arrow-right me-2"></i>Deconnexion
                             </a>
                         </div>

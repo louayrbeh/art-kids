@@ -32,7 +32,7 @@
                             </div>
                         {% endif %}
 
-                        <form method="post">
+                        <form method="post" class="art-form">
                             <div class="mb-3">
                                 <label class="form-label" for="username">Email</label>
                                 <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
@@ -42,7 +42,9 @@
                                 <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
                             </div>
                             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                            <button class="btn btn-primary w-100 btn-lg" type="submit">Se connecter</button>
+                            <button class="btn btn-art-primary w-100 btn-lg" type="submit">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>Se connecter
+                            </button>
                         </form>
 
                         <p class="art-auth-footer">Pas encore de compte parent ? <a href="{{ path('app_front_register') }}">Creer mon espace</a></p>

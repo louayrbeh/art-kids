@@ -1,41 +1,161 @@
-.child-form-card,
+.art-front-body {
+    background:
+        radial-gradient(circle at top left, rgba(142, 155, 151, 0.18), transparent 28%),
+        linear-gradient(180deg, #f4ebdb 0%, #faf8f4 38%, #eef1ee 100%);
+}
+
+.parent-navbar {
+    padding: 1rem 0;
+    background: transparent;
+}
+
+.parent-navbar .container-fluid {
+    max-width: 1380px;
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(83, 112, 114, 0.12);
+    border-radius: var(--art-radius-lg);
+    box-shadow: var(--art-shadow-sm);
+    padding: 1rem 1.25rem;
+}
+
+.parent-brand-art,
+.parent-brand-kids {
+    font-size: 1.85rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.parent-brand-art {
+    color: var(--art-dark);
+}
+
+.parent-brand-kids {
+    color: var(--art-medium);
+}
+
+.parent-navbar .nav-link {
+    color: var(--art-medium);
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 0.7rem 1rem !important;
+}
+
+.parent-navbar .nav-link:hover,
+.parent-navbar .nav-link.active {
+    color: var(--art-dark);
+    background: rgba(244, 235, 219, 0.74);
+}
+
+.parent-user-pill,
+.parent-shortcut,
+.parent-surface,
+.parent-empty,
+.parent-stat-card,
 .parent-form-page .art-form-card {
     background: rgba(255, 255, 255, 0.78);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.65);
-    border-radius: 30px;
-    box-shadow: 0 24px 70px rgba(99, 102, 241, 0.14);
+    border: 1px solid rgba(83, 112, 114, 0.12);
+    border-radius: var(--art-radius-md);
+    box-shadow: var(--art-shadow-sm);
 }
 
-.hover-lift {
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+.parent-user-pill {
+    padding: 0.75rem 1rem;
 }
 
-.hover-lift:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 28px 80px rgba(99, 102, 241, 0.22);
+.parent-shell {
+    min-height: calc(100vh - 92px);
 }
 
-.child-form-back {
-    white-space: nowrap;
+.parent-shortcut {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--art-dark);
+    text-decoration: none;
+    padding: 0.9rem 1.1rem;
+    transition: all 0.25s ease;
 }
 
-.child-form-card .btn-art-primary,
-.child-form-card .btn-art-secondary {
-    min-height: 52px;
+.parent-shortcut:hover,
+.parent-shortcut.active {
+    transform: translateY(-2px);
+    background: rgba(244, 235, 219, 0.88);
 }
 
-.child-form-card .form-label {
-    font-size: 0.96rem;
+.parent-surface {
+    padding: 1.5rem;
 }
 
-.child-form-card .form-text {
-    color: var(--art-muted);
+.parent-stat-card {
+    border: none;
+    transition: all 0.28s ease;
 }
 
-@media (max-width: 767.98px) {
-    .child-form-back {
-        width: 100%;
-        justify-content: center;
+.parent-stat-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--art-shadow-md);
+}
+
+.parent-stat-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.35rem;
+    background: var(--art-gradient-dark) !important;
+}
+
+.parent-empty {
+    padding: 2rem;
+    text-align: center;
+    color: var(--art-medium);
+    background: rgba(244, 235, 219, 0.5);
+}
+
+.parent-table thead th {
+    border-bottom: none;
+}
+
+.parent-card-media {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.child-form-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.child-form-card::before {
+    content: "";
+    position: absolute;
+    inset: auto -70px -70px auto;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(142, 155, 151, 0.26), rgba(244, 235, 219, 0));
+}
+
+.child-form-icon {
+    width: 66px;
+    height: 66px;
+    border-radius: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--art-gradient-dark);
+    color: #fff;
+    font-size: 1.8rem;
+    box-shadow: var(--art-shadow-sm);
+}
+
+@media (max-width: 991.98px) {
+    .parent-navbar .container-fluid {
+        border-radius: 24px;
     }
 }
