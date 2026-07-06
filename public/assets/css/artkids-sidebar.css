@@ -86,7 +86,10 @@
 }
 
 .admin-page {
-    padding: 32px 0 0 !important;
+    width: 100%;
+    max-width: var(--art-page-max-width, 1280px);
+    margin: 0 auto;
+    padding: 32px 40px 0 !important;
 }
 
 .admin-brand {
@@ -235,6 +238,9 @@
     }
 
     .parent-shell > .container-fluid {
+        max-width: var(--art-page-max-width, 1280px);
+        margin-left: auto;
+        margin-right: auto;
         padding: 32px 40px !important;
     }
 
@@ -276,6 +282,18 @@
     .parent-shell {
         margin-left: 0;
         padding: 16px !important;
+    }
+
+    .admin-page,
+    .parent-shell > .container-fluid {
+        padding: 1.5rem 1rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .admin-page,
+    .parent-shell > .container-fluid {
+        padding: 1rem 0.75rem !important;
     }
 }
 

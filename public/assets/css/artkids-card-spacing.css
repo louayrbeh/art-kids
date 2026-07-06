@@ -11,6 +11,23 @@
     --art-header-padding-mobile: 24px 20px 20px;
     --art-card-gap: 24px;
     --art-card-radius: 24px;
+    --art-page-max-width: 1280px;
+}
+
+.art-main-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.art-page-content {
+    width: 100%;
+    padding: var(--art-page-padding) !important;
+}
+
+.art-page-inner {
+    width: 100%;
+    max-width: var(--art-page-max-width);
+    margin: 0 auto;
 }
 
 .art-main,
@@ -31,6 +48,28 @@
 .home-section,
 .home-cinematic {
     padding: var(--art-page-padding) !important;
+}
+
+.admin-page,
+.parent-shell > .container-fluid,
+.art-form-page,
+.parent-form-page > .container {
+    width: 100%;
+    max-width: var(--art-page-max-width);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.admin-page,
+.parent-shell > .container-fluid {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+}
+
+.art-form-page,
+.parent-form-page {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
 .container,
@@ -55,11 +94,51 @@
 .child-form-header,
 .home-section__heading,
 .art-table-toolbar {
-    padding: var(--art-header-padding) !important;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: var(--art-card-gap);
+}
+
+.art-page-header,
+.page-header,
+.admin-header,
+.dashboard-header,
+.crud-header,
+.section-header,
+.module-header {
+    width: 100%;
+    padding: 0 !important;
+    margin-bottom: var(--art-card-gap);
+}
+
+.hero-header,
+.admin-topbar,
+.admin-dashboard-header,
+.admin-section-title,
+.child-form-header,
+.home-section__heading,
+.art-table-toolbar {
+    padding: var(--art-header-padding) !important;
+}
+
+.art-page-title-block {
+    min-width: 0;
+}
+
+.art-page-actions,
+.art-page-header > a.btn,
+.art-page-header > .btn,
+.art-page-header > form,
+.page-header > a.btn,
+.page-header > .btn,
+.page-header > form {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    flex-shrink: 0;
+    margin-left: auto;
 }
 
 .home-section__heading,
@@ -80,6 +159,8 @@
 .art-form-card,
 .art-auth-card,
 .art-detail-card,
+.art-content-card,
+.art-empty-state-card,
 .dashboard-card,
 .admin-card,
 .table-card,
@@ -111,6 +192,7 @@
 .art-ai-panel,
 .art-upload-panel,
 .art-fieldset {
+    width: 100%;
     padding: var(--art-card-padding) !important;
     border-radius: var(--art-card-radius);
     margin-bottom: var(--art-card-gap);
@@ -244,6 +326,43 @@ main > section {
         gap: 20px;
     }
 
+    .art-page-content,
+    .admin-page,
+    .parent-shell > .container-fluid {
+        padding: 1.5rem 1rem !important;
+    }
+
+    .art-page-header,
+    .page-header,
+    .admin-header,
+    .dashboard-header,
+    .crud-header,
+    .section-header,
+    .module-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .art-page-actions,
+    .art-page-header > a.btn,
+    .art-page-header > .btn,
+    .art-page-header > form,
+    .page-header > a.btn,
+    .page-header > .btn,
+    .page-header > form {
+        width: 100%;
+        justify-content: flex-start;
+        margin-left: 0;
+    }
+
+    .art-page-actions .btn,
+    .art-page-header > a.btn,
+    .art-page-header > .btn,
+    .page-header > a.btn,
+    .page-header > .btn {
+        width: 100%;
+    }
+
     .art-table-card > .table-responsive,
     .parent-table-card > .table-responsive,
     .admin-table-card > .table-responsive,
@@ -278,6 +397,12 @@ main > section {
         flex-direction: column;
         align-items: stretch;
         gap: 14px;
+    }
+
+    .art-page-content,
+    .admin-page,
+    .parent-shell > .container-fluid {
+        padding: 1rem 0.75rem !important;
     }
 
     .container,
