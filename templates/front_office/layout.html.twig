@@ -13,14 +13,18 @@
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('assets/css/artkids-home.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/artkids-parent.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/artkids-compact.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/artkids-card-spacing.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/artkids-sidebar.css') }}">
 {% endblock %}
 
 {% block body_class %}art-front-body{% endblock %}
 {% block main_class %}container-fluid py-0 px-0{% endblock %}
 {% block flashes %}{% endblock %}
+{% block footer %}{% endblock %}
 
 {% block navbar %}
-    <nav class="navbar navbar-expand-lg navbar-light parent-navbar art-appbar">
+    <nav class="navbar navbar-expand-lg navbar-light parent-navbar art-appbar parent-sidebar">
         <div class="container-fluid px-4">
             <a class="navbar-brand d-flex align-items-center gap-2 art-navbar-brand" href="{{ path('app_front_home') }}">
                 <span class="parent-brand-art">Art</span><span class="parent-brand-kids">Kids</span>

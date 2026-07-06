@@ -224,3 +224,81 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* VirtuArts component skin. */
+.art-box,
+.art-card,
+.art-glass-card,
+.art-stat-card,
+.art-detail-card,
+.art-widget-card {
+    background: rgba(22, 22, 26, 0.88);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--art-shadow-sm);
+    backdrop-filter: blur(18px);
+}
+
+.art-box:hover,
+.art-card:hover,
+.art-stat-card:hover {
+    border-color: rgba(249, 115, 22, 0.28);
+    box-shadow: var(--art-shadow-md), 0 0 34px rgba(249, 115, 22, 0.1);
+}
+
+.btn-art-primary,
+.btn-art-secondary,
+.btn-art-danger,
+.btn-art-success,
+.btn-art-outline,
+.btn-art-soft {
+    border-radius: 999px;
+}
+
+.btn-art-primary {
+    background: var(--gradient-primary);
+    box-shadow: 0 16px 38px rgba(249, 115, 22, 0.28);
+}
+
+.btn-art-secondary {
+    background: rgba(249, 115, 22, 0.1);
+    color: var(--color-primary-light) !important;
+    border: 1px solid rgba(249, 115, 22, 0.28);
+}
+
+.btn-art-outline,
+.btn-art-soft {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--color-text) !important;
+    border: 1px solid var(--color-border-light);
+}
+
+.btn-art-danger {
+    background: rgba(239, 68, 68, 0.12);
+    color: #fca5a5 !important;
+    border: 1px solid rgba(239, 68, 68, 0.28);
+}
+
+.art-action-view {
+    background: rgba(59, 130, 246, 0.12);
+    color: #93c5fd;
+}
+
+.art-action-edit {
+    background: rgba(249, 115, 22, 0.13);
+    color: #fdba74;
+}
+
+.art-action-confirm {
+    background: rgba(34, 197, 94, 0.13);
+    color: #86efac;
+}
+
+.art-detail-card,
+.art-detail-item {
+    background: rgba(22, 22, 26, 0.86);
+    border-color: var(--color-border);
+}
+
+.art-detail-value {
+    color: var(--color-text);
+}

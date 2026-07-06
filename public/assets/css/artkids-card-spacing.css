@@ -1,0 +1,306 @@
+/* Global card breathing layer. Loaded last so CRUD/admin cards never feel cramped. */
+:root {
+    --art-card-padding: clamp(24px, 2vw, 32px);
+    --art-card-padding-tablet: 20px;
+    --art-card-padding-mobile: 16px;
+    --art-page-padding: 32px 40px;
+    --art-page-padding-tablet: 28px;
+    --art-page-padding-mobile: 20px 16px;
+    --art-header-padding: 32px 40px 24px;
+    --art-header-padding-tablet: 28px;
+    --art-header-padding-mobile: 24px 20px 20px;
+    --art-card-gap: 24px;
+    --art-card-radius: 24px;
+}
+
+.art-main,
+.main-content,
+.page-shell,
+.art-page-shell,
+.page,
+.admin-page,
+.dashboard-page,
+.crud-page,
+.front-page,
+.content-wrapper,
+.admin-content,
+.parent-shell,
+.parent-form-page,
+.art-form-page,
+.art-auth-shell,
+.home-section,
+.home-cinematic {
+    padding: var(--art-page-padding) !important;
+}
+
+.container,
+.container-fluid,
+.container-xl,
+.container-xxl {
+    padding-left: clamp(20px, 3vw, 40px);
+    padding-right: clamp(20px, 3vw, 40px);
+}
+
+.art-page-header,
+.page-header,
+.admin-header,
+.dashboard-header,
+.crud-header,
+.section-header,
+.module-header,
+.hero-header,
+.admin-topbar,
+.admin-dashboard-header,
+.admin-section-title,
+.child-form-header,
+.home-section__heading,
+.art-table-toolbar {
+    padding: var(--art-header-padding) !important;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--art-card-gap);
+}
+
+.home-section__heading,
+.admin-section-title,
+.child-form-header {
+    flex-direction: column;
+}
+
+.art-page-header,
+.admin-topbar,
+.art-table-toolbar {
+    flex-wrap: wrap;
+}
+
+.art-card,
+.art-glass-card,
+.art-table-card,
+.art-form-card,
+.art-auth-card,
+.art-detail-card,
+.dashboard-card,
+.admin-card,
+.table-card,
+.content-card,
+.glass-card,
+.form-card,
+.crud-card,
+.page-card,
+.admin-surface,
+.admin-chart-card,
+.admin-stat-card,
+.admin-summary-card,
+.parent-surface,
+.parent-table-card,
+.parent-stat-card,
+.parent-empty,
+.home-studio-card,
+.home-bento-card,
+.home-metric-card,
+.home-panel,
+.contact-banner,
+.stats-panel,
+.universe-card,
+.step-card,
+.stat-card,
+.home-spotlight-card,
+.home-benefit-card,
+.home-testimonial,
+.art-ai-panel,
+.art-upload-panel,
+.art-fieldset {
+    padding: var(--art-card-padding) !important;
+    border-radius: var(--art-card-radius);
+    margin-bottom: var(--art-card-gap);
+}
+
+.card > .card-body,
+.recommendation-card > .card-body,
+.activity-card > .card-body,
+.child-card > .card-body,
+.reservation-card > .card-body {
+    padding: var(--art-card-padding) !important;
+}
+
+.art-card:last-child,
+.art-glass-card:last-child,
+.art-table-card:last-child,
+.art-form-card:last-child,
+.art-auth-card:last-child,
+.art-detail-card:last-child,
+.admin-surface:last-child,
+.parent-surface:last-child {
+    margin-bottom: 0;
+}
+
+.admin-page,
+.parent-shell .container-fluid,
+.art-page-content,
+.page-content,
+.module-content,
+.dashboard-content,
+.crud-content,
+.crud-section,
+.admin-section,
+.dashboard-section,
+.module-section,
+.art-section,
+.home-section,
+main > section {
+    display: grid;
+    gap: var(--art-card-gap);
+}
+
+.row {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 1.5rem;
+}
+
+.art-table-card,
+.parent-table-card,
+.admin-table-card,
+.table-card,
+.crud-card {
+    overflow: hidden;
+}
+
+.art-table-card > .table-responsive,
+.parent-table-card > .table-responsive,
+.admin-table-card > .table-responsive,
+.table-card > .table-responsive,
+.crud-card > .table-responsive,
+.admin-surface > .table-responsive,
+.parent-surface > .table-responsive {
+    padding: 20px;
+    margin: 0;
+    overflow-x: auto;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.art-table-card .art-table-toolbar {
+    padding: 0 4px;
+    margin-bottom: 20px;
+}
+
+.art-table {
+    margin-bottom: 0 !important;
+}
+
+.art-table thead th:first-child,
+.art-table tbody td:first-child {
+    padding-left: 18px;
+}
+
+.art-table thead th:last-child,
+.art-table tbody td:last-child {
+    padding-right: 18px;
+}
+
+.admin-dashboard-header,
+.parent-surface:first-child {
+    margin-bottom: var(--art-card-gap) !important;
+}
+
+.admin-stat-card,
+.parent-stat-card,
+.home-metric-card {
+    min-height: auto;
+}
+
+.art-detail-grid,
+.admin-metric-list,
+.art-action-buttons,
+.form-actions {
+    gap: 16px;
+}
+
+@media (max-width: 991.98px) {
+    :root {
+        --art-card-padding: var(--art-card-padding-tablet);
+        --art-page-padding: var(--art-page-padding-tablet);
+        --art-header-padding: var(--art-header-padding-tablet);
+        --art-card-gap: 20px;
+        --art-card-radius: 22px;
+    }
+
+    .art-page-header,
+    .page-header,
+    .admin-header,
+    .dashboard-header,
+    .crud-header,
+    .section-header,
+    .module-header,
+    .hero-header,
+    .admin-topbar,
+    .admin-dashboard-header,
+    .admin-section-title,
+    .child-form-header,
+    .home-section__heading,
+    .art-table-toolbar {
+        gap: 20px;
+    }
+
+    .art-table-card > .table-responsive,
+    .parent-table-card > .table-responsive,
+    .admin-table-card > .table-responsive,
+    .table-card > .table-responsive,
+    .crud-card > .table-responsive,
+    .admin-surface > .table-responsive,
+    .parent-surface > .table-responsive {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 576px) {
+    :root {
+        --art-card-padding: var(--art-card-padding-mobile);
+        --art-page-padding: var(--art-page-padding-mobile);
+        --art-header-padding: var(--art-header-padding-mobile);
+        --art-card-gap: 16px;
+        --art-card-radius: 18px;
+    }
+
+    .art-page-header,
+    .page-header,
+    .admin-header,
+    .dashboard-header,
+    .crud-header,
+    .section-header,
+    .module-header,
+    .hero-header,
+    .admin-topbar,
+    .admin-dashboard-header,
+    .art-table-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+    }
+
+    .container,
+    .container-fluid,
+    .container-xl,
+    .container-xxl {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .row {
+        --bs-gutter-x: 1rem;
+        --bs-gutter-y: 1rem;
+    }
+
+    .art-table-card > .table-responsive,
+    .parent-table-card > .table-responsive,
+    .admin-table-card > .table-responsive,
+    .table-card > .table-responsive,
+    .crud-card > .table-responsive,
+    .admin-surface > .table-responsive,
+    .parent-surface > .table-responsive {
+        padding: 12px;
+        border-radius: 14px;
+    }
+}

@@ -195,3 +195,66 @@
         border-radius: 24px;
     }
 }
+
+/* VirtuArts parent/front-office skin. */
+.art-front-body {
+    background:
+        radial-gradient(circle at top left, rgba(249, 115, 22, 0.16), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(234, 179, 8, 0.1), transparent 28%),
+        linear-gradient(180deg, #0a0a0c 0%, #111114 48%, #0a0a0c 100%);
+}
+
+.parent-navbar .container-fluid {
+    background: rgba(17, 17, 20, 0.8);
+    border: 1px solid rgba(249, 115, 22, 0.14);
+    backdrop-filter: blur(20px);
+}
+
+.parent-brand-art {
+    color: var(--color-text);
+}
+
+.parent-brand-kids {
+    color: var(--color-primary-light);
+}
+
+.parent-navbar .nav-link {
+    color: var(--color-text-muted) !important;
+}
+
+.parent-navbar .nav-link:hover,
+.parent-navbar .nav-link.active {
+    color: var(--color-text) !important;
+    background: rgba(249, 115, 22, 0.12);
+}
+
+.parent-user-pill,
+.parent-user-card,
+.parent-shortcut,
+.parent-surface,
+.parent-empty,
+.parent-stat-card,
+.parent-form-page .art-form-card {
+    background: rgba(22, 22, 26, 0.82);
+    border: 1px solid var(--color-border);
+}
+
+.parent-shortcut {
+    color: var(--color-text-muted);
+}
+
+.parent-shortcut:hover,
+.parent-shortcut.active,
+.parent-stat-card:hover,
+.parent-surface:hover {
+    border-color: rgba(249, 115, 22, 0.28);
+}
+
+.parent-stat-icon,
+.child-form-icon {
+    background: var(--gradient-primary) !important;
+}
+
+.recommendation-card .card-body {
+    background: linear-gradient(180deg, rgba(22, 22, 26, 0.94), rgba(17, 17, 20, 0.92));
+}

@@ -1,0 +1,121 @@
+/* Shared public appbar for home, login and register. */
+.public-navbar.home-navbar {
+    padding: 1rem 0 0 !important;
+    background: transparent !important;
+}
+
+.public-navbar .home-container {
+    background: rgba(10, 10, 12, 0.92) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 999px !important;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45) !important;
+    backdrop-filter: blur(24px);
+    padding: 22px 28px !important;
+}
+
+.public-navbar .home-brand,
+.public-navbar .home-brand__text,
+.public-navbar .home-brand__art,
+.public-navbar .home-brand__kids {
+    font-size: 22px !important;
+    font-weight: 900;
+    line-height: 1.1;
+}
+
+.public-navbar .home-brand__text,
+.public-navbar .home-brand__art {
+    color: #fafaf9 !important;
+}
+
+.public-navbar .home-brand__kids {
+    color: #f97316 !important;
+}
+
+.public-navbar .home-brand__icon {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+}
+
+.public-navbar .home-brand__icon svg {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.public-navbar .home-nav-links .nav-link {
+    color: #a8a29e !important;
+    font-size: 14px !important;
+    font-weight: 800;
+    line-height: 1.2;
+    padding: 0.75rem 1rem !important;
+}
+
+.public-navbar .home-nav-links .nav-link:hover,
+.public-navbar .home-nav-links .nav-link.active {
+    color: #fafaf9 !important;
+    background: rgba(249, 115, 22, 0.12);
+}
+
+.public-navbar .home-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.public-navbar .home-nav-actions .home-btn {
+    width: 180px !important;
+    min-width: 180px !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    padding: 0 22px !important;
+    border-radius: 999px !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 14px !important;
+    font-weight: 800;
+    line-height: 1 !important;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.public-navbar .home-nav-actions .home-btn svg {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 991.98px) {
+    .public-navbar .home-container {
+        border-radius: 26px !important;
+        padding: 18px 20px !important;
+    }
+
+    .public-navbar .home-nav-actions {
+        margin-top: 16px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .public-navbar .home-nav-actions .home-btn {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .public-navbar .home-brand,
+    .public-navbar .home-brand__text,
+    .public-navbar .home-brand__art,
+    .public-navbar .home-brand__kids {
+        font-size: 20px !important;
+    }
+
+    .public-navbar .home-nav-actions .home-btn {
+        height: 52px !important;
+        min-height: 52px !important;
+        font-size: 13px !important;
+    }
+}

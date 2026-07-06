@@ -1,0 +1,262 @@
+/* Compact typography layer: scales text close to 67% while keeping layout breathing room. */
+:root {
+    --art-type-xs: 0.54rem;
+    --art-type-sm: 0.6rem;
+    --art-type-base: 0.67rem;
+    --art-type-md: 0.74rem;
+    --art-type-lg: 0.84rem;
+    --art-type-xl: 1rem;
+    --art-type-2xl: 1.2rem;
+    --art-type-3xl: 1.45rem;
+    --art-type-4xl: 1.9rem;
+    --art-type-hero: clamp(2rem, 4.4vw, 4.3rem);
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-size: var(--art-type-base) !important;
+    line-height: 1.55;
+}
+
+p,
+li,
+td,
+th,
+label,
+.form-label,
+.form-text,
+.small,
+small,
+.text-muted,
+.art-muted-text,
+.art-page-subtitle,
+.art-form-subtitle,
+.card-text,
+.admin-user-chip,
+.parent-user-pill {
+    font-size: var(--art-type-base) !important;
+}
+
+.small,
+small,
+.form-text,
+.art-meta,
+.stat-label,
+.admin-stat-card .stat-label,
+.art-table thead th,
+.home-eyebrow,
+.home-badge,
+.badge,
+.art-badge {
+    font-size: var(--art-type-sm) !important;
+    line-height: 1.35;
+}
+
+h1,
+.h1,
+.display-1,
+.display-2,
+.display-3,
+.display-4,
+.display-5,
+.display-6,
+.art-page-title {
+    font-size: clamp(1.35rem, 2.35vw, 2.15rem) !important;
+    line-height: 1.08 !important;
+}
+
+h2,
+.h2,
+.art-section-title,
+.home-section__title,
+.home-panel__title,
+.contact-banner__title,
+.art-form-title,
+.art-auth-title {
+    font-size: clamp(1.05rem, 1.8vw, 1.55rem) !important;
+    line-height: 1.15 !important;
+}
+
+h3,
+.h3,
+.h4,
+.admin-section-title h2,
+.admin-section-title .h4,
+.art-card-title {
+    font-size: var(--art-type-xl) !important;
+    line-height: 1.2 !important;
+}
+
+h4,
+.h5,
+h5,
+.h6,
+h6 {
+    font-size: var(--art-type-lg) !important;
+    line-height: 1.25 !important;
+}
+
+.home-title {
+    font-size: var(--art-type-hero) !important;
+    line-height: 0.98 !important;
+}
+
+.fs-1 {
+    font-size: var(--art-type-3xl) !important;
+}
+
+.fs-2 {
+    font-size: var(--art-type-2xl) !important;
+}
+
+.fs-3 {
+    font-size: var(--art-type-xl) !important;
+}
+
+.fs-4 {
+    font-size: var(--art-type-lg) !important;
+}
+
+.fs-5,
+.fs-6 {
+    font-size: var(--art-type-base) !important;
+}
+
+.home-subtitle,
+.lead {
+    font-size: var(--art-type-md) !important;
+    line-height: 1.65 !important;
+}
+
+.navbar-brand,
+.art-navbar-brand,
+.home-brand,
+.admin-brand,
+.art-footer__brand {
+    font-size: var(--art-type-xl) !important;
+    line-height: 1.1;
+}
+
+.nav-link,
+.admin-nav-link,
+.parent-shortcut,
+.home-nav-link,
+.art-footer__links a {
+    font-size: var(--art-type-sm) !important;
+    line-height: 1.25;
+}
+
+.btn,
+.btn-art-primary,
+.btn-art-secondary,
+.btn-art-danger,
+.btn-art-success,
+.btn-art-outline,
+.btn-art-soft,
+.home-btn,
+.art-action-btn {
+    font-size: var(--art-type-sm) !important;
+    line-height: 1.2 !important;
+}
+
+.btn-sm,
+.btn-group-sm > .btn,
+.art-action-btn {
+    font-size: var(--art-type-xs) !important;
+}
+
+.form-control,
+.form-select,
+.form-check-label,
+.art-input,
+.art-select,
+.art-textarea,
+input,
+select,
+textarea {
+    font-size: var(--art-type-base) !important;
+}
+
+.form-control::placeholder,
+textarea::placeholder,
+input::placeholder {
+    font-size: var(--art-type-base);
+}
+
+.art-table,
+.table,
+.art-table th,
+.art-table td,
+.table th,
+.table td {
+    font-size: var(--art-type-sm) !important;
+}
+
+.art-table thead th,
+.table thead th {
+    font-size: var(--art-type-xs) !important;
+}
+
+.art-stat-value,
+.stat-value,
+.admin-stat-card h3,
+.parent-stat-card h3,
+.home-metric-value,
+.metric-value {
+    font-size: clamp(1.15rem, 2.4vw, 2rem) !important;
+    line-height: 1 !important;
+}
+
+.art-stat-label,
+.stat-label,
+.home-metric-label,
+.home-bento-card p,
+.home-panel p,
+.home-studio-card p,
+.contact-banner p,
+.admin-stat-card p,
+.parent-stat-card p,
+.art-empty-state p {
+    font-size: var(--art-type-base) !important;
+    line-height: 1.55 !important;
+}
+
+.home-bento-card h3,
+.home-studio-card h3,
+.home-panel h3,
+.art-empty-state h3 {
+    font-size: var(--art-type-lg) !important;
+}
+
+.art-alert,
+.alert,
+.invalid-feedback,
+.form-error-message {
+    font-size: var(--art-type-base) !important;
+}
+
+.lucide,
+.bi {
+    font-size: 0.9em;
+}
+
+@media (max-width: 768px) {
+    :root {
+        --art-type-hero: clamp(1.9rem, 8vw, 3.1rem);
+    }
+
+    h1,
+    .h1,
+    .display-1,
+    .display-2,
+    .display-3,
+    .display-4,
+    .display-5,
+    .display-6,
+    .art-page-title {
+        font-size: clamp(1.2rem, 6vw, 1.75rem) !important;
+    }
+}

@@ -63,3 +63,23 @@
         width: 100%;
     }
 }
+
+/* VirtuArts table skin. */
+.art-table-card {
+    background: rgba(17, 17, 20, 0.82);
+    border: 1px solid var(--color-border);
+}
+
+.art-table thead th {
+    background: rgba(249, 115, 22, 0.1);
+    color: #fdba74;
+}
+
+.art-table tbody td {
+    color: var(--color-text-muted);
+    border-bottom-color: var(--color-border);
+}
+
+.art-table tbody tr:hover {
+    background: rgba(249, 115, 22, 0.07);
+}

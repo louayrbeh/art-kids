@@ -14,12 +14,16 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('assets/css/artkids-admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/artkids-compact.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/artkids-card-spacing.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/artkids-sidebar.css') }}">
 {% endblock %}
 
 {% block body_class %}art-admin-body{% endblock %}
 {% block navbar %}{% endblock %}
 {% block main_class %}p-0{% endblock %}
 {% block flashes %}{% endblock %}
+{% block footer %}{% endblock %}
 
 {% block body %}
     <div class="admin-shell">
@@ -57,8 +61,8 @@
         </div>
 
         <div class="container-fluid">
-            <div class="row g-0">
-                <aside class="col-lg-3 col-xl-2 d-none d-lg-block admin-sidebar art-sidebar">
+            <div class="row g-0 admin-dashboard-layout">
+                <aside class="d-none d-lg-block admin-sidebar art-sidebar">
                     <div class="admin-sidebar-inner">
                         <div class="mb-4">
                             <div class="admin-brand art-sidebar-brand mb-1">
@@ -90,7 +94,7 @@
                     </div>
                 </aside>
 
-                <div class="col-lg-9 col-xl-10 admin-content">
+                <div class="admin-content">
                     <header class="admin-topbar">
                         <div class="d-flex align-items-center gap-3">
                             <button class="btn btn-light d-lg-none rounded-4 shadow-sm" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar">

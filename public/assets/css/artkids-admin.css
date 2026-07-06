@@ -379,3 +379,78 @@
         min-height: 240px;
     }
 }
+
+/* VirtuArts admin dashboard skin. */
+.art-admin-body {
+    background:
+        radial-gradient(circle at top right, rgba(249, 115, 22, 0.18), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(234, 179, 8, 0.1), transparent 30%),
+        linear-gradient(180deg, #0a0a0c 0%, #111114 55%, #0a0a0c 100%);
+}
+
+.admin-sidebar,
+.art-sidebar,
+.admin-sidebar-inner,
+.admin-offcanvas .offcanvas-body,
+.admin-offcanvas .offcanvas-header {
+    background:
+        radial-gradient(circle at top left, rgba(249, 115, 22, 0.24), transparent 34%),
+        linear-gradient(180deg, #111114 0%, #0a0a0c 100%);
+    color: var(--color-text);
+}
+
+.admin-brand,
+.admin-brand-art {
+    color: var(--color-text) !important;
+}
+
+.admin-brand-kids {
+    color: var(--color-primary-light) !important;
+}
+
+.admin-nav-link {
+    color: var(--color-text-muted);
+}
+
+.admin-nav-link:hover,
+.admin-nav-link.active {
+    background: rgba(249, 115, 22, 0.14);
+    color: var(--color-text);
+}
+
+.admin-topbar,
+.admin-user-chip,
+.admin-surface,
+.admin-chart-card,
+.admin-stat-card,
+.admin-summary-card {
+    background: rgba(22, 22, 26, 0.84);
+    border: 1px solid var(--color-border);
+}
+
+.admin-stat-card:hover {
+    border-color: rgba(249, 115, 22, 0.32);
+    box-shadow: var(--art-shadow-md), 0 0 36px rgba(249, 115, 22, 0.12);
+}
+
+.admin-stat-card .stat-icon,
+.admin-user-icon,
+.admin-table .progress-bar {
+    background: var(--gradient-primary);
+}
+
+.admin-stat-card h3,
+.admin-metric-row strong {
+    color: var(--color-text);
+}
+
+.admin-summary-label {
+    color: var(--color-primary-light);
+}
+
+.admin-metric-row,
+.admin-empty-state,
+.admin-alert-list .list-group-item {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--color-border);
+}

@@ -368,3 +368,75 @@ input[type="file"].form-control:hover {
         width: 100%;
     }
 }
+
+/* VirtuArts form skin. */
+.art-form-card,
+.art-auth-card,
+.art-upload-panel,
+.art-ai-panel,
+.art-fieldset {
+    background: rgba(17, 17, 20, 0.82);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--art-shadow-md);
+    backdrop-filter: blur(20px);
+}
+
+.form-label {
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.form-control,
+.form-select {
+    background: var(--color-bg-input) !important;
+    border-color: var(--color-border-light) !important;
+    color: var(--color-text) !important;
+}
+
+.form-control::placeholder {
+    color: var(--color-text-dim);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--color-primary) !important;
+    background: #24242b !important;
+    box-shadow: 0 0 0 0.25rem rgba(249, 115, 22, 0.16), 0 0 26px rgba(249, 115, 22, 0.1) !important;
+}
+
+.form-select option {
+    background: var(--color-bg-input);
+    color: var(--color-text);
+}
+
+.form-check,
+.form-check.art-check-card {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--color-border);
+}
+
+.form-check:hover,
+.form-check.art-check-card:hover {
+    background: rgba(249, 115, 22, 0.08);
+    border-color: rgba(249, 115, 22, 0.28);
+}
+
+.form-check-label,
+.art-fieldset-title,
+.art-ai-panel__title {
+    color: var(--color-text);
+}
+
+.art-auth-aside,
+.auth-side {
+    background:
+        radial-gradient(circle at 20% 15%, rgba(249, 115, 22, 0.34), transparent 30%),
+        linear-gradient(145deg, #16161a, #0a0a0c);
+}
+
+.art-auth-badge,
+.art-auth-list i {
+    background: rgba(249, 115, 22, 0.16);
+    color: #fdba74;
+}

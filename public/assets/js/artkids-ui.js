@@ -1,4 +1,21 @@
 const artkidsInitUi = () => {
+    if (window.lucide) {
+        window.lucide.createIcons();
+    }
+
+    const navbars = document.querySelectorAll('.art-appbar, .home-navbar, .parent-navbar, .admin-topbar');
+    const syncNavbarState = () => {
+        navbars.forEach((navbar) => {
+            navbar.classList.toggle('scrolled', window.scrollY > 12);
+        });
+    };
+
+    syncNavbarState();
+    if (!document.documentElement.dataset.artScrollBound) {
+        document.documentElement.dataset.artScrollBound = '1';
+        window.addEventListener('scroll', syncNavbarState, { passive: true });
+    }
+
     const revealTargets = document.querySelectorAll([
         '.admin-surface',
         '.parent-surface',
@@ -13,6 +30,10 @@ const artkidsInitUi = () => {
         '.home-spotlight-card',
         '.home-benefit-card',
         '.home-testimonial',
+        '.home-bento-card',
+        '.home-studio-card',
+        '.home-panel',
+        '.home-metric-card',
         '.art-ai-panel',
     ].join(','));
 
@@ -48,6 +69,24 @@ const artkidsInitUi = () => {
                 ? input.files[0].name
                 : 'Aucun fichier selectionne';
         });
+    });
+
+    document.querySelectorAll('.art-flash').forEach((flash) => {
+        if (flash.dataset.artFlashBound === '1') {
+            return;
+        }
+
+        flash.dataset.artFlashBound = '1';
+        window.setTimeout(() => {
+            if (!flash.parentNode) {
+                return;
+            }
+
+            const instance = window.bootstrap ? window.bootstrap.Alert.getOrCreateInstance(flash) : null;
+            if (instance) {
+                instance.close();
+            }
+        }, 5200);
     });
 };
 
